@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html><body>
+<script>
+window.speechSynthesis.onvoiceschanged = () => {
+    let voices = window.speechSynthesis.getVoices();
+    let esVoices = voices.filter(v => v.lang.startsWith('es'));
+    console.log("Found " + esVoices.length + " Spanish voices.");
+    esVoices.forEach(v => console.log(v.name + " (" + v.lang + ")" + (v.localService ? " [Local]" : "")));
+    
+    // Add a visible element so we know it ran
+    document.body.innerHTML = "<h1>Voices logged to console</h1><ul>" + 
+        esVoices.map(v => "<li>" + v.name + "</li>").join("") + "</ul>";
+};
+</script>
+</body></html>

@@ -1,0 +1,290 @@
+{
+  "document_id": "lengua_ortografia_acentuacion_primaria_001",
+  "title": "Reglas de acentuación españolas para Educación Primaria",
+  "subtitle": "Versión estructurada para Aula RAG",
+  "language": "es",
+  "stage": "Educación Primaria",
+  "area": "Lengua Castellana y Literatura",
+  "topic": "Ortografía",
+  "subtopics": [
+    "acentuación",
+    "sílaba tónica",
+    "palabras agudas",
+    "palabras llanas",
+    "palabras esdrújulas",
+    "palabras sobresdrújulas",
+    "monosílabos",
+    "tilde diacrítica",
+    "interrogativos",
+    "exclamativos",
+    "diptongos",
+    "hiatos",
+    "adverbios en -mente",
+    "mayúsculas"
+  ],
+  "curriculum_framework": "LOMLOE",
+  "source_type": "documento didáctico de referencia",
+  "intended_use": [
+    "recuperación semántica",
+    "apoyo tutorial",
+    "explicación",
+    "práctica guiada"
+  ],
+  "pedagogical_level": "Primaria",
+  "safety_scope": "contenido normativo escolar",
+  "version": "1.0",
+  "summary": "",
+  "chunks": [
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_01",
+      "section": "definición general",
+      "tags": [
+        "definición",
+        "acentuación",
+        "tilde",
+        "sílaba tónica"
+      ],
+      "question_hints": [
+        "qué es la acentuación",
+        "qué es la tilde",
+        "para qué sirve la tilde"
+      ],
+      "content": "La acentuación es el uso de la tilde para marcar gráficamente la sílaba tónica en las palabras que la necesitan según las reglas ortográficas del español. La sílaba tónica es la sílaba que se pronuncia con mayor intensidad."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_02",
+      "section": "clasificación por sílaba tónica",
+      "tags": [
+        "sílaba tónica",
+        "agudas",
+        "llanas",
+        "graves",
+        "esdrújulas",
+        "sobresdrújulas"
+      ],
+      "question_hints": [
+        "qué son las palabras agudas",
+        "qué son las palabras llanas",
+        "qué son las esdrújulas"
+      ],
+      "content": "Según la posición de la sílaba tónica, las palabras pueden ser agudas, llanas o graves, esdrújulas y sobresdrújulas. Las agudas tienen la sílaba tónica en la última posición. Las llanas o graves la tienen en la penúltima. Las esdrújulas la tienen en la antepenúltima. Las sobresdrújulas la tienen antes de la antepenúltima."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_03",
+      "section": "palabras agudas",
+      "tags": [
+        "reglas generales",
+        "palabras agudas",
+        "tilde"
+      ],
+      "question_hints": [
+        "cuándo llevan tilde las agudas",
+        "regla de las agudas"
+      ],
+      "content": "Las palabras agudas llevan tilde cuando terminan en vocal, n o s. Ejemplos: café, compás, camión. No llevan tilde cuando terminan en otras consonantes. Ejemplos: reloj, color, pared."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_04",
+      "section": "palabras llanas o graves",
+      "tags": [
+        "reglas generales",
+        "palabras llanas",
+        "palabras graves",
+        "tilde"
+      ],
+      "question_hints": [
+        "cuándo llevan tilde las llanas",
+        "regla de las graves"
+      ],
+      "content": "Las palabras llanas o graves llevan tilde cuando no terminan en vocal, n o s. Ejemplos: árbol, lápiz, difícil. No llevan tilde cuando terminan en vocal, n o s. Ejemplos: casa, joven, martes."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_05",
+      "section": "palabras esdrújulas y sobresdrújulas",
+      "tags": [
+        "reglas generales",
+        "esdrújulas",
+        "sobresdrújulas"
+      ],
+      "question_hints": [
+        "cuándo llevan tilde las esdrújulas",
+        "regla de las sobresdrújulas"
+      ],
+      "content": "Las palabras esdrújulas y sobresdrújulas llevan tilde siempre. Ejemplos: música, pájaro, matemáticas, devuélveselo, explícamelo."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_06",
+      "section": "monosílabos",
+      "tags": [
+        "monosílabos",
+        "tilde"
+      ],
+      "question_hints": [
+        "los monosílabos llevan tilde",
+        "regla de los monosílabos"
+      ],
+      "content": "Las palabras monosílabas, es decir, las que tienen una sola sílaba, no llevan tilde en general. Ejemplos: sol, pan, fue, vio, dio, fui."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_07",
+      "section": "tilde diacrítica",
+      "tags": [
+        "tilde diacrítica",
+        "monosílabos",
+        "significado"
+      ],
+      "question_hints": [
+        "qué es la tilde diacrítica",
+        "ejemplos de tilde diacrítica"
+      ],
+      "content": "La tilde diacrítica sirve para diferenciar palabras que se escriben igual, pero tienen significados o funciones distintas. Ejemplos: tú pronombre / tu determinante; él pronombre / el artículo; mí pronombre / mi determinante; sí afirmación o pronombre / si conjunción; dé del verbo dar / de preposición; sé del verbo saber o ser / se pronombre; más cantidad / mas equivalente a pero; té bebida / te pronombre."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_08",
+      "section": "interrogativos y exclamativos",
+      "tags": [
+        "qué",
+        "quién",
+        "cuál",
+        "cuánto",
+        "cómo",
+        "cuándo",
+        "dónde",
+        "tilde"
+      ],
+      "question_hints": [
+        "cuándo llevan tilde qué y como",
+        "interrogativos y exclamativos"
+      ],
+      "content": "Los interrogativos y exclamativos llevan tilde cuando introducen preguntas o exclamaciones directas o indirectas. Ejemplos: ¿Qué quieres?; No sé dónde está.; ¡Cómo ha crecido! Estas palabras no llevan tilde cuando funcionan como relativos o conjunciones. Ejemplos: El libro que leo es corto.; Iré cuando termine.; La casa donde vivo es grande."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_09",
+      "section": "diptongos",
+      "tags": [
+        "diptongo",
+        "vocales",
+        "sílaba"
+      ],
+      "question_hints": [
+        "qué es un diptongo",
+        "ejemplos de diptongo"
+      ],
+      "content": "Un diptongo es la unión de dos vocales que se pronuncian en una sola sílaba. Las palabras con diptongo se acentúan siguiendo las reglas generales de acentuación. Ejemplos: cielo, causa, después, cuaderno."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_10",
+      "section": "hiatos",
+      "tags": [
+        "hiato",
+        "vocal abierta",
+        "vocal cerrada",
+        "tilde"
+      ],
+      "question_hints": [
+        "qué es un hiato",
+        "cuándo se rompe un diptongo",
+        "ejemplos de hiato"
+      ],
+      "content": "Un hiato se produce cuando dos vocales contiguas se pronuncian en sílabas distintas. Cuando una vocal cerrada tónica, i o u, aparece junto a una vocal abierta, a, e u o, se rompe el diptongo y la vocal cerrada lleva tilde. Ejemplos: María, baúl, río, país, había."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_11",
+      "section": "adverbios terminados en mente",
+      "tags": [
+        "adverbios",
+        "mente",
+        "conservación de tilde"
+      ],
+      "question_hints": [
+        "cómo se acentúan los adverbios en mente"
+      ],
+      "content": "Los adverbios terminados en -mente conservan la tilde del adjetivo del que proceden. Ejemplos: fácil da fácilmente; rápido da rápidamente. Si el adjetivo no lleva tilde, el adverbio tampoco la lleva. Ejemplo: cordial da cordialmente."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_12",
+      "section": "mayúsculas y tildes",
+      "tags": [
+        "mayúsculas",
+        "tilde"
+      ],
+      "question_hints": [
+        "las mayúsculas llevan tilde"
+      ],
+      "content": "Las letras mayúsculas también llevan tilde cuando les corresponde según las reglas ortográficas. Ejemplos: ÁLVARO, EDUCACIÓN, AVIÓN."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_13",
+      "section": "solo y demostrativos",
+      "tags": [
+        "solo",
+        "demostrativos",
+        "tilde"
+      ],
+      "question_hints": [
+        "solo lleva tilde",
+        "este lleva tilde",
+        "ese lleva tilde",
+        "aquel lleva tilde"
+      ],
+      "content": "Según la ortografía académica actual, solo y los demostrativos este, ese, aquel, con sus femeninos y plurales, se escriben normalmente sin tilde. Ejemplos: Solo quiero agua.; Este libro es mío.; Aquella llegó tarde."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_14",
+      "section": "procedimiento para el alumnado",
+      "tags": [
+        "estrategia",
+        "pasos",
+        "aplicación de reglas"
+      ],
+      "question_hints": [
+        "cómo saber si una palabra lleva tilde",
+        "pasos para poner la tilde"
+      ],
+      "content": "Para saber si una palabra lleva tilde, primero hay que separarla en sílabas. Después se identifica la sílaba tónica. Luego se decide si la palabra es aguda, llana, esdrújula o sobresdrújula. A continuación se aplica la regla correspondiente. Finalmente, conviene comprobar si hay hiato, tilde diacrítica o interrogativo o exclamativo."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_15",
+      "section": "resumen de reglas",
+      "tags": [
+        "resumen",
+        "reglas básicas",
+        "repaso"
+      ],
+      "question_hints": [
+        "resumen de las reglas de acentuación",
+        "reglas básicas de acentuación"
+      ],
+      "content": "Resumen de reglas básicas. Las agudas llevan tilde si terminan en vocal, n o s. Las llanas llevan tilde si no terminan en vocal, n o s. Las esdrújulas y sobresdrújulas llevan tilde siempre. Los monosílabos, en general, no llevan tilde. Algunas palabras usan tilde diacrítica para diferenciar significados. Las mayúsculas también se acentúan."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_16",
+      "section": "enfoque didáctico compatible con LOMLOE",
+      "tags": [
+        "LOMLOE",
+        "Primaria",
+        "didáctica",
+        "reflexión sobre la lengua"
+      ],
+      "question_hints": [
+        "cómo se trabaja la acentuación en Primaria",
+        "acentuación según LOMLOE"
+      ],
+      "content": "En Educación Primaria, las reglas de acentuación deben trabajarse dentro del uso real de la lengua. Esto incluye lectura comprensiva de palabras y textos, escritura de oraciones y textos breves, revisión y corrección de producciones propias, reflexión guiada sobre la lengua y progresión gradual según el ciclo."
+    },
+    {
+      "chunk_id": "lengua_ortografia_acentuacion_primaria_001_17",
+      "section": "referencias de base",
+      "tags": [
+        "referencias",
+        "currículo",
+        "ortografía académica"
+      ],
+      "question_hints": [
+        "fuente de las reglas de acentuación",
+        "normativa de referencia"
+      ],
+      "content": "Referencias de base del documento. Real Decreto 157/2022, de 1 de marzo, por el que se establecen la ordenación y las enseñanzas mínimas de la Educación Primaria. Real Academia Española y ASALE, Ortografía de la lengua española, especialmente en lo relativo a reglas generales de acentuación, secuencias vocálicas y tilde diacrítica."
+    }
+  ]
+}

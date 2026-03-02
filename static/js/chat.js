@@ -1,0 +1,503 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const subjectButtons = document.querySelectorAll('.subject-btn');
+    const subjectTitle = document.getElementById('current-subject-title');
+    const fileUpload = document.getElementById('file-upload');
+    const uploadStatus = document.getElementById('upload-status');
+    const audioToggle = document.getElementById('audio-toggle');
+
+    // Syllabus Filter UI Elements
+    const syllabusFilters = document.getElementById('syllabus-filters');
+    const filterCurso = document.getElementById('filter-curso');
+    const filterBloque = document.getElementById('filter-bloque');
+    const filterContenido = document.getElementById('filter-contenido');
+    const btnEstudiar = document.getElementById('btn-estudiar');
+    let temarioData = [];
+
+    // Fetch Syllabus Data
+    async function loadTemario() {
+        try {
+            const resp = await fetch('/api/temario/lengua');
+            if (resp.ok) {
+                const data = await resp.json();
+                temarioData = data.temario || [];
+            }
+        } catch (e) {
+            console.error("Error loading temario:", e);
+        }
+    }
+    loadTemario();
+
+    let audioEnabled = false;
+
+    // Modern Outline SVG Icons
+    const muteIcon = `<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+    const soundIcon = `<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
+
+    // Initial load
+    audioToggle.innerHTML = muteIcon;
+
+    // Toggle Audio
+    audioToggle.addEventListener('click', () => {
+        audioEnabled = !audioEnabled;
+        if (audioEnabled) {
+            audioToggle.innerHTML = soundIcon;
+            audioToggle.title = "Desactivar Narración por Voz";
+            audioToggle.classList.remove('muted');
+            // Try playing a silent utterance to unlock audio context on iOS/Safari
+            try {
+                const unlock = new SpeechSynthesisUtterance('');
+                window.speechSynthesis.speak(unlock);
+            } catch (e) { }
+        } else {
+            audioToggle.innerHTML = muteIcon;
+            audioToggle.title = "Activar Narración por Voz";
+            audioToggle.classList.add('muted');
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        }
+    });
+
+    // Subject theme colors
+    const themes = {
+        'matematicas': { title: 'Pizarra Digital - Matemáticas', color: 'var(--color-blue)', name: 'Mates' },
+        'lengua': { title: 'Pizarra Digital - Lengua', color: 'var(--color-green)', name: 'Lengua' },
+        'valenciano': { title: 'Pizarra Digital - Valencià', color: 'var(--color-orange)', name: 'Valencià' },
+        'ingles': { title: 'Pizarra Digital - Inglés', color: 'var(--color-yellow)', name: 'Inglés' }
+    };
+
+    let currentSubject = 'matematicas';
+
+    // Handle Subject switching
+    subjectButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            subjectButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const subject = btn.dataset.subject;
+            currentSubject = subject;
+
+            // Update UI
+            subjectTitle.textContent = themes[subject].title;
+            subjectTitle.style.color = themes[subject].color;
+
+            // Toggle Syllabus Filters visibility
+            if (subject === 'lengua') {
+                syllabusFilters.style.display = 'block';
+                if (temarioData.length > 0) populateCursos();
+            } else {
+                syllabusFilters.style.display = 'none';
+            }
+        });
+    });
+
+    // --- SYLLABUS FILTERS LOGIC ---
+    function populateCursos() {
+        filterCurso.innerHTML = '<option value="">Selecciona Curso...</option>';
+        temarioData.forEach((cursoObj, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = cursoObj.curso;
+            filterCurso.appendChild(opt);
+        });
+        filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
+        filterBloque.disabled = true;
+        filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+        filterContenido.disabled = true;
+        btnEstudiar.disabled = true;
+    }
+
+    filterCurso.addEventListener('change', (e) => {
+        const cursoIdx = e.target.value;
+        filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
+        filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+        filterContenido.disabled = true;
+        btnEstudiar.disabled = true;
+
+        if (cursoIdx === "") {
+            filterBloque.disabled = true;
+            return;
+        }
+
+        const cursoObj = temarioData[cursoIdx];
+        if (cursoObj && cursoObj.bloques) {
+            Object.keys(cursoObj.bloques).forEach(bloqueName => {
+                const opt = document.createElement('option');
+                opt.value = bloqueName;
+                // Capitalize first letter
+                opt.textContent = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
+                filterBloque.appendChild(opt);
+            });
+            filterBloque.disabled = false;
+        }
+    });
+
+    filterBloque.addEventListener('change', (e) => {
+        const cursoIdx = filterCurso.value;
+        const bloqueName = e.target.value;
+        filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+        btnEstudiar.disabled = true;
+
+        if (bloqueName === "") {
+            filterContenido.disabled = true;
+            return;
+        }
+
+        const cursoObj = temarioData[cursoIdx];
+        if (cursoObj && cursoObj.bloques && cursoObj.bloques[bloqueName]) {
+            const contenidos = cursoObj.bloques[bloqueName];
+            contenidos.forEach((contenido, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = contenido;
+                filterContenido.appendChild(opt);
+            });
+            filterContenido.disabled = false;
+        }
+    });
+
+    filterContenido.addEventListener('change', (e) => {
+        btnEstudiar.disabled = (e.target.value === "");
+    });
+
+    btnEstudiar.addEventListener('click', async () => {
+        const cursoIdx = filterCurso.value;
+        const bloqueName = filterBloque.value;
+        const contenidoIdx = filterContenido.value;
+
+        if (cursoIdx === "" || bloqueName === "" || contenidoIdx === "") return;
+
+        const cursoStr = temarioData[cursoIdx].curso;
+        const bloqueStr = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
+        const contenidoStr = temarioData[cursoIdx].bloques[bloqueName][contenidoIdx];
+
+        // Format the message just like if the user typed it
+        const generatedMessage = `Quiero repasar ${bloqueStr}: ${contenidoStr} de ${cursoStr}`;
+
+        // Add to UI visibly
+        addMessage(generatedMessage, 'user');
+
+        // Reset dropdowns for next time (optional, maybe keep them selected)
+        // filterCurso.value = "";
+        // filterBloque.value = "";
+        // filterContenido.value = "";
+        // filterBloque.disabled = true; filterContenido.disabled = true; btnEstudiar.disabled = true;
+
+        // Send to backend
+        await sendMessageToBackend(generatedMessage, false);
+    });
+
+    // Helper to send message to backend
+    async function sendMessageToBackend(messageText, isHidden = false) {
+        // Show loading indicator
+        const loadingId = addLoadingIndicator();
+
+        try {
+            // Include context in the prompt temporarily since we don't have true RAG yet
+            const prefixedMessage = `[Contexto: asignatura actual es ${themes[currentSubject].name}] ${messageText}`;
+
+            const formData = new URLSearchParams();
+            formData.append('message', prefixedMessage);
+            formData.append('subject', currentSubject);
+
+            let courseLevel = "";
+            if (currentSubject === 'lengua' && filterCurso.value !== "") {
+                courseLevel = temarioData[filterCurso.value].curso;
+            }
+            formData.append('course_level', courseLevel);
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            const data = await response.json();
+
+            // Remove loading
+            removeMessage(loadingId);
+
+            if (data.error) {
+                addMessage(`Oops, un pequeño error falló: ${data.error}`, 'assistant');
+            } else {
+                // Use marked to parse simple markdown to HTML
+                const parsedResponse = marked.parse(data.response);
+                addMessage(parsedResponse, 'assistant', true); // true for isHTML
+            }
+        } catch (error) {
+            removeMessage(loadingId);
+            addMessage("Algo fue mal con la conexión. ¿Puedes enviarlo de nuevo?", 'assistant');
+        }
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Add User Message (visible)
+        addMessage(message, 'user');
+
+        // Clear input
+        userInput.value = '';
+
+        // Hit the backend
+        await sendMessageToBackend(message, false);
+    });
+
+    function addMessage(text, sender, isHTML = false, isHidden = false) {
+        if (isHidden) return; // Do not render anything if it's a hidden message
+
+        const msgEl = document.createElement('div');
+        const messageId = 'msg-' + Date.now();
+        msgEl.id = messageId;
+        msgEl.className = `message ${sender}`;
+
+        const contentEl = document.createElement('div');
+        contentEl.className = 'bubble'; // Changed from 'message-content' to 'bubble' to match existing CSS
+
+        // Parse custom interactive buttons: [BOTON: text]
+        let formattedText = text;
+
+        // Intercept [CORRECTO] and [INCORRECTO] tags for animations and button states
+        // Adding English variations because Gemini sometimes translates the tag
+        const correctoRegex = /\[CORRECTO\]|\[CORRECT\]/gi;
+        const incorrectoRegex = /\[INCORRECTO\]|\[INCORRECT\]/gi;
+
+        let foundStatus = null; // Can be 'correct' or 'incorrect'
+
+        if (formattedText.match(correctoRegex)) {
+            formattedText = formattedText.replace(correctoRegex, '').trim();
+            // Wait slightly so the message renders first
+            setTimeout(playSuccessAnimation, 300);
+            foundStatus = 'correct';
+        } else if (formattedText.match(incorrectoRegex)) {
+            formattedText = formattedText.replace(incorrectoRegex, '').trim();
+            foundStatus = 'incorrect';
+        }
+
+        // If there is a pending button, resolve its state visually
+        if (sender === 'assistant' && window.lastClickedInteractiveButton) {
+            if (foundStatus === 'correct') {
+                window.lastClickedInteractiveButton.classList.remove('loading');
+                window.lastClickedInteractiveButton.classList.add('correct');
+            } else if (foundStatus === 'incorrect') {
+                window.lastClickedInteractiveButton.classList.remove('loading');
+                window.lastClickedInteractiveButton.classList.add('incorrect');
+            } else {
+                // Fallback, if bot didn't include the tag but responded, just clear loading
+                window.lastClickedInteractiveButton.classList.remove('loading');
+            }
+            // Clear the reference since we've handled it
+            window.lastClickedInteractiveButton = null;
+        }
+
+        // Parse custom interactive buttons: [BOTON: text]
+        let interactiveButtonsHtml = '';
+
+        if (formattedText.includes('[BOTON:')) {
+            // Extract all button matches
+            const buttonRegex = /\[BOTON:\s*([^\]]+)\]/g;
+            let match;
+            const buttons = [];
+
+            while ((match = buttonRegex.exec(formattedText)) !== null) {
+                buttons.push(match[1].trim());
+            }
+
+            // Remove the raw syntax from the message text
+            formattedText = formattedText.replace(buttonRegex, '').trim();
+
+            // Generate HTML for the interactive buttons container
+            if (buttons.length > 0) {
+                interactiveButtonsHtml = '<div class="interactive-options">';
+                buttons.forEach(btnText => {
+                    // Escape quotes just in case
+                    const safeText = btnText.replace(/"/g, '&quot;');
+                    interactiveButtonsHtml += `<button class="interactive-btn" onclick="window.sendInteractiveAnswer('${safeText}', this)">${btnText}</button>`;
+                });
+                interactiveButtonsHtml += '</div>';
+            }
+        }
+
+        // Only run these manual replacements if it wasn't already processed by Marked
+        if (!isHTML) {
+            // Convert markdown-like bold text **text** to HTML
+            formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Convert newlines to <br>
+            formattedText = formattedText.replace(/\n/g, '<br>');
+        }
+
+        contentEl.innerHTML = formattedText + interactiveButtonsHtml;
+        msgEl.appendChild(contentEl);
+        chatMessages.appendChild(msgEl);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Speak the message if audio is enabled and it's from the assistant
+        if (sender === 'assistant' && !isHidden) {
+            // The incoming text is already parsed as HTML by marked.js, so we first strip all HTML tags
+            let tempDiv = document.createElement("div");
+            tempDiv.innerHTML = text;
+            let cleanText = tempDiv.textContent || tempDiv.innerText || "";
+
+            // Now clean out the proprietary bracket syntax that remains in the plain text
+            cleanText = cleanText.replace(/\[BOTON:.*?\]/gi, ''); // Remove button tags
+            cleanText = cleanText.replace(/\[CORRECTO\]/gi, ''); // Remove grading tags
+            cleanText = cleanText.replace(/\[INCORRECTO\]/gi, '');
+            cleanText = cleanText.replace(/\[CORRECT\]/gi, '');
+            cleanText = cleanText.replace(/\[INCORRECT\]/gi, '');
+            speakText(cleanText.trim());
+        }
+    }
+
+    // Speak helper using Web Speech API
+    function speakText(text) {
+        if (!audioEnabled || !window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel(); // Stop whatever is currently playing
+
+        if (!text) return;
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Select language based on subject
+        if (currentSubject === 'ingles') {
+            utterance.lang = 'en-GB';
+        } else if (currentSubject === 'valenciano') {
+            utterance.lang = 'ca-ES'; // Catalan/Valencian usually works
+        } else {
+            utterance.lang = 'es-ES';
+        }
+
+        // Try to pick a natural voice
+        const voices = window.speechSynthesis.getVoices();
+        const targetVoices = voices.filter(v => v.lang.startsWith(utterance.lang.substring(0, 2)));
+
+        if (targetVoices.length > 0) {
+            utterance.voice = targetVoices[0]; // fallback
+
+            // Try to find a premium voice for better quality if available
+            const premium = targetVoices.find(v => v.name.includes("Premium") || v.name.includes("Enhanced") || v.name.includes("Google"));
+            if (premium) {
+                utterance.voice = premium;
+            }
+        }
+
+        utterance.rate = 1.0;
+        utterance.pitch = 1.1; // Slightly higher pitch for a friendlier/teacher tone
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function addLoadingIndicator() {
+        const id = 'loading-' + Date.now();
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message assistant';
+        msgDiv.id = id;
+
+        msgDiv.innerHTML = `
+            <div class="bubble typing-indicator">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        `;
+
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        return id;
+    }
+
+    function removeMessage(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
+    // Global function to handle clicks on interactive buttons
+    window.sendInteractiveAnswer = function (answer, btnElement) {
+        // Find the container parent and disable all buttons inside it
+        const container = btnElement.parentElement;
+        const allButtons = container.querySelectorAll('.interactive-btn');
+        allButtons.forEach(btn => {
+            btn.disabled = true;
+            if (btn !== btnElement) {
+                btn.style.opacity = '0.5';
+            }
+        });
+
+        // Highlight the selected one as loading
+        btnElement.classList.add('loading');
+        window.lastClickedInteractiveButton = btnElement;
+
+        // Instead of simulating form submission, directly trigger the backend call silently
+        // We use dispatchEvent on a custom event to keep the logic clean, or we can just expose a global sender
+        // To be safe and avoid rewriting the scope, we'll force the chat form to submit, but we need to tell it to be hidden.
+        // It's cleaner to just expose a hidden sender function globally:
+        if (window.doHiddenSend) {
+            window.doHiddenSend(answer);
+        }
+    };
+
+    // Expose the internal send function globally so the buttons can hit the API silently
+    window.doHiddenSend = function (answer) {
+        // Find the sendMessageToBackend function in the current scope
+        // We'll dispatch a custom event that chat.js listens to
+        document.dispatchEvent(new CustomEvent('sendHiddenMessage', { detail: { text: answer } }));
+    };
+
+    document.addEventListener('sendHiddenMessage', (e) => {
+        const messageText = e.detail.text;
+        // The addMessage step is skipped for hidden messages. Just show loading and fetch
+
+        // Show loading indicator
+        const loadingId = addLoadingIndicator();
+
+        // Let's copy the backend logic here to avoid scope issues inside the event listener
+        const prefixedMessage = `[Contexto: asignatura actual es ${themes[currentSubject].name}] ${messageText}`;
+        const formData = new URLSearchParams();
+        formData.append('message', prefixedMessage);
+
+        fetch('/chat', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                removeMessage(loadingId);
+                if (data.error) {
+                    addMessage(`Oops, un error falló: ${data.error}`, 'assistant');
+                } else {
+                    const parsedResponse = marked.parse(data.response);
+                    addMessage(parsedResponse, 'assistant', true);
+                }
+            })
+            .catch(error => {
+                removeMessage(loadingId);
+                addMessage("Algo fue mal con la conexión.", 'assistant');
+            });
+    });
+
+    // Function to play the magical star animation
+    function playSuccessAnimation() {
+        const star = document.createElement('div');
+        star.className = 'success-star';
+        // Use an SVG to allow for perfectly soft, rounded corners while keeping it solid yellow
+        star.innerHTML = `<svg viewBox="0 0 24 24" width="100" height="100" fill="#FFD700" stroke="#F59E0B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+        document.body.appendChild(star);
+
+        // Remove from DOM after animation completes (2.5 seconds)
+        setTimeout(() => {
+            star.remove();
+        }, 2500);
+    }
+});
