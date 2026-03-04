@@ -14,21 +14,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBloque = document.getElementById('filter-bloque');
     const filterContenido = document.getElementById('filter-contenido');
     const btnEstudiar = document.getElementById('btn-estudiar');
-    let temarioData = [];
+    let temarioDataLengua = [];
+    let temarioDataMatematicas = [];
+    let temarioDataValenciano = [];
+    let temarioDataIngles = [];
+    let currentTemarioData = [];
+
+    // Store chat history HTML per subject
+    const chatHistoriesHTML = {};
 
     // Fetch Syllabus Data
-    async function loadTemario() {
+    async function loadTemario(subject, endpoint) {
         try {
-            const resp = await fetch('/api/temario/lengua');
+            const resp = await fetch(endpoint);
             if (resp.ok) {
                 const data = await resp.json();
-                temarioData = data.temario || [];
+                if (subject === 'lengua') {
+                    temarioDataLengua = data.temario || [];
+                } else if (subject === 'matematicas') {
+                    temarioDataMatematicas = data.temario || [];
+                    // If math is default on load
+                    if (currentSubject === 'matematicas') {
+                        currentTemarioData = temarioDataMatematicas;
+                        syllabusFilters.style.display = 'block';
+                        populateCursos();
+                    }
+                } else if (subject === 'valenciano') {
+                    temarioDataValenciano = data.temario || [];
+                } else if (subject === 'ingles') {
+                    temarioDataIngles = data.temario || [];
+                }
             }
         } catch (e) {
-            console.error("Error loading temario:", e);
+            console.error(`Error loading temario for ${subject}:`, e);
         }
     }
-    loadTemario();
+    loadTemario('lengua', '/api/temario/lengua');
+    loadTemario('matematicas', '/api/temario/matematicas');
+    loadTemario('valenciano', '/api/temario/valenciano');
+    loadTemario('ingles', '/api/temario/ingles');
 
     let audioEnabled = false;
 
@@ -72,30 +96,77 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Subject switching
     subjectButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+            if (currentSubject === btn.dataset.subject) return;
+
             subjectButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const subject = btn.dataset.subject;
-            currentSubject = subject;
+            const nextSubject = btn.dataset.subject;
+
+            // Save current subject's chat history
+            chatHistoriesHTML[currentSubject] = chatMessages.innerHTML;
+
+            // Switch subject
+            currentSubject = nextSubject;
 
             // Update UI
-            subjectTitle.textContent = themes[subject].title;
-            subjectTitle.style.color = themes[subject].color;
+            subjectTitle.textContent = themes[currentSubject].title;
+            subjectTitle.style.color = themes[currentSubject].color;
 
             // Toggle Syllabus Filters visibility
-            if (subject === 'lengua') {
+            if (currentSubject === 'lengua') {
                 syllabusFilters.style.display = 'block';
-                if (temarioData.length > 0) populateCursos();
+                currentTemarioData = temarioDataLengua;
+                if (currentTemarioData.length > 0) populateCursos();
+            } else if (currentSubject === 'matematicas') {
+                syllabusFilters.style.display = 'block';
+                currentTemarioData = temarioDataMatematicas;
+                if (currentTemarioData.length > 0) populateCursos();
+            } else if (currentSubject === 'valenciano') {
+                syllabusFilters.style.display = 'block';
+                currentTemarioData = temarioDataValenciano;
+                if (currentTemarioData.length > 0) populateCursos();
+            } else if (currentSubject === 'ingles') {
+                syllabusFilters.style.display = 'block';
+                currentTemarioData = temarioDataIngles;
+                if (currentTemarioData.length > 0) populateCursos();
             } else {
                 syllabusFilters.style.display = 'none';
+                currentTemarioData = [];
             }
+
+            // Restore or initialize chat history for the new subject
+            if (chatHistoriesHTML[currentSubject]) {
+                chatMessages.innerHTML = chatHistoriesHTML[currentSubject];
+            } else {
+                const welcomeText = (currentSubject === 'valenciano')
+                    ? "Hola! Què repassem hui? 😊"
+                    : "¡Hola! ¿Qué repasamos hoy? 😊";
+
+                chatMessages.innerHTML = `
+                    <div class="message assistant">
+                        <div class="bubble" id="welcome-message">
+                            ${welcomeText}
+                        </div>
+                    </div>`;
+            }
+
+            // Update Input Placeholder
+            if (currentSubject === 'valenciano') {
+                userInput.placeholder = "Pregunta el que vulgues...";
+            } else {
+                userInput.placeholder = "Pregunta lo que quieras...";
+            }
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         });
     });
 
     // --- SYLLABUS FILTERS LOGIC ---
     function populateCursos() {
         filterCurso.innerHTML = '<option value="">Selecciona Curso...</option>';
-        temarioData.forEach((cursoObj, index) => {
+        currentTemarioData.forEach((cursoObj, index) => {
             const opt = document.createElement('option');
             opt.value = index;
             opt.textContent = cursoObj.curso;
@@ -120,13 +191,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const cursoObj = temarioData[cursoIdx];
+        const cursoObj = currentTemarioData[cursoIdx];
         if (cursoObj && cursoObj.bloques) {
             Object.keys(cursoObj.bloques).forEach(bloqueName => {
                 const opt = document.createElement('option');
                 opt.value = bloqueName;
-                // Capitalize first letter
-                opt.textContent = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
+                // Capitalize first letter, handle valencian translation
+                let displayText = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
+                if (currentSubject === 'valenciano' && bloqueName === 'gramatica') {
+                    displayText = 'Gramàtica';
+                }
+                opt.textContent = displayText;
                 filterBloque.appendChild(opt);
             });
             filterBloque.disabled = false;
@@ -144,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const cursoObj = temarioData[cursoIdx];
+        const cursoObj = currentTemarioData[cursoIdx];
         if (cursoObj && cursoObj.bloques && cursoObj.bloques[bloqueName]) {
             const contenidos = cursoObj.bloques[bloqueName];
             contenidos.forEach((contenido, idx) => {
@@ -168,12 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (cursoIdx === "" || bloqueName === "" || contenidoIdx === "") return;
 
-        const cursoStr = temarioData[cursoIdx].curso;
-        const bloqueStr = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
-        const contenidoStr = temarioData[cursoIdx].bloques[bloqueName][contenidoIdx];
+        const cursoStr = currentTemarioData[cursoIdx].curso;
+        let bloqueStr = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
+        if (currentSubject === 'valenciano' && bloqueName === 'gramatica') {
+            bloqueStr = 'Gramàtica';
+        }
+        const contenidoStr = currentTemarioData[cursoIdx].bloques[bloqueName][contenidoIdx];
 
         // Format the message just like if the user typed it
-        const generatedMessage = `Quiero repasar ${bloqueStr}: ${contenidoStr} de ${cursoStr}`;
+        const generatedMessage = (currentSubject === 'valenciano')
+            ? `Vull repassar ${bloqueStr}: ${contenidoStr}`
+            : `Quiero repasar ${bloqueStr}: ${contenidoStr}`;
 
         // Add to UI visibly
         addMessage(generatedMessage, 'user');
@@ -185,11 +265,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // filterBloque.disabled = true; filterContenido.disabled = true; btnEstudiar.disabled = true;
 
         // Send to backend
-        await sendMessageToBackend(generatedMessage, false);
+        await sendMessageToBackend(generatedMessage, false, true);
     });
 
     // Helper to send message to backend
-    async function sendMessageToBackend(messageText, isHidden = false) {
+    async function sendMessageToBackend(messageText, isHidden = false, resetHistory = false) {
         // Show loading indicator
         const loadingId = addLoadingIndicator();
 
@@ -201,9 +281,13 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('message', prefixedMessage);
             formData.append('subject', currentSubject);
 
+            if (resetHistory) {
+                formData.append('reset_history', 'true');
+            }
+
             let courseLevel = "";
-            if (currentSubject === 'lengua' && filterCurso.value !== "") {
-                courseLevel = temarioData[filterCurso.value].curso;
+            if ((currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles') && filterCurso.value !== "") {
+                courseLevel = currentTemarioData[filterCurso.value].curso;
             }
             formData.append('course_level', courseLevel);
 
@@ -221,15 +305,40 @@ document.addEventListener('DOMContentLoaded', () => {
             removeMessage(loadingId);
 
             if (data.error) {
-                addMessage(`Oops, un pequeño error falló: ${data.error}`, 'assistant');
+                const errorMsg = (currentSubject === 'valenciano')
+                    ? `Ui, hi ha hagut un xicotet error: ${data.error}`
+                    : `Oops, un pequeño error falló: ${data.error}`;
+                addMessage(errorMsg, 'assistant');
             } else {
-                // Use marked to parse simple markdown to HTML
-                const parsedResponse = marked.parse(data.response);
-                addMessage(parsedResponse, 'assistant', true); // true for isHTML
+                // Play audio for the entire response once
+                playAudioForResponse(data.response);
+
+                // Clean the response slightly to remove standalone [CORRECTO] blocks 
+                // so they don't form empty bubbles or mess up splitting
+                let cleanResponse = data.response;
+
+                // We want to extract [CORRECTO]/[INCORRECTO] to handle UI state, 
+                // but we can do that inside addMessage. To prevent them from creating 
+                // empty bubbles, we'll let addMessage handle it, but we'll add a check 
+                // in addMessage to abort rendering if the resulting text is empty.
+
+                // Stop buttons from separating from the question text
+                cleanResponse = cleanResponse.replace(/\n\n+(?=\s*\[BOTON:)/gi, '\n');
+
+                // Split AI response by double newlines into blocks to render as separate bubbles
+                const blocks = cleanResponse.split('\n\n').filter(b => b.trim() !== '');
+
+                blocks.forEach(block => {
+                    const parsedResponse = marked.parse(block);
+                    addMessage(parsedResponse, 'assistant', true, false, true);
+                });
             }
         } catch (error) {
             removeMessage(loadingId);
-            addMessage("Algo fue mal con la conexión. ¿Puedes enviarlo de nuevo?", 'assistant');
+            const connError = (currentSubject === 'valenciano')
+                ? "Alguna cosa ha anat malament amb la connexió. Pots tornar a enviar-ho?"
+                : "Algo fue mal con la conexión. ¿Puedes enviarlo de nuevo?";
+            addMessage(connError, 'assistant');
         }
     }
 
@@ -249,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await sendMessageToBackend(message, false);
     });
 
-    function addMessage(text, sender, isHTML = false, isHidden = false) {
+    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false) {
         if (isHidden) return; // Do not render anything if it's a hidden message
 
         const msgEl = document.createElement('div');
@@ -273,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (formattedText.match(correctoRegex)) {
             formattedText = formattedText.replace(correctoRegex, '').trim();
             // Wait slightly so the message renders first
-            setTimeout(playSuccessAnimation, 300);
+            setTimeout(playSuccessAnimation, 0);
             foundStatus = 'correct';
         } else if (formattedText.match(incorrectoRegex)) {
             formattedText = formattedText.replace(incorrectoRegex, '').trim();
@@ -324,12 +433,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Always convert markdown-like bold text **text** to HTML just in case marked missed it
+        formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
         // Only run these manual replacements if it wasn't already processed by Marked
         if (!isHTML) {
-            // Convert markdown-like bold text **text** to HTML
-            formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             // Convert newlines to <br>
             formattedText = formattedText.replace(/\n/g, '<br>');
+        }
+
+        // Remove edge `<br>` tags that might be left over from removals
+        formattedText = formattedText.replace(/^(<br>\s*)+|(<br>\s*)+$/g, '').trim();
+
+        // Check if the resulting bubble would be completely empty visually
+        // Remove HTML tags temporarily to check if there is actual text
+        const tempCheck = document.createElement('div');
+        tempCheck.innerHTML = formattedText;
+        const textContent = tempCheck.textContent || tempCheck.innerText || '';
+
+        // If no text AND no interactive buttons, abort rendering this bubble
+        if (textContent.trim() === '' && interactiveButtonsHtml === '') {
+            return;
         }
 
         contentEl.innerHTML = formattedText + interactiveButtonsHtml;
@@ -340,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         // Speak the message if audio is enabled and it's from the assistant
-        if (sender === 'assistant' && !isHidden) {
+        if (sender === 'assistant' && !isHidden && !preventAudio) {
             // The incoming text is already parsed as HTML by marked.js, so we first strip all HTML tags
             let tempDiv = document.createElement("div");
             tempDiv.innerHTML = text;
@@ -354,6 +478,21 @@ document.addEventListener('DOMContentLoaded', () => {
             cleanText = cleanText.replace(/\[INCORRECT\]/gi, '');
             speakText(cleanText.trim());
         }
+    }
+
+    // Process the full response text for audio before splitting it into visual bubbles
+    function playAudioForResponse(rawText) {
+        if (!audioEnabled || !window.speechSynthesis) return;
+        let tempDiv = document.createElement("div");
+        // Parse markdown to HTML first, so characters like ** doesn't get spoken
+        tempDiv.innerHTML = marked.parse(rawText);
+        let cleanText = tempDiv.textContent || tempDiv.innerText || "";
+        cleanText = cleanText.replace(/\[BOTON:.*?\]/gi, '');
+        cleanText = cleanText.replace(/\[CORRECTO\]/gi, '');
+        cleanText = cleanText.replace(/\[INCORRECTO\]/gi, '');
+        cleanText = cleanText.replace(/\[CORRECT\]/gi, '');
+        cleanText = cleanText.replace(/\[INCORRECT\]/gi, '');
+        speakText(cleanText.trim());
     }
 
     // Speak helper using Web Speech API
@@ -377,15 +516,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Try to pick a natural voice
         const voices = window.speechSynthesis.getVoices();
-        const targetVoices = voices.filter(v => v.lang.startsWith(utterance.lang.substring(0, 2)));
+        // Find a male voice from all voices first (prioritizing the requested ones)
+        const maleNames = ["Diego", "Jorge", "Jordi", "Daniel", "Arthur", "Pablo"];
+        const boyVoice = voices.find(v => maleNames.some(name => v.name.includes(name)));
 
-        if (targetVoices.length > 0) {
-            utterance.voice = targetVoices[0]; // fallback
-
-            // Try to find a premium voice for better quality if available
-            const premium = targetVoices.find(v => v.name.includes("Premium") || v.name.includes("Enhanced") || v.name.includes("Google"));
-            if (premium) {
-                utterance.voice = premium;
+        if (boyVoice) {
+            utterance.voice = boyVoice;
+            // Also override the lang if we picked a specific voice to match its internal lang
+            utterance.lang = boyVoice.lang;
+        } else {
+            // Fallback: filter by language prefix and pick the best available
+            const targetVoices = voices.filter(v => v.lang.startsWith(utterance.lang.substring(0, 2)));
+            if (targetVoices.length > 0) {
+                utterance.voice = targetVoices[0];
+                const premium = targetVoices.find(v =>
+                    (v.name.includes("Premium") || v.name.includes("Enhanced") || v.name.includes("Google")) &&
+                    !v.name.includes("Monica") && !v.name.includes("Victoria") && !v.name.includes("Paulina")
+                );
+                if (premium) utterance.voice = premium;
             }
         }
 
@@ -463,6 +611,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const prefixedMessage = `[Contexto: asignatura actual es ${themes[currentSubject].name}] ${messageText}`;
         const formData = new URLSearchParams();
         formData.append('message', prefixedMessage);
+        formData.append('subject', currentSubject);
+
+        let courseLevel = "";
+        if ((currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles') && filterCurso.value !== "") {
+            courseLevel = currentTemarioData[filterCurso.value].curso;
+        }
+        formData.append('course_level', courseLevel);
 
         fetch('/chat', {
             method: 'POST',
@@ -475,15 +630,34 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 removeMessage(loadingId);
                 if (data.error) {
-                    addMessage(`Oops, un error falló: ${data.error}`, 'assistant');
+                    const errorMsg = (currentSubject === 'valenciano')
+                        ? `Ui, hi ha hagut un error: ${data.error}`
+                        : `Oops, un error falló: ${data.error}`;
+                    addMessage(errorMsg, 'assistant');
                 } else {
-                    const parsedResponse = marked.parse(data.response);
-                    addMessage(parsedResponse, 'assistant', true);
+                    playAudioForResponse(data.response);
+
+                    let cleanResponse = data.response;
+
+                    // Stop buttons from separating from the question text
+                    cleanResponse = cleanResponse.replace(/\n\n+(?=\s*\[BOTON:)/gi, '\n');
+
+                    // Split AI response by double newlines into blocks to render as separate bubbles
+                    const blocks = cleanResponse.split('\n\n').filter(b => b.trim() !== '');
+
+                    blocks.forEach(block => {
+                        const parsedResponse = marked.parse(block);
+                        // sender=assistant, isHTML=true, isHidden=false, preventAudio=true
+                        addMessage(parsedResponse, 'assistant', true, false, true);
+                    });
                 }
             })
             .catch(error => {
                 removeMessage(loadingId);
-                addMessage("Algo fue mal con la conexión.", 'assistant');
+                const connError = (currentSubject === 'valenciano')
+                    ? "Alguna cosa ha anat malament amb la connexió."
+                    : "Algo fue mal con la conexión.";
+                addMessage(connError, 'assistant');
             });
     });
 
@@ -495,9 +669,9 @@ document.addEventListener('DOMContentLoaded', () => {
         star.innerHTML = `<svg viewBox="0 0 24 24" width="100" height="100" fill="#FFD700" stroke="#F59E0B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
         document.body.appendChild(star);
 
-        // Remove from DOM after animation completes (2.5 seconds)
+        // Remove from DOM after animation completes (1.65 seconds)
         setTimeout(() => {
             star.remove();
-        }, 2500);
+        }, 1650);
     }
 });

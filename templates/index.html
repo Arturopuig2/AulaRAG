@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula - Asistente Escolar</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=5">
 </head>
 
 <body>
@@ -65,7 +65,10 @@
             </div>
             <div class="user-profile">
                 <div class="avatar">👨‍🎓</div>
-                <span>Tú</span>
+                <span id="user-display-name">Cargando...</span>
+                <button id="logout-btn" title="Cerrar sesión" onclick="logout()"
+                    style="background:none;border:none;cursor:pointer;font-size:1rem;padding:4px 6px;border-radius:8px;color:#64748b;transition:background 0.2s;"
+                    title="Cerrar sesión">⬅️</button>
             </div>
         </aside>
 
@@ -79,8 +82,8 @@
             <div class="chat-messages" id="chat-messages">
                 <!-- Welcome Message -->
                 <div class="message assistant">
-                    <div class="bubble">
-                        ¡Hola! ¿En qué puedo ayudarte? 😊
+                    <div class="bubble" id="welcome-message">
+                        ¡Hola! ¿Qué repasamos hoy? 😊
                     </div>
                 </div>
             </div>
@@ -100,9 +103,31 @@
         </main>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="/static/js/chat.js"></script>
+    <script src="/static/js/chat.js?v=14"></script>
+    <script>
+        function getCookie(name) {
+            const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return v ? v.pop() : null;
+        }
+        if (!getCookie('access_token')) {
+            window.location.href = '/login';
+        } else {
+            fetch('/auth/me', {
+                headers: { 'Authorization': 'Bearer ' + getCookie('access_token') }
+            }).then(r => r.json()).then(data => {
+                if (data.name) {
+                    document.getElementById('user-display-name').textContent = data.name;
+                } else {
+                    window.location.href = '/login';
+                }
+            }).catch(() => window.location.href = '/login');
+        }
+        function logout() {
+            document.cookie = 'access_token=; path=/; max-age=0';
+            window.location.href = '/login';
+        }
+    </script>
 </body>
 
 </html>

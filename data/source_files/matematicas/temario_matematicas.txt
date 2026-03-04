@@ -1,0 +1,459 @@
+{
+  "asignatura": "Matemáticas",
+  "temario": [
+    {
+      "curso": "1º de primaria",
+      "bloques": {
+        "Números": [
+          "Contar, escribir, ordenar y comparar números hasta el 5",
+          "Contar, escribir, ordenar y comparar números hasta el 10",
+          "Escribir, componer y descomponer números hasta el 50",
+          "Escribir, componer y descomponer números hasta el 70. Ordinales hasta el 10",
+          "Contar, escribir, componer y descomponer números hasta el 100. Pares e impares"
+        ],
+        "Operaciones": [
+          "Sumar hasta 10",
+          "Sumar y restar hasta 12",
+          "Sumar y restar hasta 20",
+          "Sumar y restar con múltiplos de 10",
+          "Sumas, restas y series hasta 100",
+          "Sumas de números de una cifra",
+          "Restas de números de una cifra",
+          "Sumas de tres números de una cifra",
+          "Sumas sin llevar de números de dos cifras",
+          "Restas sin llevar de números de dos cifras",
+          "Sumas sin llevar de tres números de dos cifras",
+          "Sumas llevando y sin llevar de números de una cifra",
+          "Sumas llevando y sin llevar de números de dos cifras",
+          "Sumas llevando y sin llevar de tres números de dos cifras"
+        ],
+        "Problemas": [
+          "Problemas con una suma sin llevar",
+          "Problemas con una resta sin llevar",
+          "Problemas con una suma llevando o sin llevar, o con una resta sin llevar"
+        ],
+        "Medida": [
+          "Utilizar atributos de medición de la longitud",
+          "Problemas de longitud seleccionando operaciones de suma o resta",
+          "Utilizar atributos de medición del peso",
+          "Problemas de peso seleccionando operaciones de suma o resta",
+          "Utilizar atributos de medición de la capacidad",
+          "Problemas de capacidad seleccionando operaciones de suma o resta",
+          "Sistema monetario de la UE: utilizar monedas y billetes hasta 20€",
+          "Problemas con dinero seleccionando operaciones de suma o resta",
+          "Los meses del año",
+          "Los días de la semana",
+          "Interpretar un horario",
+          "Reconocer las horas enteras y las medias horas en un reloj."
+        ],
+        "Geometría": [
+          "Utilizar los atributos de orientación",
+          "Identificar líneas y formas",
+          "Calcular contornos",
+          "Identificar simetrías y dibujar formas"
+        ],
+        "Estadística": [
+          "Tablas de datos: recoger y clasificar datos cualitativos y cuantitativos",
+          "Diagramas de barras: realizar e interpretar pictogramas sencillos"
+        ],
+        "Probabilidad": [
+          "Lenguaje de azar: posible, imposible, seguro",
+          "Lenguaje de azar: nunca, a veces, siempre"
+        ]
+      }
+    },
+    {
+      "curso": "2º de primaria",
+      "bloques": {
+        "Números": [
+          "Escribir, ordenar, comparar y descomponer números hasta el 99",
+          "Escribir, ordenar, comparar y descomponer números hasta el 400",
+          "Escribir, ordenar, comparar y descomponer números hasta el 700",
+          "Escribir, ordenar, comparar y descomponer números hasta el 1.000",
+          "Series numéricas ascendentes y descendentes de cadencia 3, 4 o 5",
+          "Hallar el número anterior y posterior de un número menor de 1.000"
+        ],
+        "Operaciones": [
+          "Sumar y restar mentalmente números de una y dos cifras",
+          "Tablas de multiplicar del 0, 1, 2, 3, 4 y 5",
+          "El doble, la mitad y el triple de números menores de 50",
+          "Sumas sin llevar de números de dos cifras",
+          "Restas sin llevar de números de dos cifras",
+          "Sumas llevando y sin llevar de números de dos cifras",
+          "Sumas sin llevar de tres números de dos cifras",
+          "Sumas llevando y sin llevar de números de tres cifras",
+          "La propiedad asociativa de la suma",
+          "Restas llevando de números de dos cifras",
+          "Sumas llevando de tres números de dos cifras",
+          "Restas llevando y sin llevar de tres cifras",
+          "La prueba de la resta",
+          "Multiplicaciones de números de una cifra",
+          "La propiedad conmutativa de la multiplicación",
+          "Multiplicaciones sin llevar"
+        ],
+        "Problemas": [
+          "Problemas con una suma sin llevar",
+          "Problemas con una resta sin llevar",
+          "Problemas con una suma llevando",
+          "Problemas con una resta llevando",
+          "Problemas con una suma o una resta llevando o sin llevar",
+          "Problemas con una multiplicación",
+          "Problemas con 2 operaciones de suma y resta",
+          "Problemas de doble y mitad"
+        ],
+        "Medida": [
+          "Utilizar atributos de medición de la longitud: el centímetro y el metro",
+          "Problemas de longitud seleccionando operaciones de suma o resta",
+          "Utilizar atributos de medición del peso: el kilogramo",
+          "Problemas de peso seleccionando operaciones de suma o resta",
+          "Utilizar atributos de medición de la capacidad: el litro",
+          "Problemas de capacidad seleccionando operaciones de suma o resta",
+          "Sistema monetario de la UE: utilizar monedas y billetes hasta 50 €",
+          "Problemas con dinero y selección de operaciones de suma o resta",
+          "Ayer, hoy y mañana. Los días de la semana",
+          "Utilizar el calendario: el mes y el año",
+          "Interpretar un horario",
+          "Reconocer las horas enteras, medias horas y cuartos de hora en un reloj"
+        ],
+        "Geometría": [
+          "Líneas, figuras y polígonos",
+          "Simetrías",
+          "Prisma, pirámide, esfera, cono y cilindro"
+        ],
+        "Estadística": [
+          "Recoger y clasificar datos en tablas",
+          "Diagramas de barras y pictogramas"
+        ],
+        "Probabilidad": [
+          "Lenguaje de azar: posible, imposible, seguro",
+          "Lenguaje de azar: nunca, a veces, siempre"
+        ]
+      }
+    },
+    {
+      "curso": "3º de primaria",
+      "bloques": {
+        "Números": [
+          "Escribir y ordenar números hasta el 10.000",
+          "Comparar mayor que, menor que e igual que",
+          "Identificar los números por unidades, decenas, centenas y unidades de millar.",
+          "Componer y descomponer números menores de 10.000.",
+          "Identificar los números ordinales.",
+          "Aproximar números menores de 10.000 a millares, centenas o decenas.",
+          "Construir series numéricas.",
+          "Leer, escribir y representar fracciones propias con denominador menor que 10."
+        ],
+        "Operaciones": [
+          "Sumar y restar números de hasta 3 cifras",
+          "Multiplicar por la unidad seguida de ceros.",
+          "Dividir entre múltiplos de 2, 3, 5 y 10",
+          "Calcular el doble, mitad, tercio, cuarto y quinto",
+          "Las tablas de multiplicar.",
+          "Sumas llevando y sin llevar de tres números de hasta 4 cifras.",
+          "Restas llevando y sin llevar de números de hasta 4 cifras.",
+          "Multiplicaciones de números de una cifra",
+          "Multiplicaciones sin llevar",
+          "Multiplicaciones llevando",
+          "Multiplicaciones por números de varias cifras",
+          "Divisiones exactas con divisor de una cifra",
+          "Divisiones con resto con divisor de una cifra",
+          "Divisiones bajando la cifra siguiente.",
+          "La división simplificada.",
+          "La prueba de la división."
+        ],
+        "Problemas": [
+          "Problemas con una suma o una resta",
+          "Problemas con una suma, una resta o una multiplicación",
+          "Problemas con 2 operaciones de sumar y restar",
+          "Problemas con dos operaciones de sumar o restar y multiplicar",
+          "Problemas con multiplicación o división"
+        ],
+        "Medida": [
+          "Calcular la longitud",
+          "Problemas de longitud con 1 o 2 operaciones",
+          "Calcular el peso",
+          "Problemas de peso con 1 o 2 operaciones",
+          "Calcular la capacidad.",
+          "Problemas de capacidad con 1 o 2 operaciones",
+          "Utilizar monedas y billetes hasta 500 €",
+          "Leer y escribir precios en euros y céntimos",
+          "Problemas con una o dos operaciones.",
+          "Utilizar el calendario: el mes y el año",
+          "Ayer, hoy y mañana: los días de la semana",
+          "Horas y minutos",
+          "Las horas y los minutos en un reloj"
+        ],
+        "Geometría": [
+          "Describir recorridos",
+          "Localizar puntos en el sistema cartesiano",
+          "Tipos de líneas. Segmentos y rectas",
+          "El círculo y la circunferencia",
+          "Ángulos agudos, rectos, obtusos, llanos y completos",
+          "Identificar triángulos y otros polígonos",
+          "Calcular y dibujar contornos y perímetros de polígonos",
+          "Áreas de polígonos, cuadrados y rectángulos",
+          "Poliedros: caras vértices y aristas"
+        ],
+        "Estadística": [
+          "Tablas de datos.",
+          "Realizar e interpretar diagramas de barras"
+        ],
+        "Probabilidad": [
+          "Lenguaje de azar",
+          "Problemas de probabilidad."
+        ]
+      }
+    },
+    {
+      "curso": "4º de primaria",
+      "bloques": {
+        "Números": [
+          "Escribir, ordenar y comparar números hasta el 100.000",
+          "Identificar los números ordinales.",
+          "Identificar y aproximar números hasta decenas de millar",
+          "Componer y descomponer números menores de 100.000",
+          "Leer y escribir del 1 al 20",
+          "Leer, escribir y representar fracciones propias con denominador menor que 10",
+          "Comparar fracciones.",
+          "Fracciones comparadas con la unidad.",
+          "Fracciones impropias y números mixtos.",
+          "Números decimales.",
+          "Correspondencia entre fracciones y decimales",
+          "Colocar decimales en una recta numérica",
+          "Aproximar números decimales."
+        ],
+        "Operaciones": [
+          "Restar un múltiplo de 10, 100 o 1.000.",
+          "Sumar y restar decenas, centenas y millares enteros",
+          "Multiplicar unidades, decenas y centenas",
+          "Multiplicar por múltiplos de 100",
+          "División por la unidad seguida de ceros.",
+          "Sumas de dos y tres números",
+          "Propiedad conmutativa y asociativa de la suma",
+          "Restas llevando y la prueba de la resta",
+          "Operaciones combinadas de sumas y restas",
+          "Multiplicaciones sin llevar y la propiedad conmutativa",
+          "Multiplicaciones llevando.",
+          "Multiplicaciones de varias cifras.",
+          "Multiplicaciones por números seguidos de ceros",
+          "Divisiones con divisor de 1 cifra",
+          "Divisiones con divisor de 2 cifras",
+          "Divisiones con dividendo y divisor seguidos de ceros",
+          "Sumas y restas con decimales",
+          "Multiplicaciones con números decimales."
+        ],
+        "Problemas": [
+          "Problemas con una de las cuatro operaciones",
+          "Problemas con dos de las cuatro operaciones",
+          "Problemas con una suma, una resta o una multiplicación con decimales",
+          "Problemas de dos operaciones de suma, resta o multiplicación con decimales"
+        ],
+        "Medida": [
+          "Equivalencia entre unidades de longitud (m)",
+          "Problemas de longitud con varias operaciones",
+          "Equivalencia entre unidades de peso (g)",
+          "Problemas de peso con varias operaciones.",
+          "Equivalencia entre unidades de capacidad (l)",
+          "Problemas de capacidad con varias operaciones",
+          "Sumar monedas y billetes. Convertir en céntimos",
+          "Problemas con monedas y billetes.",
+          "El calendario: la semana, el mes y el año",
+          "Trimestre, semestre, lustro, década, siglo",
+          "Horas, minutos y segundos.",
+          "Las horas y los minutos en un reloj"
+        ],
+        "Geometría": [
+          "Describir recorridos",
+          "Localizar puntos en el sistema cartesiano.",
+          "Ángulos.",
+          "Polígonos.",
+          "Circunferencia",
+          "Perímetros de polígonos",
+          "Áreas de polígonos",
+          "Polígonos: lados y ángulos",
+          "Prismas y pirámides",
+          "Cuerpos redondos",
+          "Problemas de cálculo de perímetros y áreas"
+        ],
+        "Estadística": [
+          "Tablas, diagramas de barras y lineales."
+        ],
+        "Probabilidad": [
+          "La probabilidad en forma de fracción",
+          "Problemas de probabilidad"
+        ]
+      }
+    },
+    {
+      "curso": "5º de primaria",
+      "bloques": {
+        "Números": [
+          "Escribir y comparar números hasta 6 cifras",
+          "Descomponer hasta las centenas de millar",
+          "Escribir y comparar números hasta 8 cifras",
+          "Descomponer hasta las unidades de millón",
+          "Múltiplos y divisores",
+          "Primos y compuestos",
+          "Potencias: cuadrado y cubo",
+          "Identificar números romanos",
+          "Datar hechos históricos",
+          "Fracciones propias con denominador < 10",
+          "Comparar fracciones. Recta graduada",
+          "Fracciones equivalentes. Simplificar y ordenar",
+          "Fracciones impropias y números mixtos",
+          "Fracciones sencillas, decimales y porcentajes",
+          "Ordenar decimales y expresarlos en fracción",
+          "Aproximar números decimales"
+        ],
+        "Operaciones": [
+          "Sumar y restar decenas, centenas y millares",
+          "Multiplicar y dividir unidades, decenas y centenas",
+          "Dividir entre decenas, centenas y millares",
+          "Sumar y restar números decimales sencillos",
+          "Calcular el 10%, 20%, 25%, 50%",
+          "Elevar a potencias básicas",
+          "Sumar y restar fracciones de igual denominador. Reducir a común denominador",
+          "Calcular porcentajes en situaciones reales",
+          "Multiplicaciones de varias cifras",
+          "Divisiones con divisor de 1 cifra",
+          "Divisiones bajando la cifra siguiente",
+          "Divisiones con divisor de 2 cifras",
+          "Divisiones con dividendo y divisor seguidos de ceros",
+          "Sumas y restas con decimales",
+          "Multiplicaciones con decimales",
+          "Multiplicaciones con decimales entre un 1 seguido de ceros",
+          "Divisiones con decimales en el cociente",
+          "Divisiones con el dividendo menor que el divisor",
+          "Divisiones con decimales en el dividendo"
+        ],
+        "Problemas": [
+          "Problemas con 2 de las 4 operaciones",
+          "Problemas con una suma, una resta o una multiplicación con decimales",
+          "Problemas de dos operaciones de suma, resta o multiplicación con decimales",
+          "Problemas de una división con decimales"
+        ],
+        "Medida": [
+          "Equivalencia entre unidades de longitud (m)",
+          "Problemas de longitud con varias operaciones",
+          "Equivalencia entre unidades de peso (g)",
+          "Problemas de peso con varias operaciones",
+          "Equivalencia entre unidades de capacidad (l)",
+          "Problemas de capacidad con varias operaciones",
+          "Unidades de superficie: calcular áreas",
+          "Problemas de superficie con varias operaciones",
+          "Equivalencia entre unidades de tiempo",
+          "Problemas con horas, minutos y segundos"
+        ],
+        "Geometría": [
+          "Giros en coordenadas cartesianas",
+          "Localizar puntos en coordenadas cartesianas",
+          "Clasificación de ángulos y triángulos",
+          "Cuadriláteros y tipos de paralelogramos",
+          "Circunferencia y círculo",
+          "Perímetros",
+          "Áreas",
+          "Polígonos: lados, ángulos y simetría",
+          "Prismas y pirámides",
+          "Cuerpos redondos",
+          "Problemas cálculo de perímetros y áreas"
+        ],
+        "Estadística": [
+          "Frecuencia absoluta y relativa",
+          "Media y moda",
+          "Interpretar y trabajar con tablas"
+        ],
+        "Probabilidad": [
+          "La probabilidad en forma de fracción",
+          "Ejercicios de probabilidad"
+        ]
+      }
+    },
+    {
+      "curso": "6º de primaria",
+      "bloques": {
+        "Números": [
+          "Escribir, y comparar hasta 8 cifras.",
+          "Descomponer hasta las unidades de millón",
+          "Escribir, y comparar hasta 9 cifras",
+          "Descomponer hasta las decenas de millón.",
+          "Primos y compuestos",
+          "Múltiplos y divisores",
+          "Mínimo común múltiplo y máximo común divisor.",
+          "Potencias",
+          "Calcular raíces cuadradas",
+          "Identificar números romanos",
+          "Ordenar números enteros positivos y negativos",
+          "Números enteros en contextos reales.",
+          "Reducir fracciones a común denominador",
+          "Comparar fracciones.",
+          "Fracciones propias e impropias.",
+          "Fracciones, decimales y porcentajes",
+          "Aproximar números decimales."
+        ],
+        "Operaciones": [
+          "Sumar y restar decenas, centenas y millares.",
+          "Multiplicar y dividir unidades, decenas y centenas",
+          "Dividir entre decenas, centenas y millares.",
+          "Sumar y restar números naturales y decimales.",
+          "Multiplicar y dividir decimales. Porcentajes",
+          "Sumar y restar números enteros",
+          "Sumar y restar fracciones",
+          "Multiplicar y dividir fracciones",
+          "Multiplicaciones por números de varias cifras.",
+          "Divisiones con divisor de 1 cifra.",
+          "Divisiones bajando la cifra siguiente",
+          "Divisiones con divisor de 2 cifras",
+          "Dividendo y divisor seguidos de ceros",
+          "Sumas y restas con decimales",
+          "Multiplicaciones con números decimales.",
+          "Multip. decimales por un 1 seguido de ceros.",
+          "Divisiones con números decimales",
+          "Divisiones con dividendo menor que el divisor.",
+          "Divisiones con decimales en el dividendo",
+          "Divisiones con decimales en el divisor",
+          "Div. con decimales en dividendo y divisor.",
+          "Operaciones combinadas."
+        ],
+        "Problemas": [
+          "Calcular porcentajes en situaciones reales.",
+          "Proporcionalidad directa",
+          "Problemas con dos de las cuatro operaciones.",
+          "Problemas de operaciones con decimales",
+          "Problemas de longitud con varias operaciones",
+          "Problemas de peso con varias operaciones",
+          "Problemas de capacidad con varias operaciones",
+          "Problemas de volumen con varias operaciones",
+          "Problemas de superficie con varias operaciones",
+          "Problemas con horas, minutos y segundos.",
+          "Problemas de cálculo de perímetros y áreas",
+          "Problemas de cálculo de volúmenes"
+        ],
+        "Medida": [
+          "Equivalencia entre unidades de longitud (m).",
+          "Equivalencia entre unidades de peso (g)",
+          "Equivalencia entre unidades de capacidad (l)",
+          "Equivalencia entre unidades de volumen (m³).",
+          "Equivalencia entre unidades de superficie (m²).",
+          "Equivalencia entre unidades de tiempo."
+        ],
+        "Geometría": [
+          "Coordenadas cartesianas.",
+          "Giros en coordenadas cartesianas",
+          "Localizar puntos en coordenadas cartesianas",
+          "Clasificación de ángulos y triángulos",
+          "Cuadriláteros y tipos de paralelogramos",
+          "Circunferencias y rectas: relación",
+          "Áreas.",
+          "Polígonos: lados, ángulos y simetría.",
+          "Cuerpos geométricos"
+        ],
+        "Estadística": [
+          "Media, mediana, moda y rango"
+        ],
+        "Probabilidad": [
+          "Ejercicios de probabilidad"
+        ]
+      }
+    }
+  ]
+}

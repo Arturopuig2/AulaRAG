@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regístrate — Aula</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=5">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-logo img {
+            max-height: 60px;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin: 0 0 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .auth-field {
+            margin-bottom: 1rem;
+        }
+
+        .auth-field input {
+            width: 100%;
+            padding: 0.75rem 1.1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .auth-field input:focus {
+            border-color: #667eea;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .auth-btn:active {
+            transform: scale(0.98);
+        }
+
+        .auth-btn:hover {
+            opacity: 0.92;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-hint {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            padding: 0 0.8rem;
+            margin-top: -0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .auth-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <div class="auth-logo">
+            <img src="/static/img/logo.png" alt="Aula Logo">
+        </div>
+        <h2>Crear cuenta</h2>
+        <div class="auth-error" id="error-msg"></div>
+        <form id="register-form">
+            <div class="auth-field">
+                <input type="text" id="name" required placeholder="Tu nombre" autocomplete="name">
+            </div>
+            <div class="auth-field">
+                <input type="email" id="email" required placeholder="Correo electrónico" autocomplete="email">
+            </div>
+            <div class="auth-field">
+                <input type="email" id="confirm-email" required placeholder="Repetir correo electrónico">
+            </div>
+            <div class="auth-field">
+                <input type="password" id="password" required placeholder="Contraseña" autocomplete="new-password">
+            </div>
+            <div class="auth-hint">Mínimo 8 caracteres, una letra y un número.</div>
+            <div class="auth-field">
+                <input type="password" id="confirm-password" required placeholder="Repetir contraseña">
+            </div>
+            <button type="submit" class="auth-btn">Registrarse</button>
+        </form>
+        <div class="auth-footer">
+            ¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const confirmEmail = document.getElementById('confirm-email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorEl = document.getElementById('error-msg');
+            errorEl.style.display = 'none';
+
+            // Client-side validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+
+            if (!emailRegex.test(email)) {
+                errorEl.textContent = 'Por favor, introduce un correo electrónico válido.';
+                errorEl.style.display = 'block'; return;
+            }
+            if (email !== confirmEmail) {
+                errorEl.textContent = 'Los correos electrónicos no coinciden.';
+                errorEl.style.display = 'block'; return;
+            }
+            if (!passwordRegex.test(password)) {
+                errorEl.textContent = 'La contraseña debe tener al menos 8 caracteres, una letra y un número.';
+                errorEl.style.display = 'block'; return;
+            }
+            if (password !== confirmPassword) {
+                errorEl.textContent = 'Las contraseñas no coinciden.';
+                errorEl.style.display = 'block'; return;
+            }
+
+            try {
+                // 1. Register
+                const regRes = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const regData = await regRes.json();
+                if (!regRes.ok) throw new Error(regData.detail || 'Error al registrarse');
+
+                // 2. Auto-login
+                const formData = new FormData();
+                formData.append('username', email);
+                formData.append('password', password);
+                const loginRes = await fetch('/auth/token', { method: 'POST', body: formData });
+                const loginData = await loginRes.json();
+                if (!loginRes.ok) throw new Error('Registro OK, pero error al iniciar sesión');
+
+                // 3. Store token
+                const maxAge = 60 * 60 * 24 * 30;
+                document.cookie = `access_token=${loginData.access_token}; path=/; max-age=${maxAge}; SameSite=Lax`;
+                window.location.href = '/';
+            } catch (err) {
+                errorEl.textContent = err.message;
+                errorEl.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

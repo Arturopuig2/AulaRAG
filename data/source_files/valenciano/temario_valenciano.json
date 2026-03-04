@@ -1,0 +1,218 @@
+{
+  "asignatura": "Valenciano",
+  "temario": [
+    {
+      "curso": "1º de primaria",
+      "bloques": {
+        "ortografia": [
+          "Les vocals",
+          "R, RR",
+          "CA, CO, CU, QUE, QUI",
+          "GA, GO, GU, GUE, GUI",
+          "GÜE, GÜI, QÜE, QÜI",
+          "B, V",
+          "S o SS",
+          "C o Ç",
+          "G o J",
+          "L, LL",
+          "NY, LL, X",
+          "Numerals fins a 100",
+          "La majúscula",
+          "Noms de les consonants",
+          "Repàs de G, GU i GÜ",
+          "Repàs de B i V",
+          "C, QU, QÜ",
+          "ESCRIU LA VOCAL QUE TÉ LA PARAULA"
+        ],
+        "gramatica": [
+          "Identificació de vocals i consonants",
+          "L’ordre alfabètic",
+          "L’article determinat",
+          "L’article indeterminat",
+          "Identificar el substantiu: comú i propi",
+          "L’adjectiu: descrivim i descartem",
+          "El gènere i el nombre",
+          "La concordància",
+          "La síl·laba",
+          "La paraula",
+          "L’oració",
+          "El verb: singular i plural",
+          "Les onomatopeies"
+        ]
+      }
+    },
+    {
+      "curso": "2º de primaria",
+      "bloques": {
+        "ortografia": [
+          "Amb H o sense H",
+          "X o TX",
+          "TX o IG",
+          "TG o TJ",
+          "La L i la L · L",
+          "MB i MP",
+          "BR o BL",
+          "MB o NV",
+          "Compta les síl·labes",
+          "Paraules fins a quatre síl·labes",
+          "La síl·laba tònica",
+          "La síl·laba tònica al final",
+          "L’apòstrof: l’article masculí",
+          "L’apòstrof: l’article femení",
+          "Exclamació o interrogació?",
+          "Numerals fins a 1000",
+          "Repàs de la C, QU, G, GU i GÜ",
+          "Repàs de SS, S, C i Ç",
+          "Repàs de B i V",
+          "Repàs de X, TX, IG",
+          "Repàs de la L i la L · L",
+          "COMPLETA AMB  X  O  TX"
+        ],
+        "gramatica": [
+          "Els substantius individuals i col·lectius",
+          "L’adjectiu",
+          "Els articles",
+          "Els demostratius simples",
+          "Els possessius",
+          "Els numerals",
+          "Els pronoms personals forts",
+          "El verb: present, passat i futur",
+          "Els tipus d’oracions: enunciativa, exclamativa i interrogativa",
+          "Sinònims i antònims",
+          "Diminutius i augmentatius",
+          "El camp semàntic"
+        ]
+      }
+    },
+    {
+      "curso": "3º de primaria",
+      "bloques": {
+        "ortografia": [
+          "La E oberta i la E tancada",
+          "La O oberta i la O tancada",
+          "La S sonora: el so S",
+          "La S sonora: S o Z?",
+          "La S sorda, com sona?.",
+          "La S sorda: S o SS",
+          "La S sorda. C o Ç?",
+          "G, J, TG, TJ",
+          "El diftong",
+          "El hiat",
+          "La síl·laba tònica",
+          "Paraules agudes.",
+          "Paraules planes",
+          "Paraules esdrúixoles.",
+          "Accent obert i tancat",
+          "Coma i punt",
+          "Repàs de la S sorda. S, SS, C, Ç.",
+          "Repàs del diftong i el hiat.",
+          "Repàs de les normes d’accentuació.",
+          "Accent obert o tancat?",
+          "Indica si la paraula té la E oberta o tancada"
+        ],
+        "gramatica": [
+          "La comunicació: oral i escrita",
+          "El substantiu: gènere, nombre i classe",
+          "L’adjectiu interrogatiu",
+          "Els pronoms personals forts i febles",
+          "Els determinants",
+          "El verb: l’infinitiu",
+          "Paraules simples i compostes",
+          "Paraules derivades: prefixos i sufixos",
+          "La família lèxica",
+          "Les paraules polisèmiques",
+          "Sinònims i antònims",
+          "Abreviatures i símbols"
+        ]
+      }
+    },
+    {
+      "curso": "4º de primaria",
+      "bloques": {
+        "ortografia": [
+          "La dièresi",
+          "Les paraules agudes, planes i esdrúixoles",
+          "X, TX, IG",
+          "L, L·L, TL",
+          "LL, TLL",
+          "M, MM, TM",
+          "N, NN, TN",
+          "Casos especials de G i J",
+          "Els dígrafs",
+          "Els dígrafs: separables i no separables",
+          "La coma i el punt i coma",
+          "Repàs: so sonor o sord de la S.",
+          "Repàs dels accents: paraules agudes",
+          "Repàs dels accents: paraules planes",
+          "Repàs de la dièresi",
+          "Repàs de la L i la L·L.",
+          "Completa cada parella de paraules"
+        ],
+        "gramatica": [
+          "Les classes de substantius",
+          "L’adjectiu exclamatiu i interrogatiu",
+          "Els graus de l’adjectiu",
+          "La concordança de gènere i nombre (substantius i adjectius, verbs)",
+          "Els quantificadors",
+          "El verb: gerundi i participi",
+          "El verb: arrel i desinències",
+          "Conjugació en indicatiu (verbs regulars)",
+          "El verb: mode, temps, nombre i persona",
+          "L’oració: enunciativa, interrogativa, exclamativa",
+          "L’oració: dubitativa, exhortativa",
+          "Les sigles"
+        ]
+      }
+    },
+    {
+      "curso": "5º de primaria",
+      "bloques": {
+        "ortografia": [],
+        "gramatica": []
+      }
+    },
+    {
+      "curso": "6º de primaria",
+      "bloques": {
+        "ortografia": [
+          "P/B, T/D, C/G a final de paraula",
+          "La B i la V en els verbs.",
+          "El plural amb S, NS o OS",
+          "Plural de paraules invariables",
+          "La contracció i l’apostrofació en els pronoms febles",
+          "L’accentuació en les paraules compostes",
+          "Separació sil·làbica. Els dígrafs i les lletres compostes",
+          "Separació sil·làbica. Les paraules compostes i derivades",
+          "Diftong i hiat",
+          "Excepcions de la dièresi",
+          "El verb “haver”",
+          "Si no, sinó",
+          "Tan, tant",
+          "Quan, quant",
+          "Repàs de l’accent diacrític",
+          "Repàs de la L i la L · L",
+          "Repàs de la dièresi",
+          "Repàs de les paraules compostes",
+          "Repàs dels accents",
+          "Monòle__ Àba__ Amar __ Catàle__ Espàrre__ Anora__ Ma__ Fan __ Pessi__ Alber __ Ar__ Llar __ Plàsti__ Psicòle__ Ce__ Completa les paraules amb C o G"
+        ],
+        "gramatica": [
+          "Substantius individuals i col·lectius",
+          "L’adverbi",
+          "Les locucions adverbials",
+          "Els verbs irregulars",
+          "El verb: anàlisi completa",
+          "El verb: formes impersonals",
+          "Els grups de paraules (grup nominal, adjectival, preposicional...)",
+          "Predicat nominal i predicat verbal",
+          "L’atribut",
+          "El complement directe",
+          "El complement indirecte",
+          "El complement circumstancial",
+          "Els pronoms febles",
+          "Préstecs i estrangerismes"
+        ]
+      }
+    }
+  ]
+}

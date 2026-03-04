@@ -1,0 +1,123 @@
+{
+  "asignatura": "Lengua",
+  "temario": [
+    {
+      "curso": "1º de primaria",
+      "bloques": {
+        "ortografia": [
+          "Las vocales", "La P", "La T", "La D", "P, T, D", "La M", "La N", "La Ñ", "M, N, Ñ",
+          "La C y la Z", "S, C, Z", "C, QU, K", "La B y la V", "Los sonidos de la R", "L, LL",
+          "CH, LL, Ñ", "CH, X", "G, J", "GE, GI", "GA, GUE, GUI, GO, GU", "GU y la diéresis en GÜ",
+          "Las mayúsculas", "Adivinanzas con vocales", "Reconocer consonantes", "Reconocer números"
+        ],
+        "gramatica": [
+          "Las vocales y las consonantes", "El orden alfabético", "El artículo determinado",
+          "El artículo indeterminado", "Identificar el nombre: común o propio", "El adjetivo",
+          "El número: singular o plural", "El género: masculino o femenino", "La sílaba",
+          "La palabra", "La oración", "El verbo"
+        ]
+      }
+    },
+    {
+      "curso": "2º de primaria",
+      "bloques": {
+        "ortografia": [
+          "La P y la L", "PR y PL", "BR y BL", "CR y CL", "GR y GL", "FR y FL", "TR y DR",
+          "MB y MP", "CA, CO, CU, QUE, QUI", "CE, CI y QUE, QUI", "ZA, CE, CI, ZO, ZU",
+          "GU y la diéresis en GÜ", "JE, GE y JI, GI", "P, T, D", "S, C, Z", "Los sonidos de la R",
+          "L y LL", "CH, X", "Los signos de interrogación y de exclamación", "El punto y la coma",
+          "Uso de la mayúscula"
+        ],
+        "gramatica": [
+          "Las sílabas tónicas y las sílabas átonas", "El nombre: común o propio", "El género y el número",
+          "Los artículos determinados e indeterminados", "Los pronombres personales", "Los adjetivos calificativos",
+          "Los adjetivos posesivos", "Los numerales en cifras y en letras", "Los tiempos verbales",
+          "Las oraciones enunciativas, exclamativas e interrogativas", "Los aumentativos y los disminutivos",
+          "Los sinónimos", "Los antónimos", "Creación de antónimos", "El campo semántico"
+        ]
+      }
+    },
+    {
+      "curso": "3º de primaria",
+      "bloques": {
+        "ortografia": [
+          "El sonido K: C y QU", "El sonido G suave", "El sonido J", "El sonido Z: la Z y la C",
+          "R y RR", "La letra H: ¿con H o sin H?", "La letra H: palabras echo y hecho",
+          "La letra H: palabras a y ha", "Las palabras terminadas en Y", "La Y y la LL",
+          "La LL: adivinanzas", "Palabras terminadas en Z o D", "MB y MP", "La letra B y la letra V",
+          "Exclamación e interrogación", "Coma o punto y coma", "Uso de la coma en las enumeraciones",
+          "El punto y la mayúscula", "La sílaba: división de palabras", "Sílabas tónicas y átonas",
+          "Las reglas de acentuación", "Agudas, llanas y esdrújulas"
+        ],
+        "gramatica": [
+          "El nombre: común, propio, individual y colectivo", "El género y el número",
+          "Los determinantes: el artículo", "Los determinantes demostrativos", "Los determinantes posesivos",
+          "Los determinantes numerales e indefinidos", "Los pronombres personales", "El adjetivo",
+          "El verbo: infinitivo y conjugaciones", "Tiempo, persona y número", "Palabras derivadas: los prefijos",
+          "Palabras derivadas: los sufijos", "Palabras simples y derivadas", "Las palabras compuestas",
+          "La familia léxica", "Las palabras homónimas", "Las palabras polisémicas"
+        ]
+      }
+    },
+    {
+      "curso": "4º de primaria",
+      "bloques": {
+        "ortografia": [
+          "CR y CL", "CA, CO, CU, QUE, QUI", "GR y GL", "G, GU y GÜ", "GU y la diéresis en GÜ",
+          "La J y la G", "La B y la V", "La letra H", "La letra H: palabras homófonas",
+          "La H intercalada", "El verbo haber", "Palabras terminadas en Y", "Palabras terminadas en Y o en I",
+          "La sílaba", "La sílaba tónica", "Acentuación de palabras agudas", "Acentuación de palabras llanas",
+          "Acentuación de palabras esdrújulas", "Los diptongos", "Los hiatos",
+          "La tilde en los diptongos y en los hiatos", "El punto, la coma y los dos puntos", "Signos de puntuación"
+        ],
+        "gramatica": [
+          "El sustantivo: clases, género y número", "El adjetivo calificativo: grados del adjetivo",
+          "Los determinantes: artículos y demostrativos", "Los determinantes: posesivos, numerales e indefinidos",
+          "Los pronombres personales", "El verbo: raíz y morfema", "Las formas verbales: simples y compuestas",
+          "El modo verbal", "Análisis de tiempos simples", "Análisis de tiempos compuestos",
+          "La concordancia", "Oraciones exhortativas y dubitativas", "Las abreviaturas", "Las siglas"
+        ]
+      }
+    },
+    {
+      "curso": "5º de primaria",
+      "bloques": {
+        "ortografia": [
+          "La B y la V en los verbos", "La J y la G en los verbos", "La H en los verbos y las formas compuestas",
+          "Palabras que empiezan por H", "La H intercalada", "La X", "Palabras agudas, llanas o esdrújulas",
+          "Reglas de acentuación", "Diptongo, triptongo o hiato", "Acentuación de las palabras con diptongo",
+          "Acentuación de las palabras con hiato", "Acentuación de las palabras con diptongo, triptongo e hiato",
+          "G o J", "B o V", "B o G ante consonante", "C o CC", "¿Mayúscula o minúscula?", "La coma y el punto y coma"
+        ],
+        "gramatica": [
+          "Los adverbios", "Las preposiciones", "Las conjunciones", "Los conectores", "Los pronombres personales",
+          "El verbo: raíz y desinencia", "El número y la persona en el verbo", "El tiempo y el modo en el verbo",
+          "Las formas no personales: infinitivo, gerundio y participio", "Los tiempos verbales: simples y compuestos",
+          "Análisis de las formas verbales", "Tiempos del indicativo", "Tiempos del subjuntivo e imperativo",
+          "El enunciado: la oración y la frase", "Sujeto y predicado", "El sujeto elíptico",
+          "Complementos del predicado", "El campo léxico", "El lenguaje figurado",
+          "Los prefijos: intensidad, negación y oposición", "Los sufijos: formación de sustantivos, adjetivos y verbos"
+        ]
+      }
+    },
+    {
+      "curso": "6º de primaria",
+      "bloques": {
+        "ortografia": [
+          "Diptongo, triptongo e hiato", "Diptongo, triptongo e hiato: acentuación",
+          "Los monosílabos y la tilde diacrítica", "Repaso a las reglas de acentuación",
+          "Palabras interrogativas y exclamativas", "Frases interrogativas y exclamativas",
+          "La B y la V", "La G y la J", "La H", "La S y la X", "La Y y la LL", "C, Z, Q, K",
+          "Signos de puntuación", "Uso del paréntesis y de las comillas", "Uso del guion y de la raya"
+        ],
+        "gramatica": [
+          "El predicado nominal y el predicado verbal", "Sintagmas o grupos de palabras", "El atributo",
+          "El complemento directo", "Diferencia entre el complemento directo y el atributo",
+          "El complemento indirecto", "Diferencia entre el complemento directo y el indirecto",
+          "El complemento circunstancial", "Las frases hechas", "Los arcaísmos", "Los extranjerismos",
+          "Los neologismos", "Neologismos y extranjerismos", "Las interjecciones"
+        ]
+      }
+    }
+  ]
+}

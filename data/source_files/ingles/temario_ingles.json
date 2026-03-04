@@ -1,0 +1,285 @@
+{
+    "asignatura": "Ingles",
+    "temario": [
+        {
+            "curso": "1º de Primaria",
+            "bloques": {
+                "vocabulary": [
+                    "Numbers. 1 to 10",
+                    "The colours",
+                    "What colour is it?",
+                    "Animals",
+                    "Animals and colours",
+                    "Toys",
+                    "Toys and colours",
+                    "Food",
+                    "Numbers:  0 to 15",
+                    "Feelings",
+                    "Family",
+                    "The body (I)",
+                    "The body (II)",
+                    "The body (III)",
+                    "School",
+                    "Clothes",
+                    "Review. Complete the words (I)",
+                    "Review. Complete the words (II)"
+                ],
+                "grammar": [
+                    "What’s your name?",
+                    "How old are you?",
+                    "Days of the week",
+                    "Weather",
+                    "To be. I’m or it’s?",
+                    "To be. What’s this?",
+                    "To be. There is / there are",
+                    "To have. What have you got?",
+                    "What are you wearing today?",
+                    "His, her and its",
+                    "In, on, under, behind",
+                    "Adjectives"
+                ],
+                "phonics": [
+                    "The S sound",
+                    "The short A sound",
+                    "The T sound",
+                    "The P sound",
+                    "The P and T sounds",
+                    "The M and N sounds"
+                ]
+            }
+        },
+        {
+            "curso": "2º de Primaria",
+            "bloques": {
+                "vocabulary": [
+                    "Numbers. 0 to 99",
+                    "The human body",
+                    "Parts of the body",
+                    "Animals",
+                    "Animals and adjetives",
+                    "Describing animals (I)",
+                    "Describing animals (II)",
+                    "Animals. What are they doing?",
+                    "Clothes",
+                    "Clothes and colours",
+                    "The house",
+                    "Food",
+                    "Foods and drinks",
+                    "School",
+                    "The seasons and the weather",
+                    "Feelings",
+                    "Review. Complete the words (I)",
+                    "Review. Complete the words (II)"
+                ],
+                "grammar": [
+                    "Describing family members",
+                    "Describing people",
+                    "«I am» or «I have got»",
+                    "The food I like and don’t like",
+                    "He likes / She doesn’t like",
+                    "How many have you got? 1 to 99",
+                    "What are you wearing today?",
+                    "Where are they?",
+                    "Where is this?",
+                    "Can / can’t",
+                    "What is there?",
+                    "Where is it?"
+                ],
+                "phonics": [
+                    "The K and the H sounds",
+                    "The E and the O sounds",
+                    "The short I and long E sounds",
+                    "The B sound"
+                ]
+            }
+        },
+        {
+            "curso": "3º de Primaria",
+            "bloques": {
+                "vocabulary": [
+                    "Where are you?",
+                    "School",
+                    "The backpack",
+                    "Numbers: 1 to 99",
+                    "What hobbies can you do?",
+                    "What are you doing?",
+                    "Telling time",
+                    "Schedule your day",
+                    "Wild animals",
+                    "What animal is there?",
+                    "What does the animal look like?",
+                    "Describing animals",
+                    "What food is it?",
+                    "What food do you like?",
+                    "What are they wearing?",
+                    "The seasons and the weather",
+                    "Review. Complete the words (I)",
+                    "Review. Complete the words (II)"
+                ],
+                "grammar": [
+                    "Is or isn’t?",
+                    "Is or are?",
+                    "Physical description",
+                    "This, that, these, those",
+                    "How many?",
+                    "Can / can’t",
+                    "Present continuous",
+                    "What food do you like?",
+                    "Was / were",
+                    "Past simple. Where were you yesterday?",
+                    "Past simple. What day was yesterday?",
+                    "Where is it?"
+                ],
+                "phonics": [
+                    "The TH Sound",
+                    "The J Sound",
+                    "The long U Sound",
+                    "The NG Sound",
+                    "The W Sound",
+                    "The EI Sound"
+                ]
+            }
+        },
+        {
+            "curso": "4º de Primaria",
+            "bloques": {
+                "vocabulary": [
+                    "Numbers: 100 to 999",
+                    "School objects",
+                    "School subjects",
+                    "Where can you find this?",
+                    "Where are they?",
+                    "Daily routines",
+                    "What are you doing?",
+                    "What are they doing? (I)",
+                    "What are they doing? (II)",
+                    "What do they like?",
+                    "True or false?",
+                    "Months of the year",
+                    "Parts of the body",
+                    "Illnesses and injuries",
+                    "Physical description",
+                    "Insects. Any, some",
+                    "Review. Complete the words (I)",
+                    "Review. Complete the words (II)"
+                ],
+                "grammar": [
+                    "Present. What do they look like?",
+                    "Past. What did they look like?",
+                    "Affirmative or interrogative sentences",
+                    "Time and daily routines",
+                    "What day is it today?",
+                    "Present. What do they like?",
+                    "Past. What did they like?",
+                    "This is / these are",
+                    "Questions",
+                    "Present continuous. What are you doing?",
+                    "Past continuous. What were you doing?",
+                    "Where was it?"
+                ],
+                "phonics": [
+                    "The /θ/ sound",
+                    "The  /ð/ sound",
+                    "The /k/ and /tʃ/ sound in CH",
+                    "The /ʃ/ sound",
+                    "The  /ər/ sound",
+                    "The  /ɔɪ/ sound"
+                ]
+            }
+        },
+        {
+            "curso": "5º de Primaria",
+            "bloques": {
+                "vocabulary": [
+                    "Four-digit numbers",
+                    "Education: subjects",
+                    "At home. What’s that?",
+                    "Where is it?",
+                    "Jobs",
+                    "My favourite job",
+                    "Where are you going?",
+                    "Adverbs of frequency",
+                    "What transport is it? (I)",
+                    "What transport is it? (II)",
+                    "Animals. Any, some",
+                    "Body of the animals (I)",
+                    "Body of the animals (II)",
+                    "Animals. Comparatives and superlatives",
+                    "Countable or uncountable words",
+                    "How many or how much",
+                    "Review. Complete the words (I)",
+                    "Review. Complete the words (II)"
+                ],
+                "grammar": [
+                    "Comparative and superlative adjectives",
+                    "Present simple and present continuous",
+                    "To be. Past simple",
+                    "There was/There were",
+                    "Was / were. Interrogative and affirmative sentences",
+                    "Past Simple. Regular verbs",
+                    "Past Simple. Irregular verbs (I)",
+                    "Past Simple. Irregular verbs (II)",
+                    "Past Simple. Affirmative sentences",
+                    "Past Simple. Negative and interrogative sentences",
+                    "Going to",
+                    "Question words"
+                ],
+                "phonics": [
+                    "Verbs in past. Ending in “-ed” sounds as T",
+                    "Verbs in past. Ending in “-ed” sounds as ID",
+                    "Verbs in past. Ending in “-ed” sounds as D",
+                    "The /əʊ/ sound",
+                    "The /ʃ/ and /tʃ/ sounds",
+                    "The /θ/  and /ð/ sounds"
+                ]
+            }
+        },
+        {
+            "curso": "6º de Primaria",
+            "bloques": {
+                "vocabulary": [
+                    "Countries",
+                    "Where are you from?",
+                    "Family",
+                    "Calendar riddles",
+                    "What’s your favourite subject?",
+                    "Telling time",
+                    "Food and tastes",
+                    "What food is this?",
+                    "At the restaurant",
+                    "Describing people",
+                    "Feelings",
+                    "What was the weather like yesterday?",
+                    "Are you ill?",
+                    "Adverbs of frequency",
+                    "Body of the animals",
+                    "Comparative and superlative adjectives",
+                    "Review. Complete the words (I)",
+                    "Review. Complete the words (II)"
+                ],
+                "grammar": [
+                    "Too much or too many?",
+                    "Some / any / a little / lots of",
+                    "Possessives. Whose is this?",
+                    "Relative clauses",
+                    "Question words",
+                    "Past simple. Regular and irregular verbs",
+                    "Past simple. Questions and negations",
+                    "Past continuous",
+                    "Rules. Must and mustn’t",
+                    "Present perfect",
+                    "Future. Going to and will",
+                    "Future. Interrogative and negative sentences"
+                ],
+                "phonics": [
+                    "Past tense verbs. “-ed” ending sounds like T /t/",
+                    "Past tense verbs. “-ed” ending sounds like ID /ɪd/",
+                    "Past tense verbs. “-ed” ending sounds like D /d/",
+                    "The /ɪə/ sound",
+                    "The /eə/ sound",
+                    "The /eɪ/ and /əʊ/ sounds"
+                ]
+            }
+        }
+    ]
+}

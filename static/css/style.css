@@ -393,7 +393,7 @@ body {
     transform: translateX(-50%);
     pointer-events: none;
     z-index: 1000;
-    animation: starRollUp 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation: starRollUp 1.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 @keyframes starRollUp {
