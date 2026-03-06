@@ -1,0 +1,67 @@
+[
+  {
+    "question": "¿Cuál de estas palabras está escrita correctamente?",
+    "options": [
+      "Elado",
+      "Helado",
+      "Ehlado"
+    ],
+    "answer": "Helado",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Ortografía",
+    "contenido": "Uso de la H"
+  },
+  {
+    "question": "Completa la frase: 'En el jardín _____ muchas flores de colores.'",
+    "options": [
+      "Ay",
+      "Hay",
+      "Ahy"
+    ],
+    "answer": "Hay",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Ortografía",
+    "contenido": "Uso de la H"
+  },
+  {
+    "question": "¿Cómo se escribe la palabra para el animal que cacarea y pone huevos?",
+    "options": [
+      "Gallina",
+      "Gaiina",
+      "Gahina"
+    ],
+    "answer": "Gallina",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Ortografía",
+    "contenido": "Uso de la H"
+  },
+  {
+    "question": "Selecciona la palabra que empieza por 'H' y significa un objeto para clavar.",
+    "options": [
+      "Ierro",
+      "Hierro",
+      "Yerro"
+    ],
+    "answer": "Hierro",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Ortografía",
+    "contenido": "Uso de la H"
+  },
+  {
+    "question": "¿Qué palabra usamos para el lugar donde nos curan cuando estamos enfermos?",
+    "options": [
+      "Ospital",
+      "Hospital",
+      "Hosppital"
+    ],
+    "answer": "Hospital",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Ortografía",
+    "contenido": "Uso de la H"
+  }
+]

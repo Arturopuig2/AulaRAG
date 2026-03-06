@@ -1,0 +1,67 @@
+[
+  {
+    "question": "¿Cuál de estas palabras es un sustantivo?",
+    "options": [
+      "Correr",
+      "Bonito",
+      "Flor"
+    ],
+    "answer": "Flor",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Gramática",
+    "contenido": "El sustantivo"
+  },
+  {
+    "question": "¿Qué sustantivo es un nombre propio?",
+    "options": [
+      "Mesa",
+      "Madrid",
+      "Perro"
+    ],
+    "answer": "Madrid",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Gramática",
+    "contenido": "El sustantivo"
+  },
+  {
+    "question": "¿Cuál de los siguientes sustantivos está en plural?",
+    "options": [
+      "Árbol",
+      "Casas",
+      "Niño"
+    ],
+    "answer": "Casas",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Gramática",
+    "contenido": "El sustantivo"
+  },
+  {
+    "question": "¿Qué sustantivo es de género femenino?",
+    "options": [
+      "El coche",
+      "La silla",
+      "El libro"
+    ],
+    "answer": "La silla",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Gramática",
+    "contenido": "El sustantivo"
+  },
+  {
+    "question": "En la frase 'Mi hermana juega con la pelota', ¿cuál es un sustantivo común?",
+    "options": [
+      "Juega",
+      "Pelota",
+      "Mi"
+    ],
+    "answer": "Pelota",
+    "subject": "lengua",
+    "grade": 3,
+    "bloque": "Gramática",
+    "contenido": "El sustantivo"
+  }
+]

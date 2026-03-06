@@ -1,0 +1,132 @@
+[
+  {
+    "question": "What do you use to write and draw with?",
+    "options": [
+      "a pencil",
+      "a ruler",
+      "an eraser"
+    ],
+    "answer": "a pencil",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "Where do you read stories and learn new things in class?",
+    "options": [
+      "a notebook",
+      "a book",
+      "a chair"
+    ],
+    "answer": "a book",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "If you make a mistake with your pencil, what do you use to rub it out?",
+    "options": [
+      "a crayon",
+      "an eraser",
+      "a pen"
+    ],
+    "answer": "an eraser",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "What do you use to draw straight lines?",
+    "options": [
+      "a pencil case",
+      "a ruler",
+      "scissors"
+    ],
+    "answer": "a ruler",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "Where do you write your notes and exercises?",
+    "options": [
+      "a book",
+      "a notebook",
+      "a backpack"
+    ],
+    "answer": "a notebook",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "What do you use to carry your books and school supplies to school?",
+    "options": [
+      "a lunchbox",
+      "a schoolbag",
+      "a pencil case"
+    ],
+    "answer": "a schoolbag",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "What is the flat surface where you sit and work in class?",
+    "options": [
+      "a board",
+      "a desk",
+      "a window"
+    ],
+    "answer": "a desk",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "What do you sit on at your desk in the classroom?",
+    "options": [
+      "a table",
+      "a chair",
+      "a sofa"
+    ],
+    "answer": "a chair",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "What do you use to color your drawings with different colors?",
+    "options": [
+      "a pencil",
+      "a crayon",
+      "a marker"
+    ],
+    "answer": "a crayon",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  },
+  {
+    "question": "Where does the teacher write and draw for the whole class to see?",
+    "options": [
+      "a wall",
+      "a board",
+      "a door"
+    ],
+    "answer": "a board",
+    "subject": "ingles",
+    "grade": 3,
+    "bloque": "Vocabulario",
+    "contenido": "Vocabulario del colegio"
+  }
+]

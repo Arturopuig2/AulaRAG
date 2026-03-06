@@ -1,0 +1,6632 @@
+[
+  {
+    "question": "¿Qué hacemos en los ejercicios de \"L'oració\" de la página 46?",
+    "options": [
+      "Completamos las oraciones con la palabra que falta.",
+      "Dibujamos las oraciones.",
+      "Contamos las palabras en las oraciones."
+    ],
+    "answer": "Completamos las oraciones con la palabra que falta.",
+    "contenido": "L’oració",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En la oración \"La ______ és de color roig.\", ¿qué palabra tiene sentido?",
+    "options": [
+      "casa",
+      "arbre",
+      "mar"
+    ],
+    "answer": "casa",
+    "contenido": "L’oració",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En la oración \"Les marietes són molt ______.\", ¿qué palabra describe a las mariquitas?",
+    "options": [
+      "liles",
+      "xicotetes",
+      "silencioses"
+    ],
+    "answer": "xicotetes",
+    "contenido": "L’oració",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "¿Qué es un verbo según la página 47?",
+    "options": [
+      "Una palabra que nos indica qué pasa o qué se hace en la oración.",
+      "Una palabra que nombra personas o cosas.",
+      "Una palabra que describe algo."
+    ],
+    "answer": "Una palabra que nos indica qué pasa o qué se hace en la oración.",
+    "contenido": "El verb: singular i plural",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "¿Cuándo escribimos el verbo en plural?",
+    "options": [
+      "Cuando lo hace solo una persona.",
+      "Cuando lo hacen más de una persona, animal o cosa.",
+      "Cuando es una palabra muy larga."
+    ],
+    "answer": "Cuando lo hacen más de una persona, animal o cosa.",
+    "contenido": "El verb: singular i plural",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "¿Cuál de estos verbos está en forma singular, según la página 48?",
+    "options": [
+      "Lliguen",
+      "Viatja",
+      "Dorm"
+    ],
+    "answer": "Viatja",
+    "contenido": "El verb: singular i plural",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "¿Qué son las onomatopeyas?",
+    "options": [
+      "Palabras que describen colores.",
+      "Palabras que imitan sonidos.",
+      "Palabras que nombran animales."
+    ],
+    "answer": "Palabras que imitan sonidos.",
+    "contenido": "Les onomatopeies",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "¿Qué sonido hace un perro (gos) según la página 50?",
+    "options": [
+      "Muac-muac",
+      "Ric-ric",
+      "Tic-tac"
+    ],
+    "answer": "Ric-ric",
+    "contenido": "Les onomatopeies",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "¿Qué sonido hace un reloj (rellotge) según la página 50?",
+    "options": [
+      "Grr",
+      "Xup-xup",
+      "Tic-tac"
+    ],
+    "answer": "Tic-tac",
+    "contenido": "Les onomatopeies",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Tria la paraula correcta per a la frase: \"Ma mare treballa en un ____.\"",
+    "options": [
+      "ospital",
+      "hospital",
+      "hòspital"
+    ],
+    "answer": "hospital",
+    "contenido": "Amb H o sense H",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Tria la paraula correcta per a la frase: \"Jaume és el meu ____.\"",
+    "options": [
+      "eroi",
+      "heroi",
+      "hèroi"
+    ],
+    "answer": "heroi",
+    "contenido": "Amb H o sense H",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Tria la paraula correcta per a la frase: \"Juguem a futbol ____.\"",
+    "options": [
+      "ui",
+      "huí",
+      "hui"
+    ],
+    "answer": "hui",
+    "contenido": "Amb H o sense H",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla, a principi de paraula i darrere de consonant, escrivim la lletra:",
+    "options": [
+      "TX",
+      "X",
+      "IG"
+    ],
+    "answer": "X",
+    "contenido": "X o TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla, entre vocals escrivim la combinació de lletres:",
+    "options": [
+      "X",
+      "TX",
+      "IG"
+    ],
+    "answer": "TX",
+    "contenido": "X o TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra completa correctament la paraula \"CA_A\" per formar \"caixa\"?",
+    "options": [
+      "T",
+      "X",
+      "TX"
+    ],
+    "answer": "X",
+    "contenido": "X o TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina combinació de lletres s'escriu a final de paraula per formar \"despat___\"?",
+    "options": [
+      "IG",
+      "TX",
+      "X"
+    ],
+    "answer": "TX",
+    "contenido": "TX o IG",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu el color \"ro___\" a final de paraula?",
+    "options": [
+      "TX",
+      "IG",
+      "IX"
+    ],
+    "answer": "IG",
+    "contenido": "TX o IG",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la paraula \"ASSA___\" amb la combinació correcta:",
+    "options": [
+      "TX",
+      "X",
+      "IG"
+    ],
+    "answer": "IG",
+    "contenido": "TX o IG",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina combinació de lletres s'escriu davant de les vocals E o I?",
+    "options": [
+      "TJ",
+      "TG",
+      "TI"
+    ],
+    "answer": "TG",
+    "contenido": "TG o TJ",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina combinació de lletres s'escriu davant de les vocals A, O o U?",
+    "options": [
+      "TG",
+      "TJ",
+      "TA"
+    ],
+    "answer": "TJ",
+    "contenido": "TG o TJ",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la paraula \"FORMA___E\" amb la combinació correcta:",
+    "options": [
+      "TJ",
+      "TG",
+      "TX"
+    ],
+    "answer": "TG",
+    "contenido": "TG o TJ",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es pronuncia la combinació de lletres L·L?",
+    "options": [
+      "Com una L curta",
+      "Com una L allargada",
+      "Com una R"
+    ],
+    "answer": "Com una L allargada",
+    "contenido": "La L i la L · L",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Marca la paraula escrita correctament:",
+    "options": [
+      "Electricitat",
+      "El·lectricitat",
+      "Electrisitat"
+    ],
+    "answer": "El·lectricitat",
+    "contenido": "La L i la L · L",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Marca la paraula escrita correctament:",
+    "options": [
+      "Ilusió",
+      "Il·lusió",
+      "I-lusió"
+    ],
+    "answer": "Il·lusió",
+    "contenido": "La L i la L · L",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la definició de l'activitat 7, quin instrument de percussió gran es fa sonar amb una maça?",
+    "options": [
+      "BOMBÍ",
+      "BOMBO",
+      "TÓMBOLA"
+    ],
+    "answer": "BOMBO",
+    "contenido": "MB i MP",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula completa correctament \"BO___ER\" (activitat 8)?",
+    "options": [
+      "BONBER",
+      "BOMBER",
+      "BOMPER"
+    ],
+    "answer": "BOMBER",
+    "contenido": "MB i MP",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula completa correctament \"CA___ANA\" (activitat 8)?",
+    "options": [
+      "CANPANA",
+      "CAMPANA",
+      "CAMBANA"
+    ],
+    "answer": "CAMPANA",
+    "contenido": "MB i MP",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina combinació de lletres completa correctament la paraula \"A___IL\" (activitat 9)?",
+    "options": [
+      "BL",
+      "BR",
+      "DR"
+    ],
+    "answer": "BR",
+    "contenido": "BR o BL",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Si completem la paraula \"___ESSOL\" amb la combinació correcta de l'activitat 9, quina paraula es forma?",
+    "options": [
+      "BLESSOL",
+      "BRESSOL",
+      "CRESSOL"
+    ],
+    "answer": "BRESSOL",
+    "contenido": "BR o BL",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina combinació de lletres completa correctament la paraula \"MO___E\" (activitat 10)?",
+    "options": [
+      "BRE",
+      "BLA",
+      "BLE"
+    ],
+    "answer": "BLE",
+    "contenido": "BR o BL",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla de l'apartat \"MB, NV\", quina lletra s'escriu després de la \"M\"?",
+    "options": [
+      "N",
+      "B",
+      "V"
+    ],
+    "answer": "B",
+    "contenido": "MB o NV",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla de l'apartat \"MB, NV\", quina lletra s'escriu després de la \"N\"?",
+    "options": [
+      "B",
+      "M",
+      "V"
+    ],
+    "answer": "V",
+    "contenido": "MB o NV",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula completa correctament \"E___UT\" (activitat 11)?",
+    "options": [
+      "ENBUT",
+      "EMBUT",
+      "ENVUT"
+    ],
+    "answer": "EMBUT",
+    "contenido": "MB o NV",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quantes síl·labes té la paraula \"BOSC\" (activitat 12)?",
+    "options": [
+      "2",
+      "1",
+      "3"
+    ],
+    "answer": "1",
+    "contenido": "Compta les síl·labes",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons l'explicació de la pàgina 15, com es formen les paraules?",
+    "options": [
+      "Unint lletres",
+      "Unint síl·labes",
+      "Unint sons"
+    ],
+    "answer": "Unint síl·labes",
+    "contenido": "Compta les síl·labes",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quantes síl·labes té la paraula \"PAPALLONA\" (activitat 12)?",
+    "options": [
+      "3",
+      "4",
+      "2"
+    ],
+    "answer": "4",
+    "contenido": "Compta les síl·labes",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin tipus de paraula té 2 síl·labes, segons l'explicació de la pàgina 16?",
+    "options": [
+      "Trisíl·laba",
+      "Bisíl·laba",
+      "Monosíl·laba"
+    ],
+    "answer": "Bisíl·laba",
+    "contenido": "Paraules fins a quatre síl·labes",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin tipus de paraula és \"FOGUERA\" (activitat 13)?",
+    "options": [
+      "Bisíl·laba",
+      "Trisíl·laba",
+      "Tetrasíl·laba"
+    ],
+    "answer": "Trisíl·laba",
+    "contenido": "Paraules fins a quatre síl·labes",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin tipus de paraula és \"GALL\" (activitat 13)?",
+    "options": [
+      "Bisíl·laba",
+      "Monosíl·laba",
+      "Trisíl·laba"
+    ],
+    "answer": "Monosíl·laba",
+    "contenido": "Paraules fins a quatre síl·labes",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el text, què és la síl·laba tònica?",
+    "options": [
+      "Aquella que sona més forta que la resta de síl·labes.",
+      "La síl·laba més llarga de la paraula.",
+      "La primera síl·laba de la paraula."
+    ],
+    "answer": "Aquella que sona més forta que la resta de síl·labes.",
+    "contenido": "La síl·laba tònica",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'NE-VE-RA', quina és la síl·laba tònica?",
+    "options": [
+      "VE",
+      "NE",
+      "RA"
+    ],
+    "answer": "VE",
+    "contenido": "La síl·laba tònica",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'MA-PA', quina és la síl·laba tònica?",
+    "options": [
+      "MA",
+      "PA",
+      "Les dues síl·labes sonen igual de fort."
+    ],
+    "answer": "MA",
+    "contenido": "La síl·laba tònica",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'campanar', quina és la síl·laba tònica segons l'exemple donat?",
+    "options": [
+      "CAM",
+      "PA",
+      "NAR"
+    ],
+    "answer": "NAR",
+    "contenido": "La síl·laba tònica al final",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té la síl·laba tònica al final?",
+    "options": [
+      "NA-TA-CI-Ó",
+      "MES-TRE",
+      "AR-PA"
+    ],
+    "answer": "NA-TA-CI-Ó",
+    "contenido": "La síl·laba tònica al final",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules NO té la síl·laba tònica al final?",
+    "options": [
+      "DO-FÍ",
+      "MET-GE",
+      "CLA-VELL"
+    ],
+    "answer": "MET-GE",
+    "contenido": "La síl·laba tònica al final",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu l'article masculí 'EL' segons el text?",
+    "options": [
+      "Davant de paraules que comencen per vocal o H.",
+      "Davant de paraules que comencen per consonant.",
+      "Sempre s'escriu L' davant de paraules masculines."
+    ],
+    "answer": "Davant de paraules que comencen per consonant.",
+    "contenido": "L’apòstrof: l’article masculí",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completar la frase: '____ instrument de vent.'",
+    "options": [
+      "El",
+      "L'",
+      "La"
+    ],
+    "answer": "L'",
+    "contenido": "L’apòstrof: l’article masculí",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completar la frase: '____ home jove.'",
+    "options": [
+      "El",
+      "L'",
+      "La"
+    ],
+    "answer": "L'",
+    "contenido": "L’apòstrof: l’article masculí",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu l'article femení 'LA' segons el text?",
+    "options": [
+      "Davant de paraules que comencen per vocal o H.",
+      "Davant de paraules que comencen per consonant.",
+      "Sempre s'escriu L' davant de paraules femenines."
+    ],
+    "answer": "Davant de paraules que comencen per consonant.",
+    "contenido": "L’apòstrof: l’article femení",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completar la frase: '____ ungla.'",
+    "options": [
+      "La",
+      "L'",
+      "El"
+    ],
+    "answer": "L'",
+    "contenido": "L’apòstrof: l’article femení",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completar la frase: '____ flor.'",
+    "options": [
+      "La",
+      "L'",
+      "El"
+    ],
+    "answer": "La",
+    "contenido": "L’apòstrof: l’article femení",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el text, per a què servix el signe d'exclamació (!)?",
+    "options": [
+      "Per a fer preguntes.",
+      "Per a expressar alegria, sorpresa o emoció.",
+      "Per a informar sobre algun fet."
+    ],
+    "answer": "Per a expressar alegria, sorpresa o emoció.",
+    "contenido": "Exclamació o interrogació?",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin signe s'utilitza per a fer preguntes?",
+    "options": [
+      "!",
+      "?",
+      "."
+    ],
+    "answer": "?",
+    "contenido": "Exclamació o interrogació?",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina mena d'oració és 'Quin mal m'he fet___'?",
+    "options": [
+      "Exclamativa",
+      "Interrogativa",
+      "Enunciativa"
+    ],
+    "answer": "Exclamativa",
+    "contenido": "Exclamació o interrogació?",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons l'activitat de la pàgina 22, quina és la forma correcta d'escriure el número 101?",
+    "options": [
+      "Cent-u",
+      "Sent-u",
+      "Cent u"
+    ],
+    "answer": "Cent u",
+    "contenido": "Numerals fins a 1000",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament el número 689 en valencià, segons els exemples de la pàgina 22?",
+    "options": [
+      "Sis-cents huitanta nou",
+      "Siscents-huitanta-nou",
+      "Sis-cents huitanta-nou"
+    ],
+    "answer": "Sis-cents huitanta-nou",
+    "contenido": "Numerals fins a 1000",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons els exemples de la pàgina 22, quina és la forma correcta d'escriure el número 921?",
+    "options": [
+      "Noucents vint-i-u",
+      "Nou-cents vintiu",
+      "Nou-cents vint-i-u"
+    ],
+    "answer": "Nou-cents vint-i-u",
+    "contenido": "Numerals fins a 1000",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Tria la lletra correcta per completar la paraula 'A____EDUCTE' (referint-se a la imatge d'un aqüeducte) segons l'activitat de la pàgina 23.",
+    "options": [
+      "GU",
+      "QU",
+      "C"
+    ],
+    "answer": "C",
+    "contenido": "Repàs de la C, QU, G, GU i GÜ",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quines lletres completen la paraula 'ES ____IMAL' (referint-se a la imatge d'un esquimal) segons l'activitat de la pàgina 23?",
+    "options": [
+      "C",
+      "QU",
+      "QÜ"
+    ],
+    "answer": "QÜ",
+    "contenido": "Repàs de la C, QU, G, GU i GÜ",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la paraula '____ALL' (referint-se a la imatge d'un gall) utilitzant les lletres correctes de l'activitat de la pàgina 23.",
+    "options": [
+      "GÜ",
+      "G",
+      "GU"
+    ],
+    "answer": "GU",
+    "contenido": "Repàs de la C, QU, G, GU i GÜ",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la paraula 'TA____A' (referint-se a la imatge d'una tassa) utilitzant les lletres correctes de la pàgina 24.",
+    "options": [
+      "S",
+      "C",
+      "SS"
+    ],
+    "answer": "SS",
+    "contenido": "Repàs de SS, S, C i Ç",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra completa correctament la paraula 'BALAN____A' (referint-se a la imatge d'una balança) segons l'activitat de la pàgina 24?",
+    "options": [
+      "S",
+      "C",
+      "Ç"
+    ],
+    "answer": "Ç",
+    "contenido": "Repàs de SS, S, C i Ç",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Tria la lletra correcta per completar la paraula 'PASTI____ET' (referint-se a la imatge d'un pastisset) dels exemples de la pàgina 24.",
+    "options": [
+      "SS",
+      "C",
+      "S"
+    ],
+    "answer": "S",
+    "contenido": "Repàs de SS, S, C i Ç",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Tria la lletra correcta per completar la paraula 'CLA____ELL' (referint-se a la imatge d'un clavell) basant-te en la pàgina 25.",
+    "options": [
+      "B",
+      "P",
+      "V"
+    ],
+    "answer": "V",
+    "contenido": "Repàs de B i V",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la paraula '____OIRA' (referint-se a la imatge de la boira) utilitzant la lletra correcta de l'activitat de la pàgina 25.",
+    "options": [
+      "V",
+      "P",
+      "B"
+    ],
+    "answer": "B",
+    "contenido": "Repàs de B i V",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra completa correctament la paraula 'CA____ALL' (referint-se a la imatge d'un cavall) segons la pàgina 25?",
+    "options": [
+      "B",
+      "P",
+      "V"
+    ],
+    "answer": "V",
+    "contenido": "Repàs de B i V",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la solució de la pàgina 65 per a l'activitat 23, quina lletra completa la paraula 'TORNE___'?",
+    "options": [
+      "IG",
+      "TX",
+      "X"
+    ],
+    "answer": "X",
+    "contenido": "Repàs de X, TX, IG",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quines lletres completen la paraula 'MADUI____A' segons la solució de la pàgina 65 per a l'activitat 23?",
+    "options": [
+      "TX",
+      "IG",
+      "X"
+    ],
+    "answer": "X",
+    "contenido": "Repàs de X, TX, IG",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Basant-te en la solució de la pàgina 65 per a l'activitat 23, quines lletres completen la paraula 'CALAI____'?",
+    "options": [
+      "IG",
+      "TX",
+      "X"
+    ],
+    "answer": "X",
+    "contenido": "Repàs de X, TX, IG",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla del document, com es pronuncia la L·L?",
+    "options": [
+      "Com una L normal",
+      "Com una L allargada",
+      "Com una doble R"
+    ],
+    "answer": "Com una L allargada",
+    "contenido": "Repàs de la L i la L · L",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules s'escriu amb 'L·L'?",
+    "options": [
+      "Gorila",
+      "Il·lusió",
+      "Alucinar"
+    ],
+    "answer": "Il·lusió",
+    "contenido": "Repàs de la L i la L · L",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules s'escriu amb una sola 'L'?",
+    "options": [
+      "Col·lecció",
+      "Alegria",
+      "Àguil·la"
+    ],
+    "answer": "Alegria",
+    "contenido": "Repàs de la L i la L · L",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla, quan escrivim la lletra 'X' a una paraula?",
+    "options": [
+      "Entre vocals",
+      "A principi de paraula i darrere de consonant",
+      "Al final de paraula"
+    ],
+    "answer": "A principi de paraula i darrere de consonant",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla, quan escrivim les lletres 'TX' a una paraula?",
+    "options": [
+      "A principi de paraula",
+      "Entre vocals",
+      "Darrere de consonant"
+    ],
+    "answer": "Entre vocals",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra o dígraf completa correctament la paraula 'CO_E'?",
+    "options": [
+      "X",
+      "TX",
+      "CS"
+    ],
+    "answer": "TX",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el document, què són els noms individuals?",
+    "options": [
+      "Paraules que anomenen un sol element.",
+      "Paraules que anomenen un conjunt d'elements.",
+      "Paraules que expressen una acció."
+    ],
+    "answer": "Paraules que anomenen un sol element.",
+    "contenido": "Els substantius individuals i col·lectius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'estes paraules és un nom col·lectiu, segons l'exercici de la pàgina 28?",
+    "options": [
+      "Bandada",
+      "Ocells",
+      "Jugador"
+    ],
+    "answer": "Bandada",
+    "contenido": "Els substantius individuals i col·lectius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exercici de la pàgina 28, quina paraula col·lectiva s'utilitza per a un grup de flors?",
+    "options": [
+      "Ram",
+      "Esquelet",
+      "Arbreda"
+    ],
+    "answer": "Ram",
+    "contenido": "Els substantius individuals i col·lectius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el document, què és un adjectiu?",
+    "options": [
+      "Una paraula que ens diu com són o com estan els animals, les persones o les coses.",
+      "Una paraula que anomena persones o coses.",
+      "Una paraula que expressa una acció."
+    ],
+    "answer": "Una paraula que ens diu com són o com estan els animals, les persones o les coses.",
+    "contenido": "L’adjectiu",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la imatge de la camiseta de la pàgina 30, quin adjectiu la descriu?",
+    "options": [
+      "Blanca",
+      "Roja",
+      "Groga"
+    ],
+    "answer": "Blanca",
+    "contenido": "L’adjectiu",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la imatge de l'ambulància de la pàgina 29, quin adjectiu NO la descriu?",
+    "options": [
+      "Silenciosa",
+      "Ràpida",
+      "Roja"
+    ],
+    "answer": "Silenciosa",
+    "contenido": "L’adjectiu",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el document, quan utilitzem l'article \"l'\"?",
+    "options": [
+      "Davant de paraules que comencen per vocal o H.",
+      "Davant de paraules que comencen per consonant.",
+      "Només davant de paraules femenines."
+    ],
+    "answer": "Davant de paraules que comencen per vocal o H.",
+    "contenido": "Els articles",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és la forma correcta de l'article per a la paraula \"hora\", segons les regles del document?",
+    "options": [
+      "L'",
+      "La",
+      "El"
+    ],
+    "answer": "L'",
+    "contenido": "Els articles",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és la forma correcta de l'article per a la paraula \"flor\", segons les regles del document?",
+    "options": [
+      "La",
+      "El",
+      "L'"
+    ],
+    "answer": "La",
+    "contenido": "Els articles",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el document, per a què serveixen els demostratius?",
+    "options": [
+      "Per a indicar la distància a la qual es troba el nom que acompanyen.",
+      "Per a expressar sentiments.",
+      "Per a contar una quantitat."
+    ],
+    "answer": "Per a indicar la distància a la qual es troba el nom que acompanyen.",
+    "contenido": "Els demostratius simples",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la pàgina 34, quins demostratius utilitzem per a referir-nos a una cosa que està \"prop\"?",
+    "options": [
+      "Este, esta, estos, estes.",
+      "Aquell, aquella, aquells, aquelles.",
+      "Eixe, eixa, eixos, eixes."
+    ],
+    "answer": "Este, esta, estos, estes.",
+    "contenido": "Els demostratius simples",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exemple de la pàgina 34, si un edifici està \"d'allà\", quin demostratiu l'acompanya correctament?",
+    "options": [
+      "Aquell",
+      "Esta",
+      "Este"
+    ],
+    "answer": "Aquell",
+    "contenido": "Els demostratius simples",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el document, per a què serveixen els possessius?",
+    "options": [
+      "Indiquen a qui pertanyen les coses.",
+      "Indiquen la qualitat de les coses.",
+      "Indiquen la quantitat de les coses."
+    ],
+    "answer": "Indiquen a qui pertanyen les coses.",
+    "contenido": "Els possessius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exercici de la pàgina 36, si un rellotge és meu, quina paraula l'acompanya correctament?",
+    "options": [
+      "Meu",
+      "Nostre",
+      "Teu"
+    ],
+    "answer": "Meu",
+    "contenido": "Els possessius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exercici de la pàgina 36, si una clau és de Clara, quina paraula l'acompanya correctament?",
+    "options": [
+      "Seua",
+      "Meua",
+      "Nostra"
+    ],
+    "answer": "Seua",
+    "contenido": "Els possessius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els numerals?",
+    "options": [
+      "Paraules que informen de la qualitat d'alguna cosa.",
+      "Paraules que informen de la quantitat exacta d'alguna cosa.",
+      "Paraules que indiquen una acció."
+    ],
+    "answer": "Paraules que informen de la quantitat exacta d'alguna cosa.",
+    "contenido": "Els numerals",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quantes rodes té un tricicle?",
+    "options": [
+      "Dues.",
+      "Tres.",
+      "Una."
+    ],
+    "answer": "Tres.",
+    "contenido": "Els numerals",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quants mesos té un any?",
+    "options": [
+      "Nou.",
+      "Vint-i-u.",
+      "Dotze."
+    ],
+    "answer": "Dotze.",
+    "contenido": "Els numerals",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és la funció dels pronoms personals?",
+    "options": [
+      "Expressar sentiments.",
+      "Referir-nos a les persones.",
+      "Indicar quantitats."
+    ],
+    "answer": "Referir-nos a les persones.",
+    "contenido": "Els pronoms personals forts",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quan utilitzem el pronom 'Ell'?",
+    "options": [
+      "Per a referir-nos a més d'una persona.",
+      "Per a referir-nos a una sola persona.",
+      "Per a referir-nos a un objecte."
+    ],
+    "answer": "Per a referir-nos a una sola persona.",
+    "contenido": "Els pronoms personals forts",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Completa la frase: 'A ____ li agrada dibuixar.'",
+    "options": [
+      "Nosaltres.",
+      "Ell.",
+      "Vosaltres."
+    ],
+    "answer": "Ell.",
+    "contenido": "Els pronoms personals forts",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quan diem que el temps d'un verb és present?",
+    "options": [
+      "Si ja ha ocorregut l'acció.",
+      "Si l'acció ocorrerà després.",
+      "Si l'acció ocorre ara."
+    ],
+    "answer": "Si l'acció ocorre ara.",
+    "contenido": "El verb: present, passat i futur",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En la frase 'Els iaios vindran a dinar', el verb està en temps...",
+    "options": [
+      "Passat.",
+      "Present.",
+      "Futur."
+    ],
+    "answer": "Futur.",
+    "contenido": "El verb: present, passat i futur",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Completa la frase amb el verb en el temps correcte: 'Ahir ____ molt.'",
+    "options": [
+      "plou.",
+      "va ploure.",
+      "plourà."
+    ],
+    "answer": "va ploure.",
+    "contenido": "El verb: present, passat i futur",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin tipus d'oració informa sobre algun fet?",
+    "options": [
+      "Exclamativa.",
+      "Interrogativa.",
+      "Enunciativa."
+    ],
+    "answer": "Enunciativa.",
+    "contenido": "Els tipus d’oracions: enunciativa, exclamativa i interrogativa",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "La frase 'S'ha fet tard?' és una oració...",
+    "options": [
+      "Enunciativa.",
+      "Exclamativa.",
+      "Interrogativa."
+    ],
+    "answer": "Interrogativa.",
+    "contenido": "Els tipus d’oracions: enunciativa, exclamativa i interrogativa",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "La frase 'Mira com volen! Què guai!' és una oració...",
+    "options": [
+      "Enunciativa.",
+      "Interrogativa.",
+      "Exclamativa."
+    ],
+    "answer": "Exclamativa.",
+    "contenido": "Els tipus d’oracions: enunciativa, exclamativa i interrogativa",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els sinònims?",
+    "options": [
+      "Paraules que tenen significats oposats.",
+      "Paraules que tenen el mateix significat.",
+      "Paraules que es pronuncien igual."
+    ],
+    "answer": "Paraules que tenen el mateix significat.",
+    "contenido": "Sinònims i antònims",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin és el sinònim de 'XICOTET'?",
+    "options": [
+      "Valent.",
+      "Astut.",
+      "Menut."
+    ],
+    "answer": "Menut.",
+    "contenido": "Sinònims i antònims",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin és l'antònim de 'BLANC'?",
+    "options": [
+      "Transparent.",
+      "Negre.",
+      "Clars."
+    ],
+    "answer": "Negre.",
+    "contenido": "Sinònims i antònims",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el text, què indiquen els diminutius?",
+    "options": [
+      "Una mida gran",
+      "Una mida xicoteta",
+      "Una forma especial"
+    ],
+    "answer": "Una mida xicoteta",
+    "contenido": "Diminutius i augmentatius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'estes paraules és un diminutiu de 'casa'?",
+    "options": [
+      "Casota",
+      "Caseta",
+      "Casona"
+    ],
+    "answer": "Caseta",
+    "contenido": "Diminutius i augmentatius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'estes paraules és un augmentatiu de 'cotxe'?",
+    "options": [
+      "Cotxet",
+      "Cotxàs",
+      "Cotxera"
+    ],
+    "answer": "Cotxàs",
+    "contenido": "Diminutius i augmentatius",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el text, què significa que unes paraules pertanyen al mateix camp semàntic?",
+    "options": [
+      "Que rimen entre elles",
+      "Que es relacionen pel significat",
+      "Que tenen la mateixa lletra inicial"
+    ],
+    "answer": "Que es relacionen pel significat",
+    "contenido": "El camp semàntic",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En el camp semàntic de 'Mobles', quina d'estes paraules hi pertany?",
+    "options": [
+      "Gat",
+      "Banyera",
+      "Llit"
+    ],
+    "answer": "Llit",
+    "contenido": "El camp semàntic",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'estes paraules NO pertany al mateix camp semàntic que les altres, segons l'activitat 48?",
+    "options": [
+      "Caqui",
+      "Aigua",
+      "Kiwi"
+    ],
+    "answer": "Aigua",
+    "contenido": "El camp semàntic",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En la paraula \"Zero\", com sona la 'E'?",
+    "options": [
+      "Oberta, com en \"MEL\".",
+      "Tancada, com en \"TREN\".",
+      "No sona."
+    ],
+    "answer": "Oberta, com en \"MEL\".",
+    "contenido": "La E oberta i la E tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té la 'E' oberta, com en \"MEL\"?",
+    "options": [
+      "Premi",
+      "Seda",
+      "Trapezi"
+    ],
+    "answer": "Premi",
+    "contenido": "La E oberta i la E tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té la 'E' tancada, com en \"TREN\"?",
+    "options": [
+      "Insecte",
+      "Princesa",
+      "Quadern"
+    ],
+    "answer": "Quadern",
+    "contenido": "La E oberta i la E tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula \"Porta\", com sona la 'O'?",
+    "options": [
+      "Oberta, com en \"POR\".",
+      "Tancada, com en \"GOS\".",
+      "És muda."
+    ],
+    "answer": "Oberta, com en \"POR\".",
+    "contenido": "La O oberta i la O tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té la 'O' oberta, com en \"POR\"?",
+    "options": [
+      "Pilota",
+      "Corb",
+      "Sopa"
+    ],
+    "answer": "Pilota",
+    "contenido": "La O oberta i la O tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té la 'O' tancada, com en \"GOS\"?",
+    "options": [
+      "Pólvora",
+      "Font",
+      "Bunyol"
+    ],
+    "answer": "Font",
+    "contenido": "La O oberta i la O tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "El so sonor de la 'S' és el que trobem en quines paraules?",
+    "options": [
+      "\"casa\" i \"zona\".",
+      "\"tassa\" i \"sol\".",
+      "\"cel\" i \"peu\"."
+    ],
+    "answer": "\"casa\" i \"zona\".",
+    "contenido": "La S sonora: el so S",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula \"Zodíac\", com sona la 'S'?",
+    "options": [
+      "És sonora.",
+      "No és sonora.",
+      "No té so."
+    ],
+    "answer": "És sonora.",
+    "contenido": "La S sonora: el so S",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té el so sonor de la 'S'?",
+    "options": [
+      "Passar",
+      "Donzella",
+      "Zero"
+    ],
+    "answer": "Donzella",
+    "contenido": "La S sonora: el so S",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu la lletra 'Z' per a representar el so sonor de la 'S'?",
+    "options": [
+      "Entre vocals.",
+      "A començament de paraula i darrere de consonant.",
+      "Al final de paraula."
+    ],
+    "answer": "A començament de paraula i darrere de consonant.",
+    "contenido": "La S sonora: S o Z?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu la lletra 'S' per a representar el so sonor de la 'S'?",
+    "options": [
+      "Entre vocals.",
+      "A començament de paraula.",
+      "Darrere de consonant."
+    ],
+    "answer": "Entre vocals.",
+    "contenido": "La S sonora: S o Z?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la paraula \"Prince_a\" amb la lletra correcta per al so sonor 'S':",
+    "options": [
+      "S",
+      "Z",
+      "Ç"
+    ],
+    "answer": "S",
+    "contenido": "La S sonora: S o Z?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula \"Sabata\", com sona la 'S'?",
+    "options": [
+      "Sonora, com en \"CASA\".",
+      "Sorda, com en \"TASSA\".",
+      "No sona."
+    ],
+    "answer": "Sorda, com en \"TASSA\".",
+    "contenido": "La S sorda, com sona?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té el so sord de la 'S'?",
+    "options": [
+      "Mosaic",
+      "Dansa",
+      "Cosir"
+    ],
+    "answer": "Dansa",
+    "contenido": "La S sorda, com sona?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules té el so sonor de la 'S'?",
+    "options": [
+      "Sabata",
+      "Pesar",
+      "Onze"
+    ],
+    "answer": "Onze",
+    "contenido": "La S sorda, com sona?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu el so de la S sorda quan està entre vocals?",
+    "options": [
+      "S",
+      "SS",
+      "Z"
+    ],
+    "answer": "SS",
+    "contenido": "La S sorda: S o SS",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina posició de la paraula escrivim 'S' per al so sord?",
+    "options": [
+      "A principi de paraula i entre vocals",
+      "A final de paraula i darrere de consonant",
+      "Només a principi de paraula"
+    ],
+    "answer": "A final de paraula i darrere de consonant",
+    "contenido": "La S sorda: S o SS",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La paraula 'fò_il' es completa amb:",
+    "options": [
+      "S",
+      "SS",
+      "Z"
+    ],
+    "answer": "SS",
+    "contenido": "La S sorda: S o SS",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra utilitzem per al so sord de la S davant de les vocals E i I?",
+    "options": [
+      "Ç",
+      "S",
+      "C"
+    ],
+    "answer": "C",
+    "contenido": "La S sorda. C o Ç?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu la lletra 'Ç' per representar el so sord de la S?",
+    "options": [
+      "A final de paraula i davant de A, O, U",
+      "Entre vocals",
+      "Davant de E i I"
+    ],
+    "answer": "A final de paraula i davant de A, O, U",
+    "contenido": "La S sorda. C o Ç?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La paraula 'Ma_a' (com l'eina) es completa amb:",
+    "options": [
+      "S",
+      "Ç",
+      "Z"
+    ],
+    "answer": "Ç",
+    "contenido": "La S sorda. C o Ç?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quines lletres s'escriuen davant de E o I per a fer el so de la J?",
+    "options": [
+      "J i TJ",
+      "G i TG",
+      "Només G"
+    ],
+    "answer": "G i TG",
+    "contenido": "G, J, TG, TJ",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu la J o TJ per a fer el so de la J?",
+    "options": [
+      "Davant de E i I",
+      "A principi de paraula",
+      "Davant de A, O, U"
+    ],
+    "answer": "Davant de A, O, U",
+    "contenido": "G, J, TG, TJ",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina posició de la paraula poden aparéixer TG i TJ?",
+    "options": [
+      "Al principi de paraula",
+      "Entre vocals",
+      "Al final de paraula"
+    ],
+    "answer": "Entre vocals",
+    "contenido": "G, J, TG, TJ",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què és un diftong?",
+    "options": [
+      "Una vocal tònica",
+      "La combinació de 2 vocals que pertanyen a una mateixa síl·laba",
+      "Dues vocals que pertanyen a síl·labes diferents"
+    ],
+    "answer": "La combinació de 2 vocals que pertanyen a una mateixa síl·laba",
+    "contenido": "El diftong",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin d'aquests grups de lletres NO forma diftong perquè la vocal no sona?",
+    "options": [
+      "QUA",
+      "GUI",
+      "GÜE"
+    ],
+    "answer": "GUI",
+    "contenido": "El diftong",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'Llen-gua', on trobem el diftong?",
+    "options": [
+      "Llen",
+      "gua",
+      "No hi ha diftong"
+    ],
+    "answer": "gua",
+    "contenido": "El diftong",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què són els hiats?",
+    "options": [
+      "La combinació de dues vocals que pertanyen a síl·labes diferents",
+      "La combinació de dues vocals que pertanyen a la mateixa síl·laba",
+      "Una vocal amb accent"
+    ],
+    "answer": "La combinació de dues vocals que pertanyen a síl·labes diferents",
+    "contenido": "El hiat",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin d'aquests exemples NO és un hiat segons les regles de vocals tòniques o dièresi?",
+    "options": [
+      "po-e-ma",
+      "ve-í",
+      "aire"
+    ],
+    "answer": "aire",
+    "contenido": "El hiat",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan una de les dues vocals que formen un diftong té accent o dièresi, què es forma?",
+    "options": [
+      "Un diftong",
+      "Un hiat",
+      "Una síl·laba tònica"
+    ],
+    "answer": "Un hiat",
+    "contenido": "El hiat",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el document, què és la síl·laba tònica?",
+    "options": [
+      "La síl·laba que es pronuncia amb més força en una paraula.",
+      "La primera síl·laba d'una paraula.",
+      "L'última síl·laba d'una paraula."
+    ],
+    "answer": "La síl·laba que es pronuncia amb més força en una paraula.",
+    "contenido": "La síl·laba tònica",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula d'exemple \"a-be-ce-da-ri\", quina és la síl·laba tònica?",
+    "options": [
+      "ri",
+      "da",
+      "a"
+    ],
+    "answer": "da",
+    "contenido": "La síl·laba tònica",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es classifiquen les paraules segons on es troba la síl·laba tònica?",
+    "options": [
+      "Agudes, planes o esdrúixoles.",
+      "Llargues, mitjanes o curtes.",
+      "Pròpies o comunes."
+    ],
+    "answer": "Agudes, planes o esdrúixoles.",
+    "contenido": "La síl·laba tònica",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica de les paraules agudes?",
+    "options": [
+      "En la penúltima síl·laba.",
+      "En l'última síl·laba.",
+      "En l'antepenúltima síl·laba."
+    ],
+    "answer": "En l'última síl·laba.",
+    "contenido": "Paraules agudes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'accentuen les paraules agudes que acaben en vocal?",
+    "options": [
+      "Mai s'accentuen.",
+      "Sempre s'accentuen.",
+      "Només si acaben en vocal + S."
+    ],
+    "answer": "Sempre s'accentuen.",
+    "contenido": "Paraules agudes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons les regles d'accentuació, quina d'aquestes paraules agudes hauria de portar accent?",
+    "options": [
+      "Japones",
+      "Compas",
+      "Cafe"
+    ],
+    "answer": "Cafe",
+    "contenido": "Paraules agudes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica de les paraules planes?",
+    "options": [
+      "En la penúltima síl·laba.",
+      "En l'última síl·laba.",
+      "En l'antepenúltima síl·laba."
+    ],
+    "answer": "En la penúltima síl·laba.",
+    "contenido": "Paraules planes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'accentuen les paraules planes?",
+    "options": [
+      "Quan acaben en vocal + S.",
+      "Quan acaben en vocal, vocal + S, ÉN o ÍN.",
+      "Quan NO acaben en vocal, vocal + S, ÉN ni ÍN."
+    ],
+    "answer": "Quan NO acaben en vocal, vocal + S, ÉN ni ÍN.",
+    "contenido": "Paraules planes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'Tel_fon', quina vocal hauria de portar accent, si cal, i de quin tipus (segons l'exercici 17)?",
+    "options": [
+      "La primera 'e' (Telèfon)",
+      "La 'o' (Telófon)",
+      "La segona 'e' (Telefón)"
+    ],
+    "answer": "La primera 'e' (Telèfon)",
+    "contenido": "Paraules planes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica de les paraules esdrúixoles?",
+    "options": [
+      "En la penúltima síl·laba.",
+      "En l'última síl·laba.",
+      "En l'antepenúltima síl·laba."
+    ],
+    "answer": "En l'antepenúltima síl·laba.",
+    "contenido": "Paraules esdrúixoles",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Les paraules esdrúixoles s'accentuen?",
+    "options": [
+      "Mai s'accentuen.",
+      "S'accentuen sempre.",
+      "Només si acaben en vocal."
+    ],
+    "answer": "S'accentuen sempre.",
+    "contenido": "Paraules esdrúixoles",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'M_mica', quina vocal hauria de portar accent (segons l'exercici 18)?",
+    "options": [
+      "La 'i' (Mímíca)",
+      "La primera 'a' (Màmica)",
+      "La segona 'i' (Mímíca)"
+    ],
+    "answer": "La primera 'a' (Màmica)",
+    "contenido": "Paraules esdrúixoles",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin tipus d'accent sempre porta la vocal 'A' en valencià, segons el document?",
+    "options": [
+      "Accent tancat (' ´ ').",
+      "Accent obert (' ` ').",
+      "No porta accent."
+    ],
+    "answer": "Accent obert (' ` ').",
+    "contenido": "Accent obert i tancat",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quins accents porten sempre les vocals 'I' i 'U'?",
+    "options": [
+      "Accent obert (' ` ').",
+      "Accent tancat (' ´ ').",
+      "Poden portar accent obert o tancat."
+    ],
+    "answer": "Accent tancat (' ´ ').",
+    "contenido": "Accent obert i tancat",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Les vocals 'E' i 'O' poden portar quins tipus d'accent?",
+    "options": [
+      "Només accent tancat.",
+      "Només accent obert.",
+      "Accent obert (' ` ') o accent tancat (' ´ ')."
+    ],
+    "answer": "Accent obert (' ` ') o accent tancat (' ´ ').",
+    "contenido": "Accent obert i tancat",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el text, quin signe de puntuació s'escriu al final de cada oració?",
+    "options": [
+      "La coma",
+      "El punt",
+      "L'apòstrof"
+    ],
+    "answer": "El punt",
+    "contenido": "Coma i punt",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'utilitza la coma per a separar paraules, segons el document?",
+    "options": [
+      "Per a començar una oració",
+      "En una enumeració",
+      "Després d'un punt"
+    ],
+    "answer": "En una enumeració",
+    "contenido": "Coma i punt",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina regla s'ha de seguir amb la majúscula després d'un punt?",
+    "options": [
+      "S'escriu majúscula només si és un nom propi",
+      "Sempre s'escriu majúscula",
+      "No s'escriu majúscula si la frase continua"
+    ],
+    "answer": "Sempre s'escriu majúscula",
+    "contenido": "Coma i punt",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Per a representar el so sord de la S davant de E, I, quina lletra utilitzem?",
+    "options": [
+      "S",
+      "Ç",
+      "C"
+    ],
+    "answer": "C",
+    "contenido": "Repàs de la S sorda. S, SS, C, Ç.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quines posicions s'escriu la lletra Ç per a representar el so sord de la S?",
+    "options": [
+      "A començament de paraula i darrere de consonant",
+      "A final de paraula i davant de A, O, U",
+      "Entre vocals"
+    ],
+    "answer": "A final de paraula i davant de A, O, U",
+    "contenido": "Repàs de la S sorda. S, SS, C, Ç.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'Carabassa', el so de la S és com en 'TASSA' (sord) o com en 'CASA' (sonor)?",
+    "options": [
+      "Sord",
+      "Sonor",
+      "No té so de S"
+    ],
+    "answer": "Sord",
+    "contenido": "Repàs de la S sorda. S, SS, C, Ç.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què és un hiat, segons el document?",
+    "options": [
+      "La combinació de dues vocals que pertanyen a la mateixa síl·laba",
+      "La combinació de dues vocals que pertanyen a síl·labes diferents",
+      "Un grup de vocals que no sonen"
+    ],
+    "answer": "La combinació de dues vocals que pertanyen a síl·labes diferents",
+    "contenido": "Repàs del diftong i el hiat.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Els grups GUE, GUI, QUE, QUI formen diftong?",
+    "options": [
+      "Sí, sempre",
+      "No, perquè les vocals no sonen",
+      "Només si porten accent"
+    ],
+    "answer": "No, perquè les vocals no sonen",
+    "contenido": "Repàs del diftong i el hiat.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules, segons l'exercici de la pàgina 25, conté un hiat?",
+    "options": [
+      "Queixal",
+      "Canoa",
+      "Ciència"
+    ],
+    "answer": "Ciència",
+    "contenido": "Repàs del diftong i el hiat.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'accentuen les paraules agudes, segons el document?",
+    "options": [
+      "Quan acaben en consonant que no siga S",
+      "Quan acaben en vocal, vocal + S, ÉN o ÍN",
+      "Sempre s'accentuen"
+    ],
+    "answer": "Quan acaben en vocal, vocal + S, ÉN o ÍN",
+    "contenido": "Repàs de les normes d'accentuació.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin tipus de paraules s'accentuen sempre, sense excepció?",
+    "options": [
+      "Agudes",
+      "Planes",
+      "Esdrúixoles"
+    ],
+    "answer": "Esdrúixoles",
+    "contenido": "Repàs de les normes d'accentuació.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan NO s'accentuen les paraules planes?",
+    "options": [
+      "Quan acaben en vocal, vocal + S, ÉN ni ÍN",
+      "Quan acaben en consonant",
+      "Sempre s'accentuen"
+    ],
+    "answer": "Quan acaben en vocal, vocal + S, ÉN ni ÍN",
+    "contenido": "Repàs de les normes d'accentuació.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons les normes, quina vocal sempre porta accent obert (`)?",
+    "options": [
+      "La I",
+      "L'A",
+      "La E"
+    ],
+    "answer": "L'A",
+    "contenido": "Accent obert o tancat?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quines vocals sempre porten accent tancat (')?",
+    "options": [
+      "La E i la O",
+      "L'A i la E",
+      "La I i la U"
+    ],
+    "answer": "La I i la U",
+    "contenido": "Accent obert o tancat?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quines vocals poden portar accent obert (`) o accent tancat (')?",
+    "options": [
+      "La A i la I",
+      "La I i la U",
+      "La E i la O"
+    ],
+    "answer": "La E i la O",
+    "contenido": "Accent obert o tancat?",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el document, com sona la 'E' en la paraula \"Seda\"?",
+    "options": [
+      "OBERTA",
+      "TANCADA",
+      "Ni oberta ni tancada"
+    ],
+    "answer": "OBERTA",
+    "contenido": "Indica si la paraula té la E oberta o tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula \"Paper\", quin tipus de 'E' trobem segons el document?",
+    "options": [
+      "OBERTA",
+      "TANCADA",
+      "Una 'E' que pot ser de les dues maneres"
+    ],
+    "answer": "TANCADA",
+    "contenido": "Indica si la paraula té la E oberta o tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el que s'indica al document, com sona la 'E' en la paraula \"Orella\"?",
+    "options": [
+      "OBERTA",
+      "TANCADA",
+      "No conté la lletra 'E'"
+    ],
+    "answer": "OBERTA",
+    "contenido": "Indica si la paraula té la E oberta o tancada",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què és la comunicació segons el text?",
+    "options": [
+      "L'intercanvi de paraules.",
+      "L'intercanvi d'informació per mitjà de la llengua.",
+      "El fet de parlar en veu alta."
+    ],
+    "answer": "L'intercanvi d'informació per mitjà de la llengua.",
+    "contenido": "La comunicació: oral i escrita",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin dels següents exemples és una comunicació escrita?",
+    "options": [
+      "Un secret a veu.",
+      "Una carta.",
+      "Una explicació a classe."
+    ],
+    "answer": "Una carta.",
+    "contenido": "La comunicació: oral i escrita",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quins dos tipus de comunicació hi ha?",
+    "options": [
+      "Pública i privada.",
+      "Ràpida i lenta.",
+      "Oral i escrita."
+    ],
+    "answer": "Oral i escrita.",
+    "contenido": "La comunicació: oral i escrita",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els substantius?",
+    "options": [
+      "Paraules que indiquen accions.",
+      "Paraules que anomenen persones, animals, coses o llocs.",
+      "Paraules que descriuen qualitats."
+    ],
+    "answer": "Paraules que anomenen persones, animals, coses o llocs.",
+    "contenido": "El substantiu: gènere, nombre i classe",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En la paraula 'granera', quin gènere i nombre té el substantiu?",
+    "options": [
+      "Masculí singular.",
+      "Femení singular.",
+      "Femení plural."
+    ],
+    "answer": "Femení singular.",
+    "contenido": "El substantiu: gènere, nombre i classe",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin dels següents és un substantiu propi?",
+    "options": [
+      "Ciutat.",
+      "Poble.",
+      "Alacant."
+    ],
+    "answer": "Alacant.",
+    "contenido": "El substantiu: gènere, nombre i classe",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Els adjectius interrogatius concorden amb el substantiu en...",
+    "options": [
+      "Persona i nombre.",
+      "Gènere i nombre.",
+      "Temps i mode."
+    ],
+    "answer": "Gènere i nombre.",
+    "contenido": "L'adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina paraula és un adjectiu interrogatiu?",
+    "options": [
+      "On.",
+      "Quant.",
+      "Perquè."
+    ],
+    "answer": "Quant.",
+    "contenido": "L'adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Completa la frase: '___ fruita menges al dia?'",
+    "options": [
+      "Quants.",
+      "Quanta.",
+      "Quines."
+    ],
+    "answer": "Quanta.",
+    "contenido": "L'adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els pronoms personals forts?",
+    "options": [
+      "Paraules que descriuen accions.",
+      "Paraules que s'usen per a anomenar persones o animals sense dir-ne el nom.",
+      "Paraules que sempre van unides a un verb."
+    ],
+    "answer": "Paraules que s'usen per a anomenar persones o animals sense dir-ne el nom.",
+    "contenido": "Els pronoms personals forts i febles",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin dels següents és un pronom personal feble?",
+    "options": [
+      "Nosaltres.",
+      "Jo.",
+      "Em."
+    ],
+    "answer": "Em.",
+    "contenido": "Els pronoms personals forts i febles",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Els pronoms personals febles necessiten anar units a...",
+    "options": [
+      "Un adjectiu.",
+      "Un substantiu.",
+      "Un verb."
+    ],
+    "answer": "Un verb.",
+    "contenido": "Els pronoms personals forts i febles",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina classe de determinant indica si una cosa es troba prop, a mitja distància o lluny de qui parla?",
+    "options": [
+      "Possessius.",
+      "Numerals.",
+      "Demostratius."
+    ],
+    "answer": "Demostratius.",
+    "contenido": "Els determinants",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Els determinants cardinals expressen...",
+    "options": [
+      "Ordre.",
+      "Qualitat.",
+      "Unitats exactes."
+    ],
+    "answer": "Unitats exactes.",
+    "contenido": "Els determinants",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin dels següents és un determinant possessiu?",
+    "options": [
+      "Tres.",
+      "Aquest.",
+      "Meua."
+    ],
+    "answer": "Meua.",
+    "contenido": "Els determinants",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el document, què és l'infinitiu dels verbs?",
+    "options": [
+      "El nom dels verbs",
+      "Una paraula que indica gènere",
+      "Un tipus de substantiu"
+    ],
+    "answer": "El nom dels verbs",
+    "contenido": "El verb: l’infinitiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Si un verb en infinitiu acaba en -AR, de quina conjugació és?",
+    "options": [
+      "De la primera conjugació",
+      "De la segona conjugació",
+      "De la tercera conjugació"
+    ],
+    "answer": "De la primera conjugació",
+    "contenido": "El verb: l’infinitiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests verbs en infinitiu pertany a la segona conjugació, segons l'activitat 37?",
+    "options": [
+      "Tòrcer",
+      "Niuar",
+      "Submergir"
+    ],
+    "answer": "Tòrcer",
+    "contenido": "El verb: l’infinitiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què és una paraula composta?",
+    "options": [
+      "La unió de dues paraules que, juntes, signifiquen una cosa diferent",
+      "Una paraula que té moltes síl·labes",
+      "Un substantiu que descriu un lloc"
+    ],
+    "answer": "La unió de dues paraules que, juntes, signifiquen una cosa diferent",
+    "contenido": "Paraules simples i compostes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'activitat 38, quina paraula simple ajuda a formar la composta 'ALTA...'?",
+    "options": [
+      "BAIXA",
+      "VEU",
+      "SO"
+    ],
+    "answer": "BAIXA",
+    "contenido": "Paraules simples i compostes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'activitat 39, quin d'aquests mots és una paraula composta?",
+    "options": [
+      "Furgadents",
+      "Llamps",
+      "Peus"
+    ],
+    "answer": "Furgadents",
+    "contenido": "Paraules simples i compostes",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els prefixos, segons la definició del document?",
+    "options": [
+      "Síl·labes que s'afegeixen davant de la paraula primitiva",
+      "Síl·labes que s'afegeixen darrere de la paraula primitiva",
+      "Paraules completes que no es poden dividir"
+    ],
+    "answer": "Síl·labes que s'afegeixen davant de la paraula primitiva",
+    "contenido": "Paraules derivades: prefixos i sufixos",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els sufixos, segons el document?",
+    "options": [
+      "Síl·labes que s'afegeixen darrere de la paraula primitiva",
+      "Paraules que no canvien mai",
+      "La primera síl·laba d'una paraula"
+    ],
+    "answer": "Síl·labes que s'afegeixen darrere de la paraula primitiva",
+    "contenido": "Paraules derivades: prefixos i sufixos",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'activitat 40, quin prefix s'utilitza amb la paraula 'confiar' per formar una derivada?",
+    "options": [
+      "DES",
+      "IN",
+      "DE"
+    ],
+    "answer": "DES",
+    "contenido": "Paraules derivades: prefixos i sufixos",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són les famílies de paraules o famílies lèxiques?",
+    "options": [
+      "Un conjunt de paraules que tenen una part comuna i venen de la mateixa paraula",
+      "Totes les paraules que comencen per la mateixa lletra",
+      "Paraules que rimen entre elles"
+    ],
+    "answer": "Un conjunt de paraules que tenen una part comuna i venen de la mateixa paraula",
+    "contenido": "La família lèxica",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'activitat 42, quina paraula pertany a la família lèxica de 'Terra'?",
+    "options": [
+      "Terrestre",
+      "Torró",
+      "Enfonsar"
+    ],
+    "answer": "Terrestre",
+    "contenido": "La família lèxica",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'activitat 43, quina paraula NO forma part de la família lèxica de 'Pescatera'?",
+    "options": [
+      "Pessic",
+      "Pescador",
+      "Pescater"
+    ],
+    "answer": "Pessic",
+    "contenido": "La família lèxica",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què vol dir que una paraula és polisèmica?",
+    "options": [
+      "Que té més d'un significat amb relació de semblança",
+      "Que només té un significat",
+      "Que és una paraula molt llarga"
+    ],
+    "answer": "Que té més d'un significat amb relació de semblança",
+    "contenido": "Les paraules polisèmiques",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests mots és un exemple de paraula polisèmica segons l'activitat 44?",
+    "options": [
+      "Serra",
+      "Ratolí",
+      "Ceba"
+    ],
+    "answer": "Serra",
+    "contenido": "Les paraules polisèmiques",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "La paraula 'Clau' (key) mostrada en l'activitat 44, quin altre significat té?",
+    "options": [
+      "Una eina per ajustar",
+      "Un tipus de fruit",
+      "Un color"
+    ],
+    "answer": "Una eina per ajustar",
+    "contenido": "Les paraules polisèmiques",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els antònims segons el text?",
+    "options": [
+      "Paraules que volen dir el contrari.",
+      "Paraules que volen dir el mateix.",
+      "Paraules escrites amb algunes lletres."
+    ],
+    "answer": "Paraules que volen dir el contrari.",
+    "contenido": "Sinònims i antònims",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els sinònims segons el text?",
+    "options": [
+      "Paraules que representen una quantitat.",
+      "Paraules que volen dir el contrari.",
+      "Paraules que volen dir el mateix."
+    ],
+    "answer": "Paraules que volen dir el mateix.",
+    "contenido": "Sinònims i antònims",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin és l'antònim de la paraula 'Estret' segons el text?",
+    "options": [
+      "Ample",
+      "Espaiós",
+      "Petit"
+    ],
+    "answer": "Ample",
+    "contenido": "Sinònims i antònims",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina afirmació és certa sobre les abreviatures?",
+    "options": [
+      "Sempre porten un punt al final.",
+      "No porten punt al final.",
+      "Representen operacions."
+    ],
+    "answer": "Sempre porten un punt al final.",
+    "contenido": "Abreviatures i símbols",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són els símbols, segons el text?",
+    "options": [
+      "Paraules que volen dir el contrari.",
+      "Lletres o signes que representen quantitats o operacions.",
+      "Paraules escrites amb moltes lletres."
+    ],
+    "answer": "Lletres o signes que representen quantitats o operacions.",
+    "contenido": "Abreviatures i símbols",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin és el símbol del litre?",
+    "options": [
+      "ml",
+      "h",
+      "l"
+    ],
+    "answer": "l",
+    "contenido": "Abreviatures i símbols",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el document, quan posem dièresi en la U dels grups GÜE, GÜI, QÜE, QÜI?",
+    "options": [
+      "Quan la U no es pronuncia.",
+      "Quan la U es pronuncia.",
+      "Sempre que la U siga la primera lletra."
+    ],
+    "answer": "Quan la U es pronuncia.",
+    "contenido": "La dièresi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quin altre cas es posa dièresi en les vocals I, U, segons la informació proporcionada?",
+    "options": [
+      "Quan van darrere d'una altra vocal i formen hiat.",
+      "Quan estan al final d'una paraula.",
+      "Quan formen un diftong."
+    ],
+    "answer": "Quan van darrere d'una altra vocal i formen hiat.",
+    "contenido": "La dièresi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Si una paraula porta accent segons les normes d'accentuació, què passa amb la dièresi?",
+    "options": [
+      "També porta dièresi.",
+      "No porta dièresi.",
+      "L'accent es substitueix per la dièresi."
+    ],
+    "answer": "No porta dièresi.",
+    "contenido": "La dièresi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica de les paraules agudes?",
+    "options": [
+      "En la penúltima síl·laba.",
+      "En l'última síl·laba.",
+      "En l'antepenúltima síl·laba."
+    ],
+    "answer": "En l'última síl·laba.",
+    "contenido": "Les paraules agudes, planes i esdrúixoles",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'accentuen les paraules planes?",
+    "options": [
+      "Quan acaben en vocal, vocal + S, ÉN, ÍN.",
+      "Quan NO acaben en vocal, vocal + S, ÉN, ÍN.",
+      "Sempre s'accentuen."
+    ],
+    "answer": "Quan NO acaben en vocal, vocal + S, ÉN, ÍN.",
+    "contenido": "Les paraules agudes, planes i esdrúixoles",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què passa amb l'accentuació de les paraules esdrúixoles?",
+    "options": [
+      "No s'accentuen mai.",
+      "S'accentuen sempre.",
+      "Només s'accentuen si acaben en vocal."
+    ],
+    "answer": "S'accentuen sempre.",
+    "contenido": "Les paraules agudes, planes i esdrúixoles",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com sona la X en la paraula «caixa»?",
+    "options": [
+      "Com IS.",
+      "Com TX.",
+      "Com J."
+    ],
+    "answer": "Com IS.",
+    "contenido": "X, TX, IG",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com sona la X en la paraula «xocolate»?",
+    "options": [
+      "Com IS.",
+      "Com TX.",
+      "Com G."
+    ],
+    "answer": "Com TX.",
+    "contenido": "X, TX, IG",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules dels exercicis es completa amb TX?",
+    "options": [
+      "Ai_ada (Aixada)",
+      "Gaspa_o (Gaspatxo)",
+      "Clò_ina (Clòxina)"
+    ],
+    "answer": "Gaspa_o (Gaspatxo)",
+    "contenido": "X, TX, IG",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En general, com s'escriuen les paraules que comencen per AL-L-, COL-L-, IL-L-, MIL-L-?",
+    "options": [
+      "Amb L.",
+      "Amb L·L.",
+      "Amb TL."
+    ],
+    "answer": "Amb L·L.",
+    "contenido": "L, L·L, TL",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Les paraules que acaben en -EL·LA, -IL·LA, -IL·LAR, com s'escriuen?",
+    "options": [
+      "Amb L.",
+      "Amb L·L.",
+      "Amb TL."
+    ],
+    "answer": "Amb L·L.",
+    "contenido": "L, L·L, TL",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules dels exercicis es completa amb L, no amb L·L o TL?",
+    "options": [
+      "Conste_ació (Constel·lació)",
+      "Mo_e (Mol·le)",
+      "Dàti_ (Dàtil)"
+    ],
+    "answer": "Dàti_ (Dàtil)",
+    "contenido": "L, L·L, TL",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es pot representar el so de la LL, segons el document?",
+    "options": [
+      "Només amb LL.",
+      "Amb LL o TLL.",
+      "Només amb TLL."
+    ],
+    "answer": "Amb LL o TLL.",
+    "contenido": "LL, TLL",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On pot aparèixer el grup TLL?",
+    "options": [
+      "En qualsevol posició de la paraula.",
+      "Només al principi de la paraula.",
+      "Només enmig de la paraula i entre vocals."
+    ],
+    "answer": "Només enmig de la paraula i entre vocals.",
+    "contenido": "LL, TLL",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules dels exercicis es completa amb TLL?",
+    "options": [
+      "Co_ar (Collar)",
+      "Bi_etera (Bitllera)",
+      "Coni_ (Conill)"
+    ],
+    "answer": "Bi_etera (Bitllera)",
+    "contenido": "LL, TLL",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la norma, els grups MM i TM en les paraules valencianes poden aparéixer...",
+    "options": [
+      "només al principi de la paraula.",
+      "només enmig de la paraula i entre vocals.",
+      "en qualsevol posició de la paraula."
+    ],
+    "answer": "només enmig de la paraula i entre vocals.",
+    "contenido": "M, MM, TM",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com completaries la paraula 'Co_emorar' segons les normes d'ortografia?",
+    "options": [
+      "Commemorar",
+      "Comemorar",
+      "Cotmemorar"
+    ],
+    "answer": "Commemorar",
+    "contenido": "M, MM, TM",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina d'aquestes paraules s'utilitza correctament la grafia segons les normes de M, MM, TM?",
+    "options": [
+      "Immòbil",
+      "Emobil",
+      "Immobil"
+    ],
+    "answer": "Immòbil",
+    "contenido": "M, MM, TM",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La lletra N en valencià pot aparéixer...",
+    "options": [
+      "només al principi de la paraula.",
+      "només enmig de la paraula i entre vocals.",
+      "en qualsevol posició."
+    ],
+    "answer": "en qualsevol posició.",
+    "contenido": "N, NN, TN",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com completaries la paraula 'Èt_ies' segons les normes d'ortografia?",
+    "options": [
+      "Ètnies",
+      "Ènnies",
+      "Èties"
+    ],
+    "answer": "Ètnies",
+    "contenido": "N, NN, TN",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules fa servir la grafia NN correctament?",
+    "options": [
+      "Conectat",
+      "Connectat",
+      "Connetat"
+    ],
+    "answer": "Connectat",
+    "contenido": "N, NN, TN",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Generalment, davant de quines vocals s'escriu la lletra G?",
+    "options": [
+      "Davant de A, O, U.",
+      "Davant de E, I.",
+      "Davant de totes les vocals."
+    ],
+    "answer": "Davant de E, I.",
+    "contenido": "Casos especials de G i J",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quins grups de lletres són una excepció per a l'ús de la J en valencià?",
+    "options": [
+      "GECC o GECT",
+      "JECC o JECT",
+      "JEG o JEC"
+    ],
+    "answer": "JECC o JECT",
+    "contenido": "Casos especials de G i J",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament la paraula 'Espon_a' seguint la norma general de G i J?",
+    "options": [
+      "Esponja",
+      "Esponoga",
+      "Esponga"
+    ],
+    "answer": "Esponja",
+    "contenido": "Casos especials de G i J",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què és un dígraf en valencià?",
+    "options": [
+      "La representació d'un so amb una sola lletra.",
+      "La representació d'un so amb dues lletres.",
+      "Un accent que s'afegeix a una lletra."
+    ],
+    "answer": "La representació d'un so amb dues lletres.",
+    "contenido": "Els dígrafs",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin dels següents no és un dígraf reconegut en valencià?",
+    "options": [
+      "CH",
+      "RR",
+      "NY"
+    ],
+    "answer": "CH",
+    "contenido": "Els dígrafs",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La paraula 'Mosquit' conté un dígraf?",
+    "options": [
+      "Sí, QU",
+      "No",
+      "Sí, OS"
+    ],
+    "answer": "Sí, QU",
+    "contenido": "Els dígrafs",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin d'aquests dígrafs és separable en síl·labes?",
+    "options": [
+      "GU",
+      "SS",
+      "LL"
+    ],
+    "answer": "SS",
+    "contenido": "Els dígrafs: separables i no separables",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin d'aquests dígrafs NO se separa en síl·labes diferents?",
+    "options": [
+      "RR",
+      "TX",
+      "IG"
+    ],
+    "answer": "IG",
+    "contenido": "Els dígrafs: separables i no separables",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com se separen correctament les síl·labes de la paraula 'Guitarra'?",
+    "options": [
+      "Guita-rra",
+      "Gui-tar-ra",
+      "Gui-tarr-a"
+    ],
+    "answer": "Gui-tar-ra",
+    "contenido": "Els dígrafs: separables i no separables",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Per a què s'utilitza la coma, segons el text, quan es parla d'una enumeració?",
+    "options": [
+      "Per a indicar sorpresa",
+      "Per a separar les paraules d'una enumeració",
+      "Per a fer una pregunta"
+    ],
+    "answer": "Per a separar les paraules d'una enumeració",
+    "contenido": "La coma i el punt i coma",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'utilitza el punt i coma segons la informació proporcionada?",
+    "options": [
+      "Per a separar expressions llargues",
+      "Per a separar oracions que ja tenen comes i estan unides pel significat",
+      "Per a introduir aclariments importants"
+    ],
+    "answer": "Per a separar oracions que ja tenen comes i estan unides pel significat",
+    "contenido": "La coma i el punt i coma",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què indica la coma en una oració?",
+    "options": [
+      "Una exclamació",
+      "Una pausa",
+      "Un final definitiu"
+    ],
+    "answer": "Una pausa",
+    "contenido": "La coma i el punt i coma",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es representa el so sonor de la 'S' en valencià, segons el text?",
+    "options": [
+      "Amb la lletra 'C'",
+      "Amb les lletres 'S' i 'Z'",
+      "Només amb la lletra 'S'"
+    ],
+    "answer": "Amb les lletres 'S' i 'Z'",
+    "contenido": "Repàs: so sonor o sord de la S.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina posició s'escriu la lletra 'Z' per representar el so sonor de la 'S'?",
+    "options": [
+      "Sempre entre vocals",
+      "A començament de paraula i darrere de consonant",
+      "Al final de la paraula"
+    ],
+    "answer": "A començament de paraula i darrere de consonant",
+    "contenido": "Repàs: so sonor o sord de la S.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La combinació de lletres 'SS' és sempre...",
+    "options": [
+      "Sorda",
+      "Sonora",
+      "Silenciosa"
+    ],
+    "answer": "Sorda",
+    "contenido": "Repàs: so sonor o sord de la S.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica en les paraules agudes?",
+    "options": [
+      "En la penúltima síl·laba",
+      "En l'última síl·laba",
+      "En l'antepenúltima síl·laba"
+    ],
+    "answer": "En l'última síl·laba",
+    "contenido": "Repàs dels accents: paraules agudes",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Les paraules agudes s'accentuen quan acaben en:",
+    "options": [
+      "Consonant diferent de N o S",
+      "Vocal, Vocal + S, ÉN, ÍN",
+      "Sempre que tinguen tres síl·labes"
+    ],
+    "answer": "Vocal, Vocal + S, ÉN, ÍN",
+    "contenido": "Repàs dels accents: paraules agudes",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina de les següents paraules agudes NO s'accentua?",
+    "options": [
+      "Perfum",
+      "Berlín",
+      "Compàs"
+    ],
+    "answer": "Perfum",
+    "contenido": "Repàs dels accents: paraules agudes",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica en les paraules planes?",
+    "options": [
+      "En l'última síl·laba",
+      "En la penúltima síl·laba",
+      "En la primera síl·laba"
+    ],
+    "answer": "En la penúltima síl·laba",
+    "contenido": "Repàs dels accents: paraules planes",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Les paraules planes s'accentuen quan:",
+    "options": [
+      "No acaben en Vocal, Vocal + S, ÉN, ÍN",
+      "Acaben en Vocal",
+      "Sempre, sense excepció"
+    ],
+    "answer": "No acaben en Vocal, Vocal + S, ÉN, ÍN",
+    "contenido": "Repàs dels accents: paraules planes",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina de les següents paraules planes necessita accent?",
+    "options": [
+      "Teatre",
+      "Cérvol",
+      "Rellotge"
+    ],
+    "answer": "Cérvol",
+    "contenido": "Repàs dels accents: paraules planes",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La dièresi indica que la 'U' no és muda en quins grups?",
+    "options": [
+      "GUE, GUI, QUE, QUI",
+      "GÜE, GÜI, QÜE, QÜI",
+      "GUA, GUO, QUA, QUO"
+    ],
+    "answer": "GÜE, GÜI, QÜE, QÜI",
+    "contenido": "Repàs de la dièresi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En el cas de la paraula 'Lluïsa', la dièresi indica que la 'U' o la 'I' formen un...",
+    "options": [
+      "Diftong",
+      "Triftong",
+      "Hiat"
+    ],
+    "answer": "Hiat",
+    "contenido": "Repàs de la dièresi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Per què paraules com 'Lluís' no porten dièresi a la 'i'?",
+    "options": [
+      "Perquè és una excepció a totes les regles",
+      "Perquè ja porta accent segons les normes d'accentuació",
+      "Perquè la 'i' no es pronuncia"
+    ],
+    "answer": "Perquè ja porta accent segons les normes d'accentuació",
+    "contenido": "Repàs de la dièresi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina vocal falta per a completar la paraula 'G __ T'?",
+    "options": [
+      "A",
+      "E",
+      "I"
+    ],
+    "answer": "A",
+    "contenido": "Les vocals",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina vocal falta en la paraula 'CANG __ R'?",
+    "options": [
+      "A",
+      "I",
+      "U"
+    ],
+    "answer": "U",
+    "contenido": "Les vocals",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons l'exercici de les vocals, quina paraula es completa amb la lletra 'O'?",
+    "options": [
+      "G __ S",
+      "G __ T",
+      "G __ RAFA"
+    ],
+    "answer": "G __ S",
+    "contenido": "Les vocals",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu la R forta a principi de paraula?",
+    "options": [
+      "S'escriu R",
+      "S'escriu RR",
+      "S'escriu RRR"
+    ],
+    "answer": "S'escriu R",
+    "contenido": "R, RR",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com sona la 'RR' quan està en mig de paraula?",
+    "options": [
+      "Sempre sona suau",
+      "Sempre sona forta",
+      "No sona"
+    ],
+    "answer": "Sempre sona forta",
+    "contenido": "R, RR",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'estas paraules de la llista té un so de R suau?",
+    "options": [
+      "ROSA",
+      "GUITARRA",
+      "CARA"
+    ],
+    "answer": "CARA",
+    "contenido": "R, RR",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Davant de quines vocals s'escriu la lletra 'C' per a fer el so de 'casa'?",
+    "options": [
+      "E, I",
+      "A, O, U",
+      "A, E, I"
+    ],
+    "answer": "A, O, U",
+    "contenido": "CA, CO, CU, QUE, QUI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Davant de quines vocals s'escriu 'QU'?",
+    "options": [
+      "A, O",
+      "O, U",
+      "E, I"
+    ],
+    "answer": "E, I",
+    "contenido": "CA, CO, CU, QUE, QUI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es completa la paraula 'XO____LATE'?",
+    "options": [
+      "CO",
+      "QUE",
+      "CA"
+    ],
+    "answer": "CO",
+    "contenido": "CA, CO, CU, QUE, QUI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'estes paraules s'escriu amb 'GA' segons els exemples del llibre?",
+    "options": [
+      "GOTA",
+      "GORRA",
+      "GAMBA"
+    ],
+    "answer": "GAMBA",
+    "contenido": "GA, GO, GU, GUE, GUI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es completa la paraula 'À____LA'?",
+    "options": [
+      "GUE",
+      "GUI",
+      "GA"
+    ],
+    "answer": "GUI",
+    "contenido": "GA, GO, GU, GUE, GUI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'estes paraules s'escriu amb 'GUE'?",
+    "options": [
+      "ESPA____TI",
+      "FORMIGÜER",
+      "ÀGUILA"
+    ],
+    "answer": "ESPA____TI",
+    "contenido": "GA, GO, GU, GUE, GUI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina d'estes paraules SONA la lletra 'U' perquè porta dièresi?",
+    "options": [
+      "ESQUIMAL",
+      "PINGÜÍ",
+      "FORMIGUER"
+    ],
+    "answer": "PINGÜÍ",
+    "contenido": "GÜE, GÜI, QÜE, QÜI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es completa la paraula 'A____DUCTE'?",
+    "options": [
+      "QÜE",
+      "QUE",
+      "CE"
+    ],
+    "answer": "QÜE",
+    "contenido": "GÜE, GÜI, QÜE, QÜI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la paraula 'FORMIGUER', sona la lletra 'U'?",
+    "options": [
+      "Sí sona",
+      "No sona",
+      "Sona forta"
+    ],
+    "answer": "No sona",
+    "contenido": "GÜE, GÜI, QÜE, QÜI",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En valencià, com sonen la B i la V segons el llibre?",
+    "options": [
+      "Sonen igual",
+      "Sonen diferent",
+      "No tenen so"
+    ],
+    "answer": "Sonen diferent",
+    "contenido": "B, V",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra falta en la paraula 'NÚ__OL'?",
+    "options": [
+      "B",
+      "V",
+      "P"
+    ],
+    "answer": "B",
+    "contenido": "B, V",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament el transport que va pel cel?",
+    "options": [
+      "Abió",
+      "Aviò",
+      "Avió"
+    ],
+    "answer": "Avió",
+    "contenido": "B, V",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On s'escriu la doble 'SS' segons la regla d'ortografia?",
+    "options": [
+      "A principi de paraula",
+      "Entre vocals",
+      "Davant de consonant"
+    ],
+    "answer": "Entre vocals",
+    "contenido": "S o SS",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules s'escriu amb una sola 'S' al principi?",
+    "options": [
+      "Pissarra",
+      "Sirena",
+      "Tassa"
+    ],
+    "answer": "Sirena",
+    "contenido": "S o SS",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu el líquid que traiem de la fruita, com el de taronja?",
+    "options": [
+      "Suc",
+      "Ssuc",
+      "Çuc"
+    ],
+    "answer": "Suc",
+    "contenido": "S o SS",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Davant de quines vocals s'escriu la lletra 'C'?",
+    "options": [
+      "A, O, U",
+      "E, I",
+      "A, I"
+    ],
+    "answer": "E, I",
+    "contenido": "C o Ç",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra falta en la paraula 'PLA__A'?",
+    "options": [
+      "C",
+      "Ç",
+      "S"
+    ],
+    "answer": "Ç",
+    "contenido": "C o Ç",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu la paraula 'ceba' segons el llibre?",
+    "options": [
+      "Seba",
+      "Çeba",
+      "Ceba"
+    ],
+    "answer": "Ceba",
+    "contenido": "C o Ç",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla del sol, s'escriu 'J' davant de les vocals...",
+    "options": [
+      "A, O, U",
+      "E, I",
+      "A, E"
+    ],
+    "answer": "A, O, U",
+    "contenido": "G o J",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu el nom de la fruita taronja?",
+    "options": [
+      "Taronga",
+      "Taronja",
+      "Taronsa"
+    ],
+    "answer": "Taronja",
+    "contenido": "G o J",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra falta per a completar la paraula '__ELAT'?",
+    "options": [
+      "G",
+      "J",
+      "S"
+    ],
+    "answer": "G",
+    "contenido": "G o J",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu el nom d'aquest animal marí gran?",
+    "options": [
+      "Ballena",
+      "Balena",
+      "Balenna"
+    ],
+    "answer": "Balena",
+    "contenido": "L, LL",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra falta en la paraula 'CAME__' per a l'animal de dos geps?",
+    "options": [
+      "L",
+      "LL",
+      "S"
+    ],
+    "answer": "LL",
+    "contenido": "L, LL",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu el lloc on anem a estudiar?",
+    "options": [
+      "Escolla",
+      "Escola",
+      "Es-cola"
+    ],
+    "answer": "Escola",
+    "contenido": "L, LL",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament el dolç que apareix en la imatge de l'activitat 18?",
+    "options": [
+      "XURRO",
+      "NYURRO",
+      "LLURRO"
+    ],
+    "answer": "XURRO",
+    "contenido": "NY, LL, X",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra falta per a completar la paraula ARA__A?",
+    "options": [
+      "LL",
+      "X",
+      "NY"
+    ],
+    "answer": "NY",
+    "contenido": "NY, LL, X",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina és la forma correcta de completar la paraula OCE__?",
+    "options": [
+      "LL",
+      "NY",
+      "X"
+    ],
+    "answer": "LL",
+    "contenido": "NY, LL, X",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el llibre, quina és la manera correcta d'escriure el número 4?",
+    "options": [
+      "CUATRE",
+      "QUATRE",
+      "QUATRO"
+    ],
+    "answer": "QUATRE",
+    "contenido": "Numerals fins a 100",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament el número 8 en valencià?",
+    "options": [
+      "UIT",
+      "VUIT",
+      "HUIT"
+    ],
+    "answer": "HUIT",
+    "contenido": "Numerals fins a 100",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'estes opcions és la correcta per al número 100?",
+    "options": [
+      "SENT",
+      "CIEN",
+      "CENT"
+    ],
+    "answer": "CENT",
+    "contenido": "Numerals fins a 100",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons l'activitat 20, quina d'estes paraules s'ha d'escriure amb majúscula inicial?",
+    "options": [
+      "poble",
+      "muntanya",
+      "València"
+    ],
+    "answer": "València",
+    "contenido": "La majúscula",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'ha d'escriure el nom d'una persona com 'Marta'?",
+    "options": [
+      "Amb minúscula",
+      "Amb majúscula inicial",
+      "Tota en majúscules"
+    ],
+    "answer": "Amb majúscula inicial",
+    "contenido": "La majúscula",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula s'ha d'escriure amb majúscula perquè és el nom d'un riu?",
+    "options": [
+      "túria",
+      "Túria",
+      "riu"
+    ],
+    "answer": "Túria",
+    "contenido": "La majúscula",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és el nom de la lletra 'B' segons la llista de consonants del llibre?",
+    "options": [
+      "BE ALTA",
+      "BE",
+      "BE BAIXA"
+    ],
+    "answer": "BE ALTA",
+    "contenido": "Noms de les consonants",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'anomena la lletra 'V' en l'abecedari valencià que es mostra?",
+    "options": [
+      "UVE",
+      "VE BAIXA",
+      "VE"
+    ],
+    "answer": "VE BAIXA",
+    "contenido": "Noms de les consonants",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és el nom de la lletra 'X' en valencià segons l'activitat 21?",
+    "options": [
+      "XIS",
+      "EQUIS",
+      "ICS"
+    ],
+    "answer": "ICS",
+    "contenido": "Noms de les consonants",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina d'estes paraules sona la 'U' i per tant porta dièresi?",
+    "options": [
+      "PINGÜÍ",
+      "ÀGUILA",
+      "FORMIGUER"
+    ],
+    "answer": "PINGÜÍ",
+    "contenido": "Repàs de G, GU i GÜ",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament la paraula que completa la imatge del felí ràpid?",
+    "options": [
+      "GEPARD",
+      "GUEPARD",
+      "GÜEPARD"
+    ],
+    "answer": "GUEPARD",
+    "contenido": "Repàs de G, GU i GÜ",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra s'utilitza per a completar la paraula __OTA?",
+    "options": [
+      "G",
+      "GU",
+      "GÜ"
+    ],
+    "answer": "G",
+    "contenido": "Repàs de G, GU i GÜ",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament la paraula del dibuix de l'animal que galopa a la pàgina 13?",
+    "options": [
+      "CABALL",
+      "CAVALL",
+      "CAVAL"
+    ],
+    "answer": "CAVALL",
+    "contenido": "Repàs de B i V",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla que apareix a les pàgines 13 i 26, com sonen la B i la V en valencià?",
+    "options": [
+      "Igual",
+      "Diferent",
+      "No tenen so"
+    ],
+    "answer": "Diferent",
+    "contenido": "Repàs de B i V",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'estes paraules s'escriu amb B segons els exemples de la pàgina 13?",
+    "options": [
+      "BALÓ",
+      "AVIÓ",
+      "VIOLÍ"
+    ],
+    "answer": "BALÓ",
+    "contenido": "Repàs de B i V",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Davant de quines vocals s'escriu la lletra C segons la regla de la pàgina 9?",
+    "options": [
+      "E, I",
+      "A, O, U",
+      "Només la A"
+    ],
+    "answer": "A, O, U",
+    "contenido": "C, QU, QÜ",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu la paraula que completa el dibuix de l'esportista de neu a la pàgina 9?",
+    "options": [
+      "ESCIAR",
+      "ESQUIAR",
+      "ESQÜIAR"
+    ],
+    "answer": "ESQUIAR",
+    "contenido": "C, QU, QÜ",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina d'estes paraules de la pàgina 27 s'escriu QÜ perquè sona la vocal U?",
+    "options": [
+      "AQÜEDUCTE",
+      "ESCUT",
+      "PAQUET"
+    ],
+    "answer": "AQÜEDUCTE",
+    "contenido": "C, QU, QÜ",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina vocal falta per a completar la paraula 'M _ L' de la pàgina 5?",
+    "options": [
+      "A",
+      "E",
+      "I"
+    ],
+    "answer": "E",
+    "contenido": "ESCRIU LA VOCAL QUE TÉ LA PARAULA",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina vocal es repetix en la paraula 'C_S_' segons l'exercici de la pàgina 5?",
+    "options": [
+      "A",
+      "O",
+      "U"
+    ],
+    "answer": "A",
+    "contenido": "ESCRIU LA VOCAL QUE TÉ LA PARAULA",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula de la pàgina 5 s'escriu amb la vocal O?",
+    "options": [
+      "GEL",
+      "FIL",
+      "COC"
+    ],
+    "answer": "COC",
+    "contenido": "ESCRIU LA VOCAL QUE TÉ LA PARAULA",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quantes vocals té l'abecedari segons el quadern?",
+    "options": [
+      "5 vocals",
+      "21 vocals",
+      "26 vocals"
+    ],
+    "answer": "5 vocals",
+    "contenido": "Identificació de vocals i consonants",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes paraules comença per una consonant?",
+    "options": [
+      "ANSA",
+      "SAL",
+      "ULL"
+    ],
+    "answer": "SAL",
+    "contenido": "Identificació de vocals i consonants",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exercici del quadern, quantes vocals té la paraula 'MONA'?",
+    "options": [
+      "1 vocal",
+      "2 vocals",
+      "3 vocals"
+    ],
+    "answer": "2 vocals",
+    "contenido": "Identificació de vocals i consonants",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina lletra va darrere de la lletra 'C' en l'abecedari?",
+    "options": [
+      "B",
+      "D",
+      "T"
+    ],
+    "answer": "D",
+    "contenido": "L’ordre alfabètic",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Entre les paraules 'TORTUGA' i 'ÀNEC', quina va davant en el diccionari?",
+    "options": [
+      "ÀNEC",
+      "TORTUGA",
+      "Van igual"
+    ],
+    "answer": "ÀNEC",
+    "contenido": "L’ordre alfabètic",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina lletra va darrere de la 'G' en l'abecedari?",
+    "options": [
+      "H",
+      "M",
+      "F"
+    ],
+    "answer": "H",
+    "contenido": "L’ordre alfabètic",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin article determinat s'utilitza per al singular masculí, com en 'cotxe'?",
+    "options": [
+      "la",
+      "l’",
+      "el"
+    ],
+    "answer": "el",
+    "contenido": "L’article determinat",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin article s'ha d'utilitzar en singular quan la paraula comença en vocal?",
+    "options": [
+      "l’",
+      "els",
+      "les"
+    ],
+    "answer": "l’",
+    "contenido": "L’article determinat",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin article plural s'ha d'escriure davant de la paraula 'PAPALLONES'?",
+    "options": [
+      "ELS",
+      "LES",
+      "EL"
+    ],
+    "answer": "LES",
+    "contenido": "L’article determinat",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin article indeterminat s'utilitza per al singular femení, com en 'paperera'?",
+    "options": [
+      "un",
+      "una",
+      "uns"
+    ],
+    "answer": "una",
+    "contenido": "L’article indeterminat",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests articles és plural masculí, com s'usa en 'uns peixos'?",
+    "options": [
+      "uns",
+      "unes",
+      "un"
+    ],
+    "answer": "uns",
+    "contenido": "L’article indeterminat",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin article indeterminat plural acompanya la paraula 'TISORES'?",
+    "options": [
+      "UNS",
+      "UNES",
+      "UNA"
+    ],
+    "answer": "UNES",
+    "contenido": "L’article indeterminat",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Per a què servix el nom propi segons el llibre?",
+    "options": [
+      "Per a nomenar objectes",
+      "Per a diferenciar algú de la resta",
+      "Per a comptar animals"
+    ],
+    "answer": "Per a diferenciar algú de la resta",
+    "contenido": "Identificar el substantiu: comú i propi",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes paraules és un nom propi?",
+    "options": [
+      "ciutat",
+      "poble",
+      "València"
+    ],
+    "answer": "València",
+    "contenido": "Identificar el substantiu: comú i propi",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Dins de la identificació de substantius, la paraula 'GUITARRA' es classifica com a:",
+    "options": [
+      "PERSONA",
+      "ANIMAL",
+      "OBJECTE"
+    ],
+    "answer": "OBJECTE",
+    "contenido": "Identificar el substantiu: comú i propi",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com és la girafa segons la imatge de la pàgina 38?",
+    "options": [
+      "Baixa",
+      "Alta",
+      "Curta"
+    ],
+    "answer": "Alta",
+    "contenido": "L’adjectiu: descrivim i descartem",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exercici 36, quin adjectiu NO descriu la llima?",
+    "options": [
+      "Àcida",
+      "Groga",
+      "Dolça"
+    ],
+    "answer": "Dolça",
+    "contenido": "L’adjectiu: descrivim i descartem",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com estan els xiquets en la imatge de la pàgina 39?",
+    "options": [
+      "Contents",
+      "Tristos",
+      "Enfadats"
+    ],
+    "answer": "Contents",
+    "contenido": "L’adjectiu: descrivim i descartem",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin article s'utilitza davant d'una paraula masculina segons la regla de la pàgina 40?",
+    "options": [
+      "La",
+      "Unes",
+      "El"
+    ],
+    "answer": "El",
+    "contenido": "El gènere i el nombre",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "La paraula 'Tomaques' està escrita en...",
+    "options": [
+      "Singular",
+      "Plural",
+      "Masculí"
+    ],
+    "answer": "Plural",
+    "contenido": "El gènere i el nombre",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes paraules és femenina segons l'exercici de la pàgina 40?",
+    "options": [
+      "Fil",
+      "Mòbil",
+      "Bota"
+    ],
+    "answer": "Bota",
+    "contenido": "El gènere i el nombre",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és l'opció correcta per a la imatge de la tardor a la pàgina 42?",
+    "options": [
+      "Els tardor",
+      "La tardor",
+      "Els tardors"
+    ],
+    "answer": "La tardor",
+    "contenido": "La concordància",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'exercici de concordància, com s'anomena la imatge de l'arbre?",
+    "options": [
+      "L'arbre",
+      "Les arbre",
+      "La arbres"
+    ],
+    "answer": "L'arbre",
+    "contenido": "La concordància",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és la forma correcta de referir-se a la mel segons la pàgina 42?",
+    "options": [
+      "El mel",
+      "La mel",
+      "Els mels"
+    ],
+    "answer": "La mel",
+    "contenido": "La concordància",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quantes síl·labes té la paraula 'Rebeca' segons l'activitat 40?",
+    "options": [
+      "2",
+      "1",
+      "3"
+    ],
+    "answer": "3",
+    "contenido": "La síl·laba",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina síl·laba falta per a completar la paraula '___-TA' al costat de la imatge de la gota?",
+    "options": [
+      "PO",
+      "GO",
+      "CA"
+    ],
+    "answer": "GO",
+    "contenido": "La síl·laba",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quantes síl·labes té la paraula 'Gran' segons la pàgina 43?",
+    "options": [
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": "1",
+    "contenido": "La síl·laba",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina paraula està relacionada amb la imatge de la 'Platja' a la pàgina 45?",
+    "options": [
+      "Bufanda",
+      "Tovalla",
+      "Llit"
+    ],
+    "answer": "Tovalla",
+    "contenido": "La paraula",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Amb quina paraula relacionem la imatge de l''Estació'?",
+    "options": [
+      "Tren",
+      "Avió",
+      "Vaixell"
+    ],
+    "answer": "Tren",
+    "contenido": "La paraula",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina paraula està relacionada amb la imatge de la 'Muntanya'?",
+    "options": [
+      "Motxilla",
+      "Cotxes",
+      "Banyera"
+    ],
+    "answer": "Motxilla",
+    "contenido": "La paraula",
+    "subject": "valenciano",
+    "grade": 1,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la regla de l'òliba, quan hem d'escriure les lletres «TX»?",
+    "options": [
+      "A principi de paraula",
+      "Darrere de consonant",
+      "Entre vocals"
+    ],
+    "answer": "Entre vocals",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament el nom d'aquest vehicle segons el quadern: CO___E?",
+    "options": [
+      "COXE",
+      "COTXE",
+      "COGE"
+    ],
+    "answer": "COTXE",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules s'escriu amb «X» perquè va darrere de consonant?",
+    "options": [
+      "PANXA",
+      "CAPUTXA",
+      "BROTXA"
+    ],
+    "answer": "PANXA",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el quadern, quin és l'exemple de paraula que té el so de la 'S sorda'?",
+    "options": [
+      "casa",
+      "tassa",
+      "zona"
+    ],
+    "answer": "tassa",
+    "contenido": "La S sorda, com sona?.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'ha d'escriure 'SS' per a representar el so de la S sorda?",
+    "options": [
+      "A començament de paraula",
+      "Darrere de consonant",
+      "Entre vocals"
+    ],
+    "answer": "Entre vocals",
+    "contenido": "La S sorda, com sona?.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Davant de quines vocals s'escriu la lletra 'C' per a representar el so sord de la S?",
+    "options": [
+      "Davant de A, O, U",
+      "Davant de E, I",
+      "Davant de totes les vocals"
+    ],
+    "answer": "Davant de E, I",
+    "contenido": "La S sorda, com sona?.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "On es troba la síl·laba tònica en les paraules agudes?",
+    "options": [
+      "En l'última síl·laba",
+      "En la penúltima síl·laba",
+      "En l'antepenúltima síl·laba"
+    ],
+    "answer": "En l'última síl·laba",
+    "contenido": "Paraules agudes.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules agudes s'accentua perquè acaba en vocal?",
+    "options": [
+      "Mussol",
+      "Camaleó",
+      "Mocador"
+    ],
+    "answer": "Camaleó",
+    "contenido": "Paraules agudes.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Les paraules agudes s'accentuen quan acaben en:",
+    "options": [
+      "Consonant (excepte S)",
+      "Vocal, vocal + S, ÉN o ÍN",
+      "Sempre s'accentuen"
+    ],
+    "answer": "Vocal, vocal + S, ÉN o ÍN",
+    "contenido": "Paraules agudes.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quantes paraules esdrúixoles s'han d'accentuar segons la regla general?",
+    "options": [
+      "Només les que acaben en vocal",
+      "S'accentuen totes",
+      "Cap s'accentua"
+    ],
+    "answer": "S'accentuen totes",
+    "contenido": "Paraules esdrúixoles.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quina síl·laba es troba la síl·laba tònica de les paraules esdrúixoles?",
+    "options": [
+      "En l'antepenúltima síl·laba",
+      "En la penúltima síl·laba",
+      "En l'última síl·laba"
+    ],
+    "answer": "En l'antepenúltima síl·laba",
+    "contenido": "Paraules esdrúixoles.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules del quadern és esdrúixola?",
+    "options": [
+      "Música",
+      "Excursió",
+      "Plàstic"
+    ],
+    "answer": "Música",
+    "contenido": "Paraules esdrúixoles.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin tipus d'accent porta sempre la vocal 'A' en valencià?",
+    "options": [
+      "Sempre porta accent tancat ( ´ )",
+      "Pot portar obert o tancat",
+      "Sempre porta accent obert ( ` )"
+    ],
+    "answer": "Sempre porta accent obert ( ` )",
+    "contenido": "Repàs de les normes d’accentuació.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el repàs de les normes, quan s'accentuen les paraules planes?",
+    "options": [
+      "Sempre s'accentuen",
+      "Quan NO acaben en vocal, vocal + S, ÉN ni ÍN",
+      "Quan acaben en vocal, vocal + S, ÉN o ÍN"
+    ],
+    "answer": "Quan NO acaben en vocal, vocal + S, ÉN ni ÍN",
+    "contenido": "Repàs de les normes d’accentuació.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quines vocals porten SEMPRE accent tancat ( ´ ) en valencià?",
+    "options": [
+      "La E i la O",
+      "La I i la U",
+      "Només la A"
+    ],
+    "answer": "La I i la U",
+    "contenido": "Repàs de les normes d’accentuació.",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Amb què han de concordar els adjectius interrogatius en gènere i nombre?",
+    "options": [
+      "Amb el verb",
+      "Amb el substantiu",
+      "Amb el pronom"
+    ],
+    "answer": "Amb el substantiu",
+    "contenido": "L'adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin adjectiu interrogatiu és el correcte per a completar la pregunta: \"___________ llibre t'agrada més?\"",
+    "options": [
+      "Quin",
+      "Quant",
+      "Quina"
+    ],
+    "answer": "Quin",
+    "contenido": "L'adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons els exemples del llibre, quin adjectiu s'utilitza per a preguntar per les sabates: \"___________ sabates tens?\"",
+    "options": [
+      "Quantes",
+      "Quanta",
+      "Quants"
+    ],
+    "answer": "Quantes",
+    "contenido": "L'adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons les regles d'ortografia del quadern, com s'escriuen generalment les paraules que comencen per AL·L-, COL·L-, IL·L- o MIL·L-?",
+    "options": [
+      "Amb L·L (ela geminada)",
+      "Amb L (ela senzilla)",
+      "Amb TL"
+    ],
+    "answer": "Amb L·L (ela geminada)",
+    "contenido": "Repàs de la L i la L·L.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules del quadern s'escriu amb L·L perquè acaba en -EL·LA?",
+    "options": [
+      "Novella",
+      "Gabela",
+      "Àguila"
+    ],
+    "answer": "Novella",
+    "contenido": "Repàs de la L i la L·L.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la parella: si la paraula 'Ame____a' és una excepció que no seguix les normes de la L·L, com s'escriu correctament?",
+    "options": [
+      "Ametla",
+      "Amella",
+      "Ametlla"
+    ],
+    "answer": "Ametla",
+    "contenido": "Repàs de la L i la L·L.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En l'exercici de completar parelles, quina és la forma femenina correcta de la paraula 'Veí'?",
+    "options": [
+      "Veïna",
+      "Veina",
+      "Veína"
+    ],
+    "answer": "Veïna",
+    "contenido": "Completa cada parella de paraules",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Seguint l'exercici de parelles de paraules, quina paraula necessita dièresi per a formar un hiat?",
+    "options": [
+      "Suïssa",
+      "Suíssa",
+      "Suisa"
+    ],
+    "answer": "Suïssa",
+    "contenido": "Completa cada parella de paraules",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina és la parella correcta per a la paraula 'Flauta' segons l'ús de la dièresi en el quadern?",
+    "options": [
+      "Llaüt",
+      "Llaut",
+      "Llaút"
+    ],
+    "answer": "Llaüt",
+    "contenido": "Completa cada parella de paraules",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es classifiquen els substantius que es refereixen a grups, com ara 'manada' o 'serralada'?",
+    "options": [
+      "Substantius propis",
+      "Comuns individuals",
+      "Comuns col·lectius"
+    ],
+    "answer": "Comuns col·lectius",
+    "contenido": "Les clases de substantius",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests substantius es considera 'propi' segons els exemples del llibre?",
+    "options": [
+      "Muntanya",
+      "Roma",
+      "Gosset"
+    ],
+    "answer": "Roma",
+    "contenido": "Les clases de substantius",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la classificació per tipus, què és el substantiu 'clau'?",
+    "options": [
+      "Comú individual",
+      "Comú col·lectiu",
+      "Substantiu propi"
+    ],
+    "answer": "Comú individual",
+    "contenido": "Les clases de substantius",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "On s'escriuen habitualment els adjectius exclamatius i interrogatius en una oració?",
+    "options": [
+      "Al final de l'oració",
+      "Al principi de l'oració",
+      "Sempre darrere del verb"
+    ],
+    "answer": "Al principi de l'oració",
+    "contenido": "L’adjectiu exclamatiu i interrogatiu",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin adjectiu interrogatiu és el correcte per a completar l'oració: '____ hores té un dia?'",
+    "options": [
+      "Quina",
+      "Quants",
+      "Quantes"
+    ],
+    "answer": "Quantes",
+    "contenido": "L’adjectiu exclamatiu i interrogatiu",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és la funció dels adjectius exclamatius segons el text?",
+    "options": [
+      "Fer una pregunta",
+      "Expressar una emoció",
+      "Indicar una quantitat exacta"
+    ],
+    "answer": "Expressar una emoció",
+    "contenido": "L’adjectiu exclamatiu i interrogatiu",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin grau de l'adjectiu identifica l'oració: 'La balena és un animal grandíssim'?",
+    "options": [
+      "Grau positiu",
+      "Grau comparatiu",
+      "Grau superlatiu"
+    ],
+    "answer": "Grau superlatiu",
+    "contenido": "Els graus de l’adjectiu",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'anomena el grau de l'adjectiu que expressa una qualitat sense comparar-la amb res?",
+    "options": [
+      "Grau positiu",
+      "Grau comparatiu",
+      "Grau superlatiu"
+    ],
+    "answer": "Grau positiu",
+    "contenido": "Els graus de l’adjectiu",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'oració 'Açò és més avorrit que el parxís', en quin grau està l'adjectiu?",
+    "options": [
+      "Grau positiu",
+      "Grau comparatiu",
+      "Grau superlatiu"
+    ],
+    "answer": "Grau comparatiu",
+    "contenido": "Els graus de l’adjectiu",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons les normes de concordança, amb què han de concordar el substantiu i l'adjectiu?",
+    "options": [
+      "Només en gènere",
+      "Només en nombre",
+      "En gènere i nombre"
+    ],
+    "answer": "En gènere i nombre",
+    "contenido": "La concordança de gènere i nombre (substantius i adjectius, verbs)",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En quins aspectes han de concordar el subjecte i el verb d'una oració?",
+    "options": [
+      "Persona i nombre",
+      "Gènere i persona",
+      "Gènere i nombre"
+    ],
+    "answer": "Persona i nombre",
+    "contenido": "La concordança de gènere i nombre (substantius i adjectius, verbs)",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina forma verbal concorda correctament en l'oració: 'Nosaltres ____ el temps junts'?",
+    "options": [
+      "passen",
+      "passeu",
+      "passem"
+    ],
+    "answer": "passem",
+    "contenido": "La concordança de gènere i nombre (substantius i adjectius, verbs)",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'anomenen els numerals que indiquen el lloc exacte en un ordre, com 'primer' o 'sisé'?",
+    "options": [
+      "Cardinals",
+      "Ordinals",
+      "Indefinits"
+    ],
+    "answer": "Ordinals",
+    "contenido": "Els quantificadors",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quins quantificadors indiquen una quantitat de manera aproximada, com per exemple 'alguns'?",
+    "options": [
+      "Numerals",
+      "Quantitatius",
+      "Indefinits"
+    ],
+    "answer": "Indefinits",
+    "contenido": "Els quantificadors",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'oració 'Marta té trenta-dos anys', quin tipus de numeral s'utilitza?",
+    "options": [
+      "Cardinal",
+      "Ordinal",
+      "Quantitatiu"
+    ],
+    "answer": "Cardinal",
+    "contenido": "Els quantificadors",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En què pot acabar un gerundi segons les regles del quadern?",
+    "options": [
+      "-ant, -ent o -int",
+      "-at, -ut o -it",
+      "-ar, -er o -ir"
+    ],
+    "answer": "-ant, -ent o -int",
+    "contenido": "El verb: gerundi i participi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina forma verbal expressa com és o com està una cosa i té gènere i nombre?",
+    "options": [
+      "El gerundi",
+      "L'infinitiu",
+      "El participi"
+    ],
+    "answer": "El participi",
+    "contenido": "El verb: gerundi i participi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons l'activitat 38, quina d'aquestes paraules és un gerundi?",
+    "options": [
+      "reunit",
+      "somrient",
+      "ordenada"
+    ],
+    "answer": "somrient",
+    "contenido": "El verb: gerundi i participi",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'identifica l'arrel d'un verb segons l'explicació del llibre?",
+    "options": [
+      "Afegint les terminacions -ant o -it",
+      "Llevant les terminacions -ar, -er, -re i -ir a l'infinitiu",
+      "Mirant només la primera lletra del verb"
+    ],
+    "answer": "Llevant les terminacions -ar, -er, -re i -ir a l'infinitiu",
+    "contenido": "El verb: arrel i desinències",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Sobre quins tres aspectes ens informen les desinències dels verbs?",
+    "options": [
+      "Nombre, persona i temps",
+      "Gènere, tamany i color",
+      "Mode, lloc i forma"
+    ],
+    "answer": "Nombre, persona i temps",
+    "contenido": "El verb: arrel i desinències",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En el verb 'compraré', quina és l'arrel seguint l'exemple de la pàgina 42?",
+    "options": [
+      "compr-",
+      "-aré",
+      "comp-"
+    ],
+    "answer": "compr-",
+    "contenido": "El verb: arrel i desinències",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com estan formades les formes verbals compostes?",
+    "options": [
+      "Per una única paraula",
+      "Per una forma del verb 'haver' i el participi del verb que conjuguem",
+      "Per una forma del verb 'anar' i l'infinitiu"
+    ],
+    "answer": "Per una forma del verb 'haver' i el participi del verb que conjuguem",
+    "contenido": "Conjugació en indicatiu (verbs regulars)",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes formes verbals és una forma perifràstica?",
+    "options": [
+      "vaig esperar",
+      "he deixat",
+      "parlarem"
+    ],
+    "answer": "vaig esperar",
+    "contenido": "Conjugació en indicatiu (verbs regulars)",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el text, què caracteritza a les formes verbals simples?",
+    "options": [
+      "Estan formades per dues paraules",
+      "Estan formades per una única paraula",
+      "Sempre estan en temps futur"
+    ],
+    "answer": "Estan formades per una única paraula",
+    "contenido": "Conjugació en indicatiu (verbs regulars)",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin mode verbal expressa ordres o prohibicions?",
+    "options": [
+      "L'indicatiu",
+      "L'imperatiu",
+      "El subjuntiu"
+    ],
+    "answer": "L'imperatiu",
+    "contenido": "El verb: mode, temps, nombre i persona",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què expressa el mode subjuntiu d'un verb?",
+    "options": [
+      "Accions o fets reals",
+      "Desitjos o possibilitats",
+      "Una pregunta directa"
+    ],
+    "answer": "Desitjos o possibilitats",
+    "contenido": "El verb: mode, temps, nombre i persona",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Dins de les característiques del verb, l'indicatiu expressa:",
+    "options": [
+      "Accions o fets reals",
+      "Una ordre",
+      "Un desig"
+    ],
+    "answer": "Accions o fets reals",
+    "contenido": "El verb: mode, temps, nombre i persona",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'anomenen les oracions que expliquen alguna cosa i acaben amb un punt?",
+    "options": [
+      "Oracions interrogatives",
+      "Oracions exclamatives",
+      "Oracions enunciatives"
+    ],
+    "answer": "Oracions enunciatives",
+    "contenido": "L’oració: enunciativa, interrogativa, exclamativa",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin signe de puntuació s'utilitza per a les oracions que expressen sentiments?",
+    "options": [
+      "El signe d'interrogació (?)",
+      "El signe d'exclamació (!)",
+      "El punt (.)"
+    ],
+    "answer": "El signe d'exclamació (!)",
+    "contenido": "L’oració: enunciativa, interrogativa, exclamativa",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina és la funció de les oracions interrogatives?",
+    "options": [
+      "Expressar sentiments",
+      "Explicar una història",
+      "Preguntar alguna cosa"
+    ],
+    "answer": "Preguntar alguna cosa",
+    "contenido": "L’oració: enunciativa, interrogativa, exclamativa",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin tipus d'oració s'utilitza per a expressar un dubte?",
+    "options": [
+      "Oració exhortativa",
+      "Oració dubitativa",
+      "Oració exclamativa"
+    ],
+    "answer": "Oració dubitativa",
+    "contenido": "L’oració: dubitativa, exhortativa",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el llibre, quina d'aquestes oracions és exhortativa?",
+    "options": [
+      "Potser demà anem al teatre...",
+      "Trobe que els diumenges no obrin la botiga.",
+      "Ajuda’m a col·locar les maletes."
+    ],
+    "answer": "Ajuda’m a col·locar les maletes.",
+    "contenido": "L’oració: dubitativa, exhortativa",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'anomenen les oracions que demanen alguna cosa o donen una ordre?",
+    "options": [
+      "Exhortatives o imperatives",
+      "Dubitatives",
+      "Enunciatives"
+    ],
+    "answer": "Exhortatives o imperatives",
+    "contenido": "L’oració: dubitativa, exhortativa",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què són les sigles segons la definició del llibre?",
+    "options": [
+      "Paraules que signifiquen el mateix",
+      "Paraules construïdes amb les lletres inicials d’altres paraules",
+      "Paraules que indiquen accions o estats"
+    ],
+    "answer": "Paraules construïdes amb les lletres inicials d’altres paraules",
+    "contenido": "Les sigles",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què signifiquen les sigles ESO?",
+    "options": [
+      "Educació Secundària Obligatòria",
+      "Escola Secundària d'Orient",
+      "Estudi Secundari Obligat"
+    ],
+    "answer": "Educació Secundària Obligatòria",
+    "contenido": "Les sigles",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "A quin concepte correspon el símbol o sigla 'CP'?",
+    "options": [
+      "Comunitat Principal",
+      "Codi postal",
+      "Centre de Primària"
+    ],
+    "answer": "Codi postal",
+    "contenido": "Les sigles",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'escriu el masculí correcte de la paraula 'Groga'?",
+    "options": [
+      "Grog",
+      "Groc",
+      "Groga"
+    ],
+    "answer": "Groc",
+    "contenido": "P/B, T/D, C/G a final de paraula",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons l'exercici de completar paraules, quina d'aquestes acaba en 'P'?",
+    "options": [
+      "Arrap",
+      "Sòlid",
+      "Nord"
+    ],
+    "answer": "Arrap",
+    "contenido": "P/B, T/D, C/G a final de paraula",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és el masculí de la paraula 'Neboda' segons els exemples de la unitat?",
+    "options": [
+      "Nebod",
+      "Nebot",
+      "Nebos"
+    ],
+    "answer": "Nebot",
+    "contenido": "P/B, T/D, C/G a final de paraula",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina és la regla general per a l'imperfet d'indicatiu dels verbs de la primera conjugació?",
+    "options": [
+      "S'escriu sempre amb B",
+      "S'escriu sempre amb V",
+      "S'escriu amb B o V segons el verb"
+    ],
+    "answer": "S'escriu sempre amb V",
+    "contenido": "La B i la V en els verbs.",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es completa correctament la forma verbal del verb 'saber' en 'Ells sa__en'?",
+    "options": [
+      "saben",
+      "saven",
+      "sabien"
+    ],
+    "answer": "saben",
+    "contenido": "La B i la V en els verbs.",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el solucionari, com s'escriu la forma del verb 'beure' en 'Ells be__ien'?",
+    "options": [
+      "bebien",
+      "bevien",
+      "beurem"
+    ],
+    "answer": "bevien",
+    "contenido": "La B i la V en els verbs.",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es forma el plural dels substantius que acaben en vocal tònica, com a norma general?",
+    "options": [
+      "Afegint -S",
+      "Afegint -NS",
+      "Afegint -OS"
+    ],
+    "answer": "Afegint -NS",
+    "contenido": "El plural amb S, NS o OS",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és el plural de la paraula 'Eriçó'?",
+    "options": [
+      "Eriçós",
+      "Eriçons",
+      "Eriços"
+    ],
+    "answer": "Eriçons",
+    "contenido": "El plural amb S, NS o OS",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és el plural correcte per a un monosíl·lab masculí acabat en 'X' com 'Peix'?",
+    "options": [
+      "Peixos",
+      "Peixs",
+      "Peixns"
+    ],
+    "answer": "Peixos",
+    "contenido": "El plural amb S, NS o OS",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'anomenen els substantius que només tenen una forma per al singular i per al plural?",
+    "options": [
+      "Variables",
+      "Invariables",
+      "Incomplets"
+    ],
+    "answer": "Invariables",
+    "contenido": "Plural de paraules invariables",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules és invariable quant al nombre?",
+    "options": [
+      "El virus",
+      "El peu",
+      "El dissabte"
+    ],
+    "answer": "El virus",
+    "contenido": "Plural de paraules invariables",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el llibre, quin és el plural de la paraula variable 'L'autobús'?",
+    "options": [
+      "Els autobús",
+      "Els autobusos",
+      "Els autobúses"
+    ],
+    "answer": "Els autobusos",
+    "contenido": "Plural de paraules invariables",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'apostrofen els pronoms febles EM, ET, ES, EL, LA i EN davant de les formes verbals?",
+    "options": [
+      "Davant de consonant",
+      "Davant de vocal o h muda",
+      "Davant de vocal seguida de U"
+    ],
+    "answer": "Davant de vocal o h muda",
+    "contenido": "La contracció i l’apostrofació en els pronoms febles",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament la següent oració: 'Has comprat el diari? Deixa me el'?",
+    "options": [
+      "Deixa-m'el",
+      "Deixa-me’l",
+      "Deixa'me-l"
+    ],
+    "answer": "Deixa-me’l",
+    "contenido": "La contracció i l’apostrofació en els pronoms febles",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què s'utilitza darrere del verb quan aquest acaba en consonant o en vocal seguida de U?",
+    "options": [
+      "L'apòstrof",
+      "El guionet",
+      "La dièresi"
+    ],
+    "answer": "El guionet",
+    "contenido": "La contracció i l’apostrofació en els pronoms febles",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'accentuen les paraules compostes que s'escriuen amb guionet?",
+    "options": [
+      "Cada paraula manté el seu accent",
+      "Només s'accentua la primera paraula",
+      "Només s'accentua la segona paraula"
+    ],
+    "answer": "Cada paraula manté el seu accent",
+    "contenido": "L’accentuació en les paraules compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Si la paraula composta no porta guionet, on es posa l'accent?",
+    "options": [
+      "Sempre en la primera síl·laba",
+      "Només en el segon terme, si n'ha de portar",
+      "En cap dels dos termes"
+    ],
+    "answer": "Només en el segon terme, si n'ha de portar",
+    "contenido": "L’accentuació en les paraules compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Què passa amb l'accent diacrític en una paraula composta?",
+    "options": [
+      "S'elimina sempre",
+      "Es canvia per un guionet",
+      "La paraula composta el manté"
+    ],
+    "answer": "La paraula composta el manté",
+    "contenido": "L’accentuació en les paraules compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin d'aquests dígrafs NO es separa mai en síl·labes diferents?",
+    "options": [
+      "RR",
+      "L·L",
+      "NY"
+    ],
+    "answer": "NY",
+    "contenido": "Separació sil·làbica. Els dígrafs i les lletres compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina és la separació sil·làbica correcta de la paraula 'Pissarra'?",
+    "options": [
+      "Pi-ssa-rra",
+      "Pis-sa-rra",
+      "Pis-sar-ra"
+    ],
+    "answer": "Pis-sar-ra",
+    "contenido": "Separació sil·làbica. Els dígrafs i les lletres compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com se separa correctament la paraula 'Botella'?",
+    "options": [
+      "Bo-te-lla",
+      "Bot-e-lla",
+      "Bo-tel-la"
+    ],
+    "answer": "Bo-te-lla",
+    "contenido": "Separació sil·làbica. Els dígrafs i les lletres compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'han de separar els elements que integren una paraula composta o derivada?",
+    "options": [
+      "No s'han de separar mai",
+      "S'han de separar els seus elements, com els prefixos",
+      "S'ha de separar només la vocal final"
+    ],
+    "answer": "S'han de separar els seus elements, com els prefixos",
+    "contenido": "Separació sil·làbica. Les paraules compostes i derivades",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina és la separació sil·làbica correcta de 'Inexpert'?",
+    "options": [
+      "I-nex-pert",
+      "In-ex-pe-rt",
+      "In-ex-pert"
+    ],
+    "answer": "In-ex-pert",
+    "contenido": "Separació sil·làbica. Les paraules compostes i derivades",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la regla dels prefixos, quina és la separació de 'Benestar'?",
+    "options": [
+      "Be-nes-tar",
+      "Ben-es-tar",
+      "Be-ne-star"
+    ],
+    "answer": "Ben-es-tar",
+    "contenido": "Separació sil·làbica. Les paraules compostes i derivades",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com es defineix un diftong decreixent?",
+    "options": [
+      "Format per GU o QU seguits d'una vocal",
+      "Dues vocals en síl·labes diferents",
+      "Format per una vocal seguida d'una I o d'una U"
+    ],
+    "answer": "Format per una vocal seguida d'una I o d'una U",
+    "contenido": "Diftong i hiat",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "La paraula 'Diccionari' conté un hiat. Com se separa correctament?",
+    "options": [
+      "Dic-ci-o-na-ri",
+      "Dic-cio-na-ri",
+      "Dic-cion-a-ri"
+    ],
+    "answer": "Dic-ci-o-na-ri",
+    "contenido": "Diftong i hiat",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules conté un diftong creixent?",
+    "options": [
+      "Neu",
+      "Guant",
+      "Aire"
+    ],
+    "answer": "Guant",
+    "contenido": "Diftong i hiat",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Per quina raó la paraula 'Gruista' és una excepció i no porta dièresi?",
+    "options": [
+      "Perquè porta un prefix",
+      "Perquè acaba en el sufix -ISTA",
+      "Perquè és una paraula aguda"
+    ],
+    "answer": "Perquè acaba en el sufix -ISTA",
+    "contenido": "Excepcions de la dièresi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quins prefixos no s'ha de posar dièresi encara que hi haja hiat?",
+    "options": [
+      "ANTI, CONTRA i RE",
+      "SUB, DES i EX",
+      "IN, CON i PER"
+    ],
+    "answer": "ANTI, CONTRA i RE",
+    "contenido": "Excepcions de la dièresi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'ha de mantenir la dièresi segons les regles del verb 'aïllar'?",
+    "options": [
+      "Sempre en tots els gerundis",
+      "Si l'arrel de la paraula ja en porta",
+      "Només en el futur d'indicatiu"
+    ],
+    "answer": "Si l'arrel de la paraula ja en porta",
+    "contenido": "Excepcions de la dièresi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com completaries correctament aquesta frase: 'Ahir hi ________ molta boira'?",
+    "options": [
+      "ha",
+      "havia",
+      "havien"
+    ],
+    "answer": "havia",
+    "contenido": "El verb “haver”",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina forma del verb haver és la correcta per a: 'Els pares ________ adoptat un gos'?",
+    "options": [
+      "ha",
+      "han",
+      "havia"
+    ],
+    "answer": "han",
+    "contenido": "El verb “haver”",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons l'exercici 16, quina paraula completa la frase: 'Ara hi ________ dos xiquets jugant al parc'?",
+    "options": [
+      "havia",
+      "han",
+      "ha"
+    ],
+    "answer": "ha",
+    "contenido": "El verb “haver”",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la definició del llibre, què és 'sinó'?",
+    "options": [
+      "Una conjunció adversativa que indica oposició",
+      "Un conjunt format per la conjunció 'si' i l'adverbi 'no'",
+      "Un adverbi de temps que indica futur"
+    ],
+    "answer": "Una conjunció adversativa que indica oposició",
+    "contenido": "Si no, sinó",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina opció completa correctament aquesta frase: 'No sé fer els deures ________ m’ajudes'?",
+    "options": [
+      "sinó",
+      "si no",
+      "si ni"
+    ],
+    "answer": "si no",
+    "contenido": "Si no, sinó",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament l'oposició en aquesta frase: 'No he fet lasanya, ________ canelons'?",
+    "options": [
+      "si no",
+      "sinó",
+      "si que no"
+    ],
+    "answer": "sinó",
+    "contenido": "Si no, sinó",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Completa la frase seguint els exemples del llibre: 'Jaume és ________ major com Mireia'?",
+    "options": [
+      "tant",
+      "tan",
+      "tanta"
+    ],
+    "answer": "tan",
+    "contenido": "Tan, tant",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina forma és la correcta en la frase: 'No et poses ________ de sucre'?",
+    "options": [
+      "tan",
+      "tants",
+      "tant"
+    ],
+    "answer": "tant",
+    "contenido": "Tan, tant",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula completa correctament aquesta oració: 'Tenia ________ ganes de veure’t que he anat a l’estació'?",
+    "options": [
+      "tants",
+      "tantes",
+      "tant"
+    ],
+    "answer": "tantes",
+    "contenido": "Tan, tant",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina opció completa la frase: 'Eixirem a passejar ________ arriben tots'?",
+    "options": [
+      "quant",
+      "quants",
+      "quan"
+    ],
+    "answer": "quan",
+    "contenido": "Quan, quant",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la frase 'No sé ________ farina he de posar', quina paraula és la correcta?",
+    "options": [
+      "quant",
+      "quanta",
+      "quantes"
+    ],
+    "answer": "quanta",
+    "contenido": "Quan, quant",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina paraula s'ha d'utilitzar en la frase: 'Vull saber ________ costa aquell moble'?",
+    "options": [
+      "quant",
+      "quan",
+      "quanta"
+    ],
+    "answer": "quant",
+    "contenido": "Quan, quant",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons la taula d'accent diacrític, quina paraula s'accentua per a diferenciar el verb 'ser' del pronom?",
+    "options": [
+      "és",
+      "bé",
+      "déu"
+    ],
+    "answer": "és",
+    "contenido": "Repàs de l’accent diacrític",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el llibre, quina paraula sense accent significa 'part de l'any'?",
+    "options": [
+      "més",
+      "mes",
+      "món"
+    ],
+    "answer": "mes",
+    "contenido": "Repàs de l’accent diacrític",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En la frase 'M’agrada més el ________ que el café', quina forma és la correcta per a la beguda?",
+    "options": [
+      "té",
+      "te",
+      "tè"
+    ],
+    "answer": "te",
+    "contenido": "Repàs de l’accent diacrític",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons les normes generals, quines paraules s'escriuen amb L·L?",
+    "options": [
+      "Les que comencen per AL·L, COL·L, IL·L i MIL·L.",
+      "Totes les que comencen per la lletra A.",
+      "Les que acaben en vocal seguida de L."
+    ],
+    "answer": "Les que comencen per AL·L, COL·L, IL·L i MIL·L.",
+    "contenido": "Repàs de la L i la L · L",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules s'ha d'escriure amb L (i no amb L·L)?",
+    "options": [
+      "Alegria",
+      "Al·lèrgia",
+      "Metàl·lic"
+    ],
+    "answer": "Alegria",
+    "contenido": "Repàs de la L i la L · L",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament la paraula que es refereix a un conjunt de persones o coses?",
+    "options": [
+      "Col·lecció",
+      "Colecció",
+      "Col·leció"
+    ],
+    "answer": "Col·lecció",
+    "contenido": "Repàs de la L i la L · L",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "En quin d'aquests casos NO es posa dièresi segons les excepcions estudiades?",
+    "options": [
+      "En les paraules que contenen els prefixos ANTI, CONTRA i RE.",
+      "Quan es pronuncia la U dels grups GÜE o GÜI.",
+      "Quan les vocals I, U formen un hiat."
+    ],
+    "answer": "En les paraules que contenen els prefixos ANTI, CONTRA i RE.",
+    "contenido": "Repàs de la dièresi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules porta dièresi per formar un hiat?",
+    "options": [
+      "Suïssa",
+      "Aigua",
+      "Quadrat"
+    ],
+    "answer": "Suïssa",
+    "contenido": "Repàs de la dièresi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu la paraula 'raïm' correctament?",
+    "options": [
+      "Raïm",
+      "Raim",
+      "Raím"
+    ],
+    "answer": "Raïm",
+    "contenido": "Repàs de la dièresi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'escriu guionet en les paraules compostes?",
+    "options": [
+      "Quan la segona paraula comença per R, S o X.",
+      "Sempre que la paraula tinga més de dues síl·labes.",
+      "Només quan la primera paraula acaba en vocal."
+    ],
+    "answer": "Quan la segona paraula comença per R, S o X.",
+    "contenido": "Repàs de les paraules compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Si una paraula composta s'escriu AMB guionet, què passa amb l'accent?",
+    "options": [
+      "Cada paraula manté el seu accent.",
+      "Només es posa accent en la segona paraula.",
+      "S'eliminen tots els accents."
+    ],
+    "answer": "Cada paraula manté el seu accent.",
+    "contenido": "Repàs de les paraules compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina és la forma correcta d'escriure la paraula composta que indica oposició al sol?",
+    "options": [
+      "Para-sol",
+      "Parasòl",
+      "Para-sòl"
+    ],
+    "answer": "Para-sol",
+    "contenido": "Repàs de les paraules compostes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Segons el quadre d'accentuació, quan s'accentuen les paraules agudes?",
+    "options": [
+      "Quan acaben en vocal, vocal + s, -en, -in.",
+      "Quan no acaben en vocal, vocal + s, -en, -in.",
+      "S'accentuen sempre, sense excepció."
+    ],
+    "answer": "Quan acaben en vocal, vocal + s, -en, -in.",
+    "contenido": "Repàs dels accents",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és l'accent diacrític correcte per a la paraula que significa 'el nostre planeta'?",
+    "options": [
+      "Món",
+      "Mon",
+      "Mòn"
+    ],
+    "answer": "Món",
+    "contenido": "Repàs dels accents",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quan s'accentuen les paraules esdrúixoles?",
+    "options": [
+      "Sempre.",
+      "Només si acaben en vocal.",
+      "Mai."
+    ],
+    "answer": "Sempre.",
+    "contenido": "Repàs dels accents",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'escriu correctament la paraula que descriu un discurs d'una sola persona?",
+    "options": [
+      "Monòleg",
+      "Monòlec",
+      "Monòlegue"
+    ],
+    "answer": "Monòleg",
+    "contenido": "Completa les paraules amb C o G",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'aquestes paraules acaba en la lletra C?",
+    "options": [
+      "Àbac",
+      "Llarg",
+      "Amarg"
+    ],
+    "answer": "Àbac",
+    "contenido": "Completa les paraules amb C o G",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina lletra falta per a completar correctament la paraula 'Anora__'?",
+    "options": [
+      "c",
+      "g",
+      "qu"
+    ],
+    "answer": "c",
+    "contenido": "Completa les paraules amb C o G",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quin és el substantiu col·lectiu que s'utilitza per a designar un conjunt d'illes?",
+    "options": [
+      "Arxipèlag",
+      "Cinglera",
+      "Illenc"
+    ],
+    "answer": "Arxipèlag",
+    "contenido": "Substantius individuals i col·lectius",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el text, què designa un substantiu col·lectiu?",
+    "options": [
+      "Un sol ésser o objecte",
+      "Un grup o conjunt d'éssers o objectes",
+      "Una acció realitzada per una persona"
+    ],
+    "answer": "Un grup o conjunt d'éssers o objectes",
+    "contenido": "Substantius individuals i col·lectius",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests exemples és un substantiu col·lectiu segons el material?",
+    "options": [
+      "Mosquit",
+      "Eixam",
+      "Pilota"
+    ],
+    "answer": "Eixam",
+    "contenido": "Substantius individuals i col·lectius",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "A quin tipus d'adverbi correspon la paraula 'probablement'?",
+    "options": [
+      "Adverbi de lloc",
+      "Adverbi de dubte",
+      "Adverbi de quantitat"
+    ],
+    "answer": "Adverbi de dubte",
+    "contenido": "L’adverbi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com es poden crear adverbis a partir d'un adjectiu segons la regla explicada?",
+    "options": [
+      "Afegint la terminació -ment a l'adjectiu en masculí",
+      "Afegint la terminació -ment a l'adjectiu en femení",
+      "Canviant l'arrel de l'adjectiu"
+    ],
+    "answer": "Afegint la terminació -ment a l'adjectiu en femení",
+    "contenido": "L’adverbi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes afirmacions sobre els adverbis és correcta?",
+    "options": [
+      "Varien en gènere i en nombre",
+      "No varien en gènere ni en nombre",
+      "Només varien en gènere"
+    ],
+    "answer": "No varien en gènere ni en nombre",
+    "contenido": "L’adverbi",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "A quin adverbi equival la locució adverbial 'en un obrir i tancar d’ulls'?",
+    "options": [
+      "Lentament",
+      "Ràpidament",
+      "D'amagat"
+    ],
+    "answer": "Ràpidament",
+    "contenido": "Les locucions adverbials",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina locució adverbial completa la frase 'Tria una carta...'?",
+    "options": [
+      "A la babalà",
+      "A l’atzar",
+      "Més avall"
+    ],
+    "answer": "A l’atzar",
+    "contenido": "Les locucions adverbials",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons els exemples del llibre, quina locució indica temps?",
+    "options": [
+      "De tant en tant",
+      "A peu",
+      "En equip"
+    ],
+    "answer": "De tant en tant",
+    "contenido": "Les locucions adverbials",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Per què el verb 'anar' es considera irregular en algunes de les seues formes?",
+    "options": [
+      "Perquè té desinències de la segona conjugació",
+      "Perquè presenta una arrel diferent, com en 'vaig'",
+      "Perquè és un verb de la tercera conjugació"
+    ],
+    "answer": "Perquè presenta una arrel diferent, com en 'vaig'",
+    "contenido": "Els verbs irregulars",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Es consideren irregulars els verbs que tenen modificacions en l’arrel només per causes ortogràfiques, com 'assajar'?",
+    "options": [
+      "Sí, sempre són irregulars",
+      "No, es consideren regulars",
+      "Depén de si és passat o futur"
+    ],
+    "answer": "No, es consideren regulars",
+    "contenido": "Els verbs irregulars",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes parelles de formes del verb 'poder' demostra la seua irregularitat?",
+    "options": [
+      "Podré - Puc",
+      "Poder - Podrem",
+      "Podia - Podíem"
+    ],
+    "answer": "Podré - Puc",
+    "contenido": "Els verbs irregulars",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'anàlisi del verb 'Vosaltres heu portat', quin és el temps verbal correcte?",
+    "options": [
+      "Present",
+      "Perfet",
+      "Pluscuamperfet"
+    ],
+    "answer": "Perfet",
+    "contenido": "El verb: anàlisi completa",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "A quin mode correspon la forma verbal 'Jo conega'?",
+    "options": [
+      "Indicatiu",
+      "Subjuntiu",
+      "Imperatiu"
+    ],
+    "answer": "Subjuntiu",
+    "contenido": "El verb: anàlisi completa",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'analitza la forma verbal 'Ell rebia' segons la taula d'exercicis?",
+    "options": [
+      "3a persona, singular, imperfet d'indicatiu",
+      "1a persona, plural, present de subjuntiu",
+      "2a persona, singular, perfet d'indicatiu"
+    ],
+    "answer": "3a persona, singular, imperfet d'indicatiu",
+    "contenido": "El verb: anàlisi completa",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons el llibre, quina és la terminació característica del gerundi?",
+    "options": [
+      "-ar, -er o -re",
+      "-ant, -ent o -int",
+      "-ada, -at o -ut"
+    ],
+    "answer": "-ant, -ent o -int",
+    "contenido": "El verb: formes impersonals",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina forma impersonal del verb pot tindre gènere i nombre, com en l'exemple 'pensada'?",
+    "options": [
+      "L'infinitiu",
+      "El gerundi",
+      "El participi"
+    ],
+    "answer": "El participi",
+    "contenido": "El verb: formes impersonals",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'oració 'Passar temps amb els amics és una bona idea', quina forma impersonal s'utilitza en la paraula en negreta?",
+    "options": [
+      "Infinitiu simple",
+      "Gerundi simple",
+      "Participi"
+    ],
+    "answer": "Infinitiu simple",
+    "contenido": "El verb: formes impersonals",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin tipus de grup de paraules és 'una gran presentadora'?",
+    "options": [
+      "Grup Adjectival",
+      "Grup Nominal",
+      "Grup Adverbial"
+    ],
+    "answer": "Grup Nominal",
+    "contenido": "Els grups de paraules (grup nominal, adjectival, preposicional...)",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En el grup de paraules 'molt bonic', quin és el nucli segons la seua classificació?",
+    "options": [
+      "Un substantiu",
+      "Un adjectiu",
+      "Un adverbi"
+    ],
+    "answer": "Un adjectiu",
+    "contenido": "Els grups de paraules (grup nominal, adjectival, preposicional...)",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com es classifica el grup de paraules 'molt bé' en l'oració 'M’ho he passat molt bé!'?",
+    "options": [
+      "Grup Adverbial",
+      "Grup Nominal",
+      "Grup Verbal"
+    ],
+    "answer": "Grup Adverbial",
+    "contenido": "Els grups de paraules (grup nominal, adjectival, preposicional...)",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quins verbs formen el predicat nominal?",
+    "options": [
+      "Menjar, beure i dormir",
+      "Ser, estar, paréixer o semblar",
+      "Anar, vindre i eixir"
+    ],
+    "answer": "Ser, estar, paréixer o semblar",
+    "contenido": "Predicat nominal i predicat verbal",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin tipus de predicat té l'oració 'El pare escriu poesia'?",
+    "options": [
+      "Predicat nominal",
+      "Predicat verbal",
+      "Predicat d'atribut"
+    ],
+    "answer": "Predicat verbal",
+    "contenido": "Predicat nominal i predicat verbal",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin és el predicat en l'oració 'La tempesta serà forta'?",
+    "options": [
+      "La tempesta",
+      "serà forta",
+      "forta"
+    ],
+    "answer": "serà forta",
+    "contenido": "Predicat nominal i predicat verbal",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Què és l'atribut segons la definició del quadern?",
+    "options": [
+      "Una paraula que indica on ocorre l'acció",
+      "Una paraula o grup que qualifica o determina el subjecte en oracions nominals",
+      "El nucli del subjecte en qualsevol oració"
+    ],
+    "answer": "Una paraula o grup que qualifica o determina el subjecte en oracions nominals",
+    "contenido": "L’atribut",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'oració 'Aquest gos tan gran sembla un llop!', quina paraula és l'atribut?",
+    "options": [
+      "Aquest gos",
+      "sembla",
+      "un llop"
+    ],
+    "answer": "un llop",
+    "contenido": "L’atribut",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests elements funciona com a atribut en l'oració 'La remolatxa està boníssima!'?",
+    "options": [
+      "La remolatxa",
+      "està",
+      "boníssima"
+    ],
+    "answer": "boníssima",
+    "contenido": "L’atribut",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com es pot identificar el complement directe (CD) en una oració?",
+    "options": [
+      "Preguntant al verb on o quan",
+      "Preguntant al verb què o qui",
+      "Preguntant al verb per a qui"
+    ],
+    "answer": "Preguntant al verb què o qui",
+    "contenido": "El complement directe",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Per quins pronoms es pot substituir el complement directe (CD)?",
+    "options": [
+      "el, la, els, les, en i ho",
+      "em, et, li, ens, us",
+      "li, els, se"
+    ],
+    "answer": "el, la, els, les, en i ho",
+    "contenido": "El complement directe",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin és el complement directe en l'oració 'Mar escolta la ràdio al cotxe'?",
+    "options": [
+      "Mar",
+      "la ràdio",
+      "al cotxe"
+    ],
+    "answer": "la ràdio",
+    "contenido": "El complement directe",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la regla de la pàgina 5, quan hem d'escriure les lletres 'TX'?",
+    "options": [
+      "A principi de paraula",
+      "Entre vocals",
+      "Darrere de consonant"
+    ],
+    "answer": "Entre vocals",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Com s'ha de completar la paraula 'PAN__A' segons els exercicis d'ortografia del llibre?",
+    "options": [
+      "TX",
+      "X",
+      "IG"
+    ],
+    "answer": "X",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Quina d'estes paraules apareix com a exemple de l'ús de la 'X' a principi de paraula?",
+    "options": [
+      "motxilla",
+      "xampú",
+      "cotxe"
+    ],
+    "answer": "xampú",
+    "contenido": "COMPLETA AMB X O TX",
+    "subject": "valenciano",
+    "grade": 2,
+    "bloque": "ortografia"
+  },
+  {
+    "question": "Amb què han de concordar els adjectius interrogatius segons el llibre?",
+    "options": [
+      "Amb el verb en persona i nombre",
+      "Amb el substantiu en gènere i nombre",
+      "Només amb l'article en gènere"
+    ],
+    "answer": "Amb el substantiu en gènere i nombre",
+    "contenido": "L’adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quines d'aquestes formes corresponen a adjectius interrogatius segons la lliçó?",
+    "options": [
+      "jo, tu, ell, ella",
+      "aquest, aqueix, aquell",
+      "quin, quina, quins, quines"
+    ],
+    "answer": "quin, quina, quins, quines",
+    "contenido": "L’adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin adjectiu interrogatiu és el correcte per a completar la frase '________ sabates tens?' segons els exercicis del llibre?",
+    "options": [
+      "Quantes",
+      "Quant",
+      "Quanta"
+    ],
+    "answer": "Quantes",
+    "contenido": "L’adjectiu interrogatiu",
+    "subject": "valenciano",
+    "grade": 3,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com es classifiquen els substantius segons si són 'got' (un sol objecte) o 'gots' (diversos objectes)?",
+    "options": [
+      "Segons el gènere",
+      "Segons el nombre",
+      "Segons el tipus"
+    ],
+    "answer": "Segons el nombre",
+    "contenido": "Les classes de substantius",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Segons la definició del llibre, quina classe de substantius s'utilitza per a anomenar éssers o coses úniques, com ara 'Roma' o 'París'?",
+    "options": [
+      "Substantius propis",
+      "Substantius comuns individuals",
+      "Substantius comuns col·lectius"
+    ],
+    "answer": "Substantius propis",
+    "contenido": "Les classes de substantius",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com s'anomenen els substantius comuns que es refereixen a grups, com per exemple 'manada' o 'gent'?",
+    "options": [
+      "Individuals",
+      "Propis",
+      "Col·lectius"
+    ],
+    "answer": "Col·lectius",
+    "contenido": "Les classes de substantius",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Per quines preposicions va introduït sempre el complement indirecte (CI)?",
+    "options": [
+      "a o per a",
+      "de o amb",
+      "en o cap a"
+    ],
+    "answer": "a o per a",
+    "contenido": "El complement indirecte",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'oració 'Dona aquesta jaqueta a Joana', quin és el complement indirecte?",
+    "options": [
+      "Dona",
+      "aquesta jaqueta",
+      "a Joana"
+    ],
+    "answer": "a Joana",
+    "contenido": "El complement indirecte",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin d'aquests pronoms pot substituir el complement indirecte segons el llibre?",
+    "options": [
+      "ho",
+      "li",
+      "en"
+    ],
+    "answer": "li",
+    "contenido": "El complement indirecte",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina pregunta hem de fer per a identificar un complement circumstancial de lloc?",
+    "options": [
+      "Quan?",
+      "Com?",
+      "On?"
+    ],
+    "answer": "On?",
+    "contenido": "El complement circumstancial",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin tipus de complement circumstancial és 'amb el ganivet' en l'oració 'Es va tallar amb el ganivet'?",
+    "options": [
+      "De manera",
+      "D'instrument",
+      "De causa"
+    ],
+    "answer": "D'instrument",
+    "contenido": "El complement circumstancial",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "En l'oració 'El tio Jaume escriu molt', quin tipus de complement circumstancial és 'molt'?",
+    "options": [
+      "De quantitat",
+      "De temps",
+      "De lloc"
+    ],
+    "answer": "De quantitat",
+    "contenido": "El complement circumstancial",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com se substituïx l'atribut per un pronom feble en l'oració 'Aquell castell és molt antic'?",
+    "options": [
+      "Aquell castell en és",
+      "Aquell castell l'és",
+      "Aquell castell ho és"
+    ],
+    "answer": "Aquell castell ho és",
+    "contenido": "Els pronoms febles",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quan un complement circumstancial està introduït per la preposició 'de', per quin pronom se substituïx?",
+    "options": [
+      "en",
+      "hi",
+      "ho"
+    ],
+    "answer": "en",
+    "contenido": "Els pronoms febles",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quin pronom feble s'utilitza per a substituir 'al poble' en l'oració 'Viu al poble'?",
+    "options": [
+      "Li",
+      "En",
+      "Hi"
+    ],
+    "answer": "Hi",
+    "contenido": "Els pronoms febles",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Com es defineixen els 'préstecs' en el llibre?",
+    "options": [
+      "Paraules que s'escriuen igual que en la llengua d'origen",
+      "Paraules estrangeres que s'adapten a les normes de la nostra llengua",
+      "Paraules que no tenen traducció"
+    ],
+    "answer": "Paraules estrangeres que s'adapten a les normes de la nostra llengua",
+    "contenido": "Préstecs i estrangerismes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "De quina llengua prové el préstec 'albercoc'?",
+    "options": [
+      "De l'italià",
+      "De l'àrab",
+      "Del francés"
+    ],
+    "answer": "De l'àrab",
+    "contenido": "Préstecs i estrangerismes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  },
+  {
+    "question": "Quina d'aquestes paraules és un estrangerisme perquè s'escriu tal com en la llengua d'origen?",
+    "options": [
+      "Jazz",
+      "Baguet",
+      "Quètxup"
+    ],
+    "answer": "Jazz",
+    "contenido": "Préstecs i estrangerismes",
+    "subject": "valenciano",
+    "grade": 6,
+    "bloque": "gramatica"
+  }
+]

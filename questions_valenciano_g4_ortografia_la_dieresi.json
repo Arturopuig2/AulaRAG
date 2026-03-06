@@ -1,0 +1,41 @@
+[
+  {
+    "question": "Según la información de la página 4, ¿cuándo se pone diéresis en la letra U de los grupos GÜE, GÜI, QÜE, QÜI?",
+    "options": [
+      "Cuando la U se pronuncia.",
+      "Cuando la U no se pronuncia.",
+      "Solo en las palabras que empiezan por G."
+    ],
+    "answer": "Cuando la U se pronuncia.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "Ortografia",
+    "contenido": "La dieresi"
+  },
+  {
+    "question": "Según la página 5, ¿en qué vocales se pone también diéresis cuando van detrás de otra vocal y forman hiato?",
+    "options": [
+      "En las vocales A, E.",
+      "En las vocales I, U.",
+      "En las vocales O, U."
+    ],
+    "answer": "En las vocales I, U.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "Ortografia",
+    "contenido": "La dieresi"
+  },
+  {
+    "question": "De acuerdo con el documento (página 5), ¿qué tipo de palabras NO llevan diéresis?",
+    "options": [
+      "Las palabras que tienen más de tres sílabas.",
+      "Las palabras que, siguiendo las normas de acentuación, llevan acento.",
+      "Las palabras que terminan en vocal."
+    ],
+    "answer": "Las palabras que, siguiendo las normas de acentuación, llevan acento.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "Ortografia",
+    "contenido": "La dieresi"
+  }
+]

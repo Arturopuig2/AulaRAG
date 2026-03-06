@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from datetime import datetime
 
@@ -121,17 +122,19 @@ async def read_root(request: Request):
 async def get_temario(subject: str):
     """Generic endpoint to serve the syllabus JSON for any subject."""
     SUBJECT_FILES = {
-        "lengua":      "lengua/temario_lengua.json",
-        "matematicas": "matematicas/temario_matematicas.txt",
-        "valenciano":  "valenciano/temario_valenciano.json",
-        "ingles":      "ingles/temario_ingles.json",
+        "lengua":              "lengua/temario_lengua.json",
+        "matematicas":         "matematicas/temario_matematicas.txt",
+        "valenciano":          "valenciano/temario_valenciano.json",
+        "ingles":              "ingles/temario_ingles.json",
+        "competencia_lectora": "competencia_lectora/temario_competencia_lectora.json",
     }
 
     relative_path = SUBJECT_FILES.get(subject.lower())
     if not relative_path:
         raise HTTPException(status_code=404, detail=f"Temario not found for subject: '{subject}'")
 
-    file_path = os.path.join(os.path.dirname(__file__), "..", "data", "source_files", relative_path)
+    base_data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "source_files")
+    file_path = os.path.join(base_data_dir, relative_path)
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -164,7 +167,33 @@ async def chat_endpoint(
     db.commit()
 
     try:
-        response_text = await get_gemini_response(message, subject, course_level, str(current_user.email), reset_history)
+        # Fetch mastery stats for the current user and subject
+        stats_query = db.query(models.UserProgress).filter(
+            models.UserProgress.user_id == current_user.id
+        )
+        if subject != "general":
+            stats_query = stats_query.filter(func.lower(models.UserProgress.subject) == subject.lower())
+        
+        # We only care about weaknesses for the proactive tutoring
+        raw_stats = stats_query.all()
+        mastery_stats = []
+        for s in raw_stats:
+            rate = (s.successes / s.attempts) if s.attempts > 0 else 0
+            mastery_stats.append({
+                "subject": s.subject,
+                "bloque": s.bloque,
+                "contenido": s.contenido,
+                "attempts": s.attempts,
+                "rate": round(rate * 100, 1)
+            })
+        # Sort by rate so the AI sees biggest weaknesses first
+        mastery_stats.sort(key=lambda x: x["rate"])
+        
+        response_text = await get_gemini_response(
+            message, subject, course_level, str(current_user.email), 
+            reset_history, 
+            mastery_stats=mastery_stats[:10] # Top 10 indicators
+        )
         return {"response": response_text}
     except Exception as e:
         return {"error": str(e)}
@@ -187,7 +216,7 @@ async def upload_file(
     if not file.filename.endswith(".pdf"):
         return {"error": "Only PDF files are supported"}
 
-    source_dir = os.path.join(os.path.dirname(__file__), "..", "data", "source_files", subject)
+    source_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "source_files", subject)
     os.makedirs(source_dir, exist_ok=True)
     file_path = os.path.join(source_dir, file.filename)
 
@@ -199,6 +228,183 @@ async def upload_file(
         return {"filename": file.filename, "status": "Successfully uploaded and indexed by Gemini"}
     else:
         return {"error": "Failed to index file in Gemini API"}
+
+
+
+# ── Question Bank ─────────────────────────────────────────────────────────────
+
+from pydantic import BaseModel
+from typing import Optional, List
+import random as _random
+
+class QuestionIn(BaseModel):
+    subject: str
+    grade: Optional[int] = None
+    bloque: Optional[str] = None
+    contenido: Optional[str] = None
+    question: str
+    options: List[str]
+    answer: str
+
+class AnswerCheck(BaseModel):
+    question_id: int
+    selected_option: str
+
+
+@app.get("/questions/random")
+async def get_random_question(
+    request: Request,
+    subject: str,
+    grade: Optional[int] = None,
+    bloque: Optional[str] = None,
+    contenido: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+    """Return a random question from the bank, filtered by subject/grade/bloque/contenido."""
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    q = db.query(models.Question).filter(func.lower(models.Question.subject) == subject.lower())
+    if grade is not None:
+        q = q.filter((models.Question.grade == grade) | (models.Question.grade == None))
+    if bloque:
+        q = q.filter(func.lower(models.Question.bloque) == bloque.lower())
+    if contenido:
+        q = q.filter(func.lower(models.Question.contenido) == contenido.lower())
+
+    # Use func.random() for efficient selection at DB level
+    picked = q.order_by(func.random()).first()
+    
+    if not picked:
+        return JSONResponse({"error": "no_questions", "detail": "No hay preguntas para este filtro."}, status_code=404)
+
+    return {
+        "id": picked.id,
+        "question": picked.question,
+        "options": json.loads(picked.options),
+        # NOTE: answer is intentionally NOT returned to the client
+    }
+
+
+@app.post("/questions/check")
+async def check_answer(
+    request: Request,
+    body: AnswerCheck,
+    db: Session = Depends(get_db),
+):
+    """Server-side answer evaluation. Returns {correct: bool, answer: str}."""
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    q = db.query(models.Question).filter(models.Question.id == body.question_id).first()
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    correct = body.selected_option.strip() == q.answer.strip()
+    
+    # Record Progress
+    progress = db.query(models.UserProgress).filter(
+        models.UserProgress.user_id == current_user.id,
+        models.UserProgress.subject == q.subject,
+        models.UserProgress.grade == q.grade,
+        models.UserProgress.bloque == q.bloque,
+        models.UserProgress.contenido == q.contenido
+    ).first()
+
+    if not progress:
+        progress = models.UserProgress(
+            user_id=current_user.id,
+            subject=q.subject,
+            grade=q.grade,
+            bloque=q.bloque,
+            contenido=q.contenido,
+            attempts=0,
+            successes=0
+        )
+        db.add(progress)
+
+    progress.attempts += 1
+    if correct:
+        progress.successes += 1
+    progress.last_attempt = datetime.utcnow()
+    db.commit()
+
+    return {"correct": correct, "answer": q.answer}
+
+
+@app.get("/stats/mastery")
+async def get_user_mastery(
+    request: Request,
+    subject: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+    """Returns a summary of topics where the user struggles (success rate < 70%)."""
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    q = db.query(models.UserProgress).filter(models.UserProgress.user_id == current_user.id)
+    if subject:
+        q = q.filter(func.lower(models.UserProgress.subject) == subject.lower())
+    
+    # Get all progress records
+    progress_records = q.all()
+    
+    # Sort by success rate to find weaknesses
+    stats = []
+    for p in progress_records:
+        rate = (p.successes / p.attempts) if p.attempts > 0 else 0
+        stats.append({
+            "subject": p.subject,
+            "grade": p.grade,
+            "bloque": p.bloque,
+            "contenido": p.contenido,
+            "attempts": p.attempts,
+            "successes": p.successes,
+            "rate": round(rate * 100, 1)
+        })
+    
+    # Sort by rate (worst first)
+    stats.sort(key=lambda x: x["rate"])
+    
+    return {"stats": stats[:5]} # Return top 5 weaknesses
+
+
+@app.post("/admin/questions")
+async def import_questions(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Admin-only bulk import of questions from a JSON list."""
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin only")
+
+    data = await request.json()
+    questions_data = data if isinstance(data, list) else data.get("questions", [])
+    created = 0
+    for item in questions_data:
+        q = models.Question(
+            subject=item["subject"],
+            grade=item.get("grade"),
+            bloque=item.get("bloque"),
+            contenido=item.get("contenido"),
+            question=item["question"],
+            options=json.dumps(item["options"], ensure_ascii=False),
+            answer=item["answer"],
+        )
+        db.add(q)
+        created += 1
+    db.commit()
+    return {"created": created}
 
 
 if __name__ == "__main__":

@@ -61,6 +61,7 @@ body {
     display: flex;
     flex-direction: column;
     border-right: 2px solid #eaebed;
+    overflow-y: auto;
 }
 
 .logo {
@@ -213,6 +214,7 @@ body {
     padding: 15px;
     border-top: 1px solid #eaebed;
     font-weight: 600;
+    margin-top: auto;
 }
 
 .avatar {

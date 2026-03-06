@@ -1,0 +1,67 @@
+[
+  {
+    "question": "¿Cuál es el resultado de la suma 4 + 5?",
+    "options": [
+      "8",
+      "9",
+      "10"
+    ],
+    "answer": "9",
+    "subject": "matematicas",
+    "grade": 2,
+    "bloque": "Numeros",
+    "contenido": "Calculo mental"
+  },
+  {
+    "question": "Calcula el resultado de la resta 70 - 20.",
+    "options": [
+      "40",
+      "50",
+      "60"
+    ],
+    "answer": "50",
+    "subject": "matematicas",
+    "grade": 2,
+    "bloque": "Numeros",
+    "contenido": "Calculo mental"
+  },
+  {
+    "question": "¿Cuánto es 5 multiplicado por 7?",
+    "options": [
+      "30",
+      "35",
+      "40"
+    ],
+    "answer": "35",
+    "subject": "matematicas",
+    "grade": 2,
+    "bloque": "Numeros",
+    "contenido": "Calculo mental"
+  },
+  {
+    "question": "El doble de 7 es:",
+    "options": [
+      "12",
+      "14",
+      "16"
+    ],
+    "answer": "14",
+    "subject": "matematicas",
+    "grade": 2,
+    "bloque": "Numeros",
+    "contenido": "Calculo mental"
+  },
+  {
+    "question": "¿Cuál es el número posterior a 599?",
+    "options": [
+      "598",
+      "600",
+      "601"
+    ],
+    "answer": "600",
+    "subject": "matematicas",
+    "grade": 2,
+    "bloque": "Numeros",
+    "contenido": "Calculo mental"
+  }
+]

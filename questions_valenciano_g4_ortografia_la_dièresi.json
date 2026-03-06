@@ -1,0 +1,41 @@
+[
+  {
+    "question": "Segons el document, quan posem dièresi a la lletra U?",
+    "options": [
+      "Quan la U es pronuncia en els grups GÜE, GÜI, QÜE, QÜI.",
+      "Quan la U va al final de la paraula.",
+      "Quan la U no es pronuncia."
+    ],
+    "answer": "Quan la U es pronuncia en els grups GÜE, GÜI, QÜE, QÜI.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "Ortografia",
+    "contenido": "La dièresi"
+  },
+  {
+    "question": "Segons el document, en quina situació es posa també dièresi a les vocals I o U?",
+    "options": [
+      "Quan van darrere d'una altra vocal i formen hiat.",
+      "Quan van davant d'una consonant.",
+      "Quan estan soles en una síl·laba."
+    ],
+    "answer": "Quan van darrere d'una altra vocal i formen hiat.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "Ortografia",
+    "contenido": "La dièresi"
+  },
+  {
+    "question": "En quins casos NO posem dièresi a les paraules, segons el document?",
+    "options": [
+      "Les paraules que, seguint les normes d'accentuació, porten accent.",
+      "Les paraules que tenen més de tres síl·labes.",
+      "Les paraules que comencen per vocal."
+    ],
+    "answer": "Les paraules que, seguint les normes d'accentuació, porten accent.",
+    "subject": "valenciano",
+    "grade": 4,
+    "bloque": "Ortografia",
+    "contenido": "La dièresi"
+  }
+]

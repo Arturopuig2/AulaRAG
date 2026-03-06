@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula - Asistente Escolar</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css?v=5">
+    <link rel="stylesheet" href="/static/css/style.css?v=6">
 </head>
 
 <body>
@@ -34,6 +34,10 @@
                     <span class="icon">🇬🇧</span>
                     <span class="label">Inglés</span>
                 </button>
+                <button class="subject-btn btn-purple" data-subject="competencia_lectora">
+                    <span class="icon">📖</span>
+                    <span class="label">Lectura</span>
+                </button>
             </nav>
 
             <!-- Syllabus Filters (Hidden by default, shown when Lengua is selected) -->
@@ -41,21 +45,18 @@
                 <h3>Filtrar Temario</h3>
 
                 <div class="filter-group">
-                    <label for="filter-curso">Curso</label>
                     <select id="filter-curso">
                         <option value="">Selecciona Curso...</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label for="filter-bloque">Bloque</label>
                     <select id="filter-bloque" disabled>
                         <option value="">Selecciona Bloque...</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label for="filter-contenido">Contenido</label>
                     <select id="filter-contenido" disabled>
                         <option value="">Selecciona Contenido...</option>
                     </select>
@@ -104,7 +105,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="/static/js/chat.js?v=14"></script>
+    <script src="/static/js/chat.js?v=19"></script>
     <script>
         function getCookie(name) {
             const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');

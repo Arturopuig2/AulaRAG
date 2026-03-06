@@ -1,0 +1,115 @@
+{
+    "asignatura": "Competencia Lectora",
+    "temario": [
+        {
+            "curso": "1º de primaria",
+            "bloques": {
+                "Comprensión Literal": [
+                    "Identificar personajes principales en cuentos cortos",
+                    "Localizar el lugar donde ocurre la historia",
+                    "Reconocer el orden de los acontecimientos (primero, después, al final)",
+                    "Responder preguntas básicas: ¿Quién?, ¿Qué?, ¿Dónde?"
+                ],
+                "Vocabulario y Letras": [
+                    "Identificar palabras que riman",
+                    "Descubrir palabras nuevas en un texto sencillo",
+                    "Relacionar palabras con sus imágenes correspondientes"
+                ],
+                "Tipos de Textos": [
+                    "Diferenciar entre un cuento y una lista",
+                    "Identificar un cartel publicitario sencillo"
+                ]
+            }
+        },
+        {
+            "curso": "2º de primaria",
+            "bloques": {
+                "Comprensión Literal": [
+                    "Describir las características de los personajes",
+                    "Identificar el problema o conflicto de la narración",
+                    "Seguir instrucciones escritas de dos o tres pasos"
+                ],
+                "Comprensión Inferencial": [
+                    "Adivinar sentimientos de los personajes por sus acciones",
+                    "Predecir qué pasará a continuación en una historia"
+                ],
+                "Vocabulario": [
+                    "Sinónimos y antónimos en contextos de lectura",
+                    "Entender frases hechas sencillas"
+                ]
+            }
+        },
+        {
+            "curso": "3º de primaria",
+            "bloques": {
+                "Comprensión Literal e Interpretativa": [
+                    "Identificar la idea principal de un párrafo",
+                    "Resumir brevemente una historia leída",
+                    "Distinguir entre realidad y fantasía"
+                ],
+                "Comprensión Inferencial": [
+                    "Inferir el significado de palabras desconocidas por el contexto",
+                    "Comprender la intención del autor (entretener, informar)"
+                ],
+                "Textos Informativos": [
+                    "Extraer datos de una noticia corta",
+                    "Entender instrucciones de juegos o recetas"
+                ]
+            }
+        },
+        {
+            "curso": "4º de primaria",
+            "bloques": {
+                "Análisis de Textos": [
+                    "Estructura del texto: introducción, nudo y desenlace",
+                    "Identificar el tema principal y subtemas",
+                    "Localizar detalles específicos en textos más extensos"
+                ],
+                "Comprensión Crítica": [
+                    "Opinar sobre el comportamiento de los personajes",
+                    "Diferenciar entre hechos y opiniones en un texto"
+                ],
+                "Vocabulario Avanzado": [
+                    "Uso del diccionario para términos técnicos sencillos",
+                    "Sentido figurado y metáforas simples"
+                ]
+            }
+        },
+        {
+            "curso": "5º de primaria",
+            "bloques": {
+                "Comprensión Profunda": [
+                    "Relacionar el contenido del texto con conocimientos previos",
+                    "Identificar diferentes puntos de vista en una narración",
+                    "Sintetizar la información de varios párrafos"
+                ],
+                "Comprensión Inferencial y Crítica": [
+                    "Inferir causas y consecuencias no explícitas",
+                    "Analizar la veracidad de la información en textos de internet"
+                ],
+                "Textos Expositivos y Argumentativos": [
+                    "Identificar argumentos sencillos en un texto de opinión",
+                    "Comprender gráficos y tablas que acompañan al texto"
+                ]
+            }
+        },
+        {
+            "curso": "6º de primaria",
+            "bloques": {
+                "Análisis Crítico y Literario": [
+                    "Analizar el estilo del autor y recursos literarios",
+                    "Comparar dos textos sobre el mismo tema",
+                    "Evaluar la estructura y eficacia de un texto argumentativo"
+                ],
+                "Comprensión de Textos Complejos": [
+                    "Entender textos instructivos complejos (manuales, normas)",
+                    "Interpretación de textos discontinuos (mapas, infografías, facturas simuladas)"
+                ],
+                "Investigación y Síntesis": [
+                    "Extraer conclusiones propias tras una lectura",
+                    "Resumir ideas complejas manteniendo la jerarquía de la información"
+                ]
+            }
+        }
+    ]
+}
