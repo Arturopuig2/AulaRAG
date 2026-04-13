@@ -40,6 +40,39 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentTemarioData = temarioDataMatematicas;
                         syllabusFilters.style.display = 'block';
                         populateCursos();
+
+                        // ── Default selection: 1º Primaria > Probabilidad > Lenguaje de azar ──
+                        const defaultCurso    = '1º de primaria';
+                        const defaultBloque   = 'probabilidad';
+                        const defaultContenido = 'Lenguaje de azar';
+
+                        const cursoIdx = currentTemarioData.findIndex(c =>
+                            c.curso.toLowerCase() === defaultCurso.toLowerCase());
+                        if (cursoIdx !== -1) {
+                            filterCurso.value = cursoIdx;
+                            filterCurso.dispatchEvent(new Event('change'));
+
+                            // Wait a tick for bloque options to render
+                            setTimeout(() => {
+                                // Select bloque
+                                const bloqueOpt = [...filterBloque.options].find(o =>
+                                    o.value.toLowerCase() === defaultBloque.toLowerCase());
+                                if (bloqueOpt) {
+                                    filterBloque.value = bloqueOpt.value;
+                                    filterBloque.dispatchEvent(new Event('change'));
+
+                                    setTimeout(() => {
+                                        // Select contenido
+                                        const contenidoOpt = [...filterContenido.options].find(o =>
+                                            o.text.toLowerCase() === defaultContenido.toLowerCase());
+                                        if (contenidoOpt) {
+                                            filterContenido.value = contenidoOpt.value;
+                                            filterContenido.dispatchEvent(new Event('change'));
+                                        }
+                                    }, 50);
+                                }
+                            }, 50);
+                        }
                     }
                 } else if (subject === 'valenciano') {
                     temarioDataValenciano = data.temario || [];
@@ -371,8 +404,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentExerciseIndex = exerciseNum;
 
             // Build exercise bubble
-            let idTag = q.id ? `<span class="exercise-id" title="ID en base de datos: ${q.id}">#${q.id}</span> ` : '';
-            let html = `<p>${idTag}<strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question}</p>`;
+            let idTag = q.id ? `<span class="exercise-id" title="ID en base de datos: ${q.id}">#${q.id}</span>` : '';
+            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question} ${idTag}</p>`;
             html += '<div class="interactive-options">';
             q.options.forEach(opt => {
                 const safe = opt.replace(/"/g, '&quot;');
