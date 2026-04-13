@@ -9,7 +9,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from typing import Optional, List
 
 from .rag_engine import get_gemini_response, upload_new_file_to_gemini
 from . import models
@@ -28,9 +29,40 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Aula RAG AI Assistant")
 
+# Admin status update (Global endpoint for robustness)
+@app.post("/admin-status-update")
+async def global_status_update(request: Request, db: Session = Depends(get_db)):
+    try:
+        user = await get_current_user(request, db)
+        if not user or not user.is_admin:
+            return JSONResponse({"error": "No autorizado"}, status_code=403)
+        data = await request.json()
+        qid = data.get("id")
+        new_status = data.get("is_active")
+        q = db.query(models.Question).filter(models.Question.id == qid).first()
+        if not q:
+            return JSONResponse({"error": "No encontrado"}, status_code=404)
+        q.is_active = bool(new_status)
+        db.commit()
+        return {"ok": True, "id": qid, "active": q.is_active}
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)
+
 # Mount static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+# ── Admin router ──────────────────────────────────────────────────────────────
+from .routers.admin import router as admin_router  # noqa: E402
+app.include_router(admin_router)
+
+
+# ── Admin Dependency ──────────────────────────────────────────────────────────
+
+async def check_admin(user: models.User = Depends(get_current_user)):
+    if not user.is_admin:
+        raise HTTPException(status_code=403, detail="Acceso denegado: Se requieren permisos de administrador")
+    return user
 
 
 # ── Auth pages ────────────────────────────────────────────────────────────────
@@ -145,7 +177,17 @@ async def get_temario(subject: str):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-# ── Chat ──────────────────────────────────────────────────────────────────────
+# ── Admin Panel ────────────────────────────────────────────────────────────────
+
+@app.get("/admin/exercises", response_class=HTMLResponse)
+async def admin_page(request: Request, user: models.User = Depends(check_admin)):
+    return templates.TemplateResponse("admin.html", {"request": request, "user": user})
+
+
+# Admin CRUD handled in routers/admin.py
+
+
+# Logic moved to top of file
 
 @app.post("/chat")
 async def chat_endpoint(
@@ -153,7 +195,10 @@ async def chat_endpoint(
     message: str = Form(...),
     subject: str = Form("general"),
     course_level: str = Form(""),
+    bloque: str = Form(""),
+    contenido: str = Form(""),
     reset_history: bool = Form(False),
+    exercise_num: int = Form(0),
     db: Session = Depends(get_db),
 ):
     # Require authentication
@@ -163,18 +208,16 @@ async def chat_endpoint(
         return JSONResponse({"error": "not_authenticated"}, status_code=401)
 
     # Update last_seen_at
-    current_user.last_seen_at = datetime.utcnow()
+    current_user.last_seen_at = datetime.now(timezone.utc)
     db.commit()
 
     try:
-        # Fetch mastery stats for the current user and subject
         stats_query = db.query(models.UserProgress).filter(
             models.UserProgress.user_id == current_user.id
         )
         if subject != "general":
             stats_query = stats_query.filter(func.lower(models.UserProgress.subject) == subject.lower())
         
-        # We only care about weaknesses for the proactive tutoring
         raw_stats = stats_query.all()
         mastery_stats = []
         for s in raw_stats:
@@ -186,15 +229,22 @@ async def chat_endpoint(
                 "attempts": s.attempts,
                 "rate": round(rate * 100, 1)
             })
-        # Sort by rate so the AI sees biggest weaknesses first
         mastery_stats.sort(key=lambda x: x["rate"])
         
-        response_text = await get_gemini_response(
+        response_text, is_correct, media_info = await get_gemini_response(
             message, subject, course_level, str(current_user.email), 
             reset_history, 
-            mastery_stats=mastery_stats[:10] # Top 10 indicators
+            mastery_stats=mastery_stats[:10],
+            bloque=bloque,
+            contenido=contenido,
+            exercise_num=exercise_num
         )
-        return {"response": response_text}
+        return {
+            "response": response_text, 
+            "is_correct": is_correct,
+            "visual_url": media_info.get("visual_url"),
+            "audio_url": media_info.get("audio_url")
+        }
     except Exception as e:
         return {"error": str(e)}
 
@@ -288,6 +338,97 @@ async def get_random_question(
     }
 
 
+@app.get("/explanations/get")
+async def get_explanation(
+    request: Request,
+    subject: str,
+    grade: int,
+    bloque: str = "",
+    contenido: str = "",
+    db: Session = Depends(get_db),
+):
+    """Returns the verified explanation for the given filters."""
+    try:
+        await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    query = db.query(models.Explanation).filter(
+        models.Explanation.is_active == True,
+        models.Explanation.is_verified == True,
+        models.Explanation.subject == subject,
+        models.Explanation.grade == grade,
+    )
+    if bloque:
+        query = query.filter(models.Explanation.bloque == bloque)
+    if contenido:
+        query = query.filter(models.Explanation.contenido == contenido)
+
+    exp = query.first()
+    if not exp:
+        return JSONResponse({"error": "not_found"}, status_code=404)
+
+    return {
+        "id": exp.id,
+        "content": exp.content,
+        "visual_url": exp.visual_url or "",
+        "audio_url": exp.audio_url or "",
+    }
+
+
+@app.get("/questions/next")
+async def get_next_question(
+    request: Request,
+    subject: str,
+    grade: int,
+    bloque: str = "",
+    contenido: str = "",
+    exclude_id: int = 0,
+    db: Session = Depends(get_db),
+):
+    """Returns a random verified question from DB matching the given filters."""
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    from sqlalchemy import func as sqlfunc
+    import random
+
+    query = db.query(models.Question).filter(
+        models.Question.is_active == True,
+        models.Question.is_verified == True,
+        models.Question.subject == subject,
+        models.Question.grade == grade,
+    )
+    if bloque:
+        query = query.filter(models.Question.bloque == bloque)
+    if contenido:
+        query = query.filter(models.Question.contenido == contenido)
+    if exclude_id:
+        query = query.filter(models.Question.id != exclude_id)
+
+    questions = query.all()
+
+    if not questions:
+        return JSONResponse({"error": "no_questions"}, status_code=404)
+
+    picked = random.choice(questions)
+    opts = json.loads(picked.options) if picked.options else []
+
+    return {
+        "id": picked.id,
+        "question": picked.question,
+        "options": opts,
+        "answer": picked.answer,
+        "feedback_correct":   picked.feedback_correct   or picked.explanation or "",
+        "feedback_incorrect": picked.feedback_incorrect or picked.explanation or "",
+        "visual_url": picked.visual_url or "",
+        "audio_url": picked.audio_url or "",
+        "identifier": picked.identifier or "",
+    }
+
+
 @app.post("/questions/check")
 async def check_answer(
     request: Request,
@@ -375,38 +516,9 @@ async def get_user_mastery(
     return {"stats": stats[:5]} # Return top 5 weaknesses
 
 
-@app.post("/admin/questions")
-async def import_questions(
-    request: Request,
-    db: Session = Depends(get_db),
-):
-    """Admin-only bulk import of questions from a JSON list."""
-    try:
-        current_user = await get_current_user(request, db)
-    except HTTPException:
-        return JSONResponse({"error": "not_authenticated"}, status_code=401)
-    if not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Admin only")
-
-    data = await request.json()
-    questions_data = data if isinstance(data, list) else data.get("questions", [])
-    created = 0
-    for item in questions_data:
-        q = models.Question(
-            subject=item["subject"],
-            grade=item.get("grade"),
-            bloque=item.get("bloque"),
-            contenido=item.get("contenido"),
-            question=item["question"],
-            options=json.dumps(item["options"], ensure_ascii=False),
-            answer=item["answer"],
-        )
-        db.add(q)
-        created += 1
-    db.commit()
-    return {"created": created}
+# Admin Bank actions handled in routers/admin.py
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)

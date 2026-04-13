@@ -133,9 +133,14 @@
     </div>
 
     <script>
-        // If already logged in, redirect to app
+        // If already logged in, redirect to app. 
+        // We verify first to avoid redirect loops if the token is stale.
         if (document.cookie.includes('access_token')) {
-            window.location.href = '/';
+            fetch('/auth/me')
+                .then(r => {
+                    if (r.ok) window.location.href = '/';
+                    else document.cookie = 'access_token=; path=/; max-age=0';
+                });
         }
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {

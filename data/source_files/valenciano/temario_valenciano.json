@@ -4,7 +4,7 @@
     {
       "curso": "1º de primaria",
       "bloques": {
-        "ortografia": [
+        "Ortografia": [
           "Les vocals",
           "R, RR",
           "CA, CO, CU, QUE, QUI",
@@ -24,7 +24,7 @@
           "C, QU, QÜ",
           "ESCRIU LA VOCAL QUE TÉ LA PARAULA"
         ],
-        "gramatica": [
+        "Gramàtica": [
           "Identificació de vocals i consonants",
           "L’ordre alfabètic",
           "L’article determinat",
@@ -44,7 +44,7 @@
     {
       "curso": "2º de primaria",
       "bloques": {
-        "ortografia": [
+        "Ortografia": [
           "Amb H o sense H",
           "X o TX",
           "TX o IG",
@@ -68,7 +68,7 @@
           "Repàs de la L i la L · L",
           "COMPLETA AMB  X  O  TX"
         ],
-        "gramatica": [
+        "Gramàtica": [
           "Els substantius individuals i col·lectius",
           "L’adjectiu",
           "Els articles",
@@ -87,7 +87,7 @@
     {
       "curso": "3º de primaria",
       "bloques": {
-        "ortografia": [
+        "Ortografia": [
           "La E oberta i la E tancada",
           "La O oberta i la O tancada",
           "La S sonora: el so S",
@@ -110,7 +110,7 @@
           "Accent obert o tancat?",
           "Indica si la paraula té la E oberta o tancada"
         ],
-        "gramatica": [
+        "Gramàtica": [
           "La comunicació: oral i escrita",
           "El substantiu: gènere, nombre i classe",
           "L’adjectiu interrogatiu",
@@ -129,7 +129,7 @@
     {
       "curso": "4º de primaria",
       "bloques": {
-        "ortografia": [
+        "Ortografia": [
           "La dièresi",
           "Les paraules agudes, planes i esdrúixoles",
           "X, TX, IG",
@@ -148,7 +148,7 @@
           "Repàs de la L i la L·L.",
           "Completa cada parella de paraules"
         ],
-        "gramatica": [
+        "Gramàtica": [
           "Les classes de substantius",
           "L’adjectiu exclamatiu i interrogatiu",
           "Els graus de l’adjectiu",
@@ -167,14 +167,14 @@
     {
       "curso": "5º de primaria",
       "bloques": {
-        "ortografia": [],
-        "gramatica": []
+        "Ortografia": [],
+        "Gramàtica": []
       }
     },
     {
       "curso": "6º de primaria",
       "bloques": {
-        "ortografia": [
+        "Ortografia": [
           "P/B, T/D, C/G a final de paraula",
           "La B i la V en els verbs.",
           "El plural amb S, NS o OS",
@@ -196,7 +196,7 @@
           "Repàs dels accents",
           "Monòle__ Àba__ Amar __ Catàle__ Espàrre__ Anora__ Ma__ Fan __ Pessi__ Alber __ Ar__ Llar __ Plàsti__ Psicòle__ Ce__ Completa les paraules amb C o G"
         ],
-        "gramatica": [
+        "Gramàtica": [
           "Substantius individuals i col·lectius",
           "L’adverbi",
           "Les locucions adverbials",

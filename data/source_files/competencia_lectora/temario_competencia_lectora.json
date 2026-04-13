@@ -4,74 +4,101 @@
         {
             "curso": "1º de primaria",
             "bloques": {
-                "Comprensión Literal": [
-                    "Identificar personajes principales en cuentos cortos",
-                    "Localizar el lugar donde ocurre la historia",
-                    "Reconocer el orden de los acontecimientos (primero, después, al final)",
-                    "Responder preguntas básicas: ¿Quién?, ¿Qué?, ¿Dónde?"
-                ],
-                "Vocabulario y Letras": [
-                    "Identificar palabras que riman",
-                    "Descubrir palabras nuevas en un texto sencillo",
-                    "Relacionar palabras con sus imágenes correspondientes"
-                ],
-                "Tipos de Textos": [
-                    "Diferenciar entre un cuento y una lista",
-                    "Identificar un cartel publicitario sencillo"
+                "Lecturas": [
+                    "La pompa del oso Pol",
+                    "La merienda",
+                    "El globo de Lúa",
+                    "Meli y su gato",
+                    "Un día en la playa",
+                    "La rana Juana",
+                    "¡Perrito perdido!",
+                    "Los bigotes de Renato",
+                    "El avión de papel",
+                    "El tren de Ramón",
+                    "La bicicleta de Eli",
+                    "La cometa",
+                    "El gato Renato",
+                    "Receta de la limonada",
+                    "Las abejas",
+                    "En clase",
+                    "La magia de los colores",
+                    "El barco de papel",
+                    "El muñeco de nieve",
+                    "Mi tía",
+                    "Receta de galletas"
                 ]
             }
         },
         {
             "curso": "2º de primaria",
             "bloques": {
-                "Comprensión Literal": [
-                    "Describir las características de los personajes",
-                    "Identificar el problema o conflicto de la narración",
-                    "Seguir instrucciones escritas de dos o tres pasos"
-                ],
-                "Comprensión Inferencial": [
-                    "Adivinar sentimientos de los personajes por sus acciones",
-                    "Predecir qué pasará a continuación en una historia"
-                ],
-                "Vocabulario": [
-                    "Sinónimos y antónimos en contextos de lectura",
-                    "Entender frases hechas sencillas"
+                "Lecturas": [
+                    "El tambor de Pol",
+                    "El mono divertido",
+                    "Las hormigas trabajadoras",
+                    "El vampiro Casimiro",
+                    "El otoño",
+                    "El oso goloso",
+                    "Brochetas de fruta con chocolate",
+                    "El submarino de cartón",
+                    "El invierno",
+                    "Tarta de manzana",
+                    "El ovillo de Mica",
+                    "Jack, el pirata",
+                    "El tesoro del pirata Jack",
+                    "Poesía del pirata",
+                    "Viaje a la Luna",
+                    "Tito, ratoncito",
+                    "La carrera",
+                    "La primavera",
+                    "Mi merienda",
+                    "La gata Mica",
+                    "El verano",
+                    "El arcoíris"
                 ]
             }
         },
         {
             "curso": "3º de primaria",
             "bloques": {
-                "Comprensión Literal e Interpretativa": [
-                    "Identificar la idea principal de un párrafo",
-                    "Resumir brevemente una historia leída",
-                    "Distinguir entre realidad y fantasía"
-                ],
-                "Comprensión Inferencial": [
-                    "Inferir el significado de palabras desconocidas por el contexto",
-                    "Comprender la intención del autor (entretener, informar)"
-                ],
-                "Textos Informativos": [
-                    "Extraer datos de una noticia corta",
-                    "Entender instrucciones de juegos o recetas"
+                "Lecturas": [
+                    "El misterio de la corona perdida",
+                    "Mi trabajo favorito",
+                    "El sándwich",
+                    "Pedro y el lobo",
+                    "Un viaje por Europa",
+                    "Receta: Sándwich especial de jamón y queso",
+                    "Margaritas del camino",
+                    "Drak, el dragón lector"
                 ]
             }
         },
         {
             "curso": "4º de primaria",
             "bloques": {
-                "Análisis de Textos": [
-                    "Estructura del texto: introducción, nudo y desenlace",
-                    "Identificar el tema principal y subtemas",
-                    "Localizar detalles específicos en textos más extensos"
-                ],
-                "Comprensión Crítica": [
-                    "Opinar sobre el comportamiento de los personajes",
-                    "Diferenciar entre hechos y opiniones en un texto"
-                ],
-                "Vocabulario Avanzado": [
-                    "Uso del diccionario para términos técnicos sencillos",
-                    "Sentido figurado y metáforas simples"
+                "Lecturas": [
+                    "El pastel de la abuela Martina",
+                    "Alicia en el País de las Maravillas",
+                    "Pinocho (Parte 1)",
+                    "Pinocho (Parte 2)",
+                    "La bombilla: luz que cambió las noches",
+                    "Moneda de plata",
+                    "Caracola",
+                    "Receta: Espaguetis a la carbonara",
+                    "La imprenta (Inventos que cambiaron el mundo)",
+                    "El Lazarillo de Tormes",
+                    "Sherlock Holmes: El robo del escarabajo de oro (1)",
+                    "Sherlock Holmes: El robo del escarabajo de oro (2)",
+                    "El manzano",
+                    "La importancia de la amistad",
+                    "La Ilíada",
+                    "El ingenioso hidalgo Don Quijote de la Mancha",
+                    "La vacuna, una protección invisible",
+                    "De acampada",
+                    "La isla del tesoro: El mapa en la posada",
+                    "La isla del tesoro: El viaje y el secreto a bordo",
+                    "La isla del tesoro: Ben Gunn y el tesoro",
+                    "Receta: Bizcocho sencillo"
                 ]
             }
         },

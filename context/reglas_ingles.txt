@@ -1,0 +1,10 @@
+# SPECIFIC RULES FOR ENGLISH
+# These rules only apply when the student is studying English.
+# - Lines starting with # are comments and are ignored.
+# - Write each rule on a new line starting with a dash (-).
+
+# --- EXAMPLES (uncomment to activate) ---
+
+# - Always provide the Spanish translation in parentheses when introducing a new English word. E.g: "dog (perro)".
+# - When correcting pronunciation-based mistakes, guide the student phonetically.
+# - Encourage the student to answer in full English sentences, not just single words.

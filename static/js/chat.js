@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Configure Marked to honor single line breaks as <br>
+    if (typeof marked !== 'undefined') {
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+    }
+
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
     const chatMessages = document.getElementById('chat-messages');
@@ -13,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterCurso = document.getElementById('filter-curso');
     const filterBloque = document.getElementById('filter-bloque');
     const filterContenido = document.getElementById('filter-contenido');
+    const groupBloque = document.getElementById('group-bloque');
     const btnEstudiar = document.getElementById('btn-estudiar');
     let temarioDataLengua = [];
     let temarioDataMatematicas = [];
@@ -93,10 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
         'lengua': { title: 'Pizarra Digital - Lengua', color: 'var(--color-green)', name: 'Lengua' },
         'valenciano': { title: 'Pizarra Digital - Valencià', color: 'var(--color-orange)', name: 'Valencià' },
         'ingles': { title: 'Pizarra Digital - Inglés', color: 'var(--color-yellow)', name: 'Inglés' },
-        'competencia_lectora': { title: 'Pizarra Digital - Lectura', color: 'var(--color-purple)', name: 'Lectura' }
+        'competencia_lectora': { title: 'Pizarra Digital - Lectura', color: 'var(--color-red)', name: 'Lectura' }
     };
 
     let currentSubject = 'matematicas';
+    let currentExerciseIndex = 0;
+    let totalExercisesInSeries = 3;
+    let userStars = parseInt(localStorage.getItem('aula_stars') || '0');
+
+    // Session state: persist the active topic labels across all turns
+    let activeSessionCurso = "";
+    let activeSessionBloque = "";
+    let activeSessionContenido = "";
+
+    // UI Elements for gamification
+    const progressBar = document.getElementById('series-progress');
+    const starsCountLabel = document.getElementById('stars-count');
+
+    // Initialize stars
+    starsCountLabel.textContent = userStars;
 
     // Handle Subject switching
     subjectButtons.forEach(btn => {
@@ -119,25 +143,23 @@ document.addEventListener('DOMContentLoaded', () => {
             subjectTitle.style.color = themes[currentSubject].color;
 
             // Toggle Syllabus Filters visibility
-            if (currentSubject === 'lengua') {
+            if (currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles' || currentSubject === 'competencia_lectora') {
                 syllabusFilters.style.display = 'block';
-                currentTemarioData = temarioDataLengua;
-                if (currentTemarioData.length > 0) populateCursos();
-            } else if (currentSubject === 'matematicas') {
-                syllabusFilters.style.display = 'block';
-                currentTemarioData = temarioDataMatematicas;
-                if (currentTemarioData.length > 0) populateCursos();
-            } else if (currentSubject === 'valenciano') {
-                syllabusFilters.style.display = 'block';
-                currentTemarioData = temarioDataValenciano;
-                if (currentTemarioData.length > 0) populateCursos();
-            } else if (currentSubject === 'ingles') {
-                syllabusFilters.style.display = 'block';
-                currentTemarioData = temarioDataIngles;
-                if (currentTemarioData.length > 0) populateCursos();
-            } else if (currentSubject === 'competencia_lectora') {
-                syllabusFilters.style.display = 'block';
-                currentTemarioData = temarioDataCompetenciaLectora;
+                // Always reset block group to visible when switching subject
+                if (groupBloque) groupBloque.style.display = 'block';
+
+                if (currentSubject === 'lengua') {
+                    currentTemarioData = temarioDataLengua;
+                } else if (currentSubject === 'matematicas') {
+                    currentTemarioData = temarioDataMatematicas;
+                } else if (currentSubject === 'valenciano') {
+                    currentTemarioData = temarioDataValenciano;
+                } else if (currentSubject === 'ingles') {
+                    currentTemarioData = temarioDataIngles;
+                } else if (currentSubject === 'competencia_lectora') {
+                    currentTemarioData = temarioDataCompetenciaLectora;
+                }
+
                 if (currentTemarioData.length > 0) populateCursos();
             } else {
                 syllabusFilters.style.display = 'none';
@@ -148,9 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (chatHistoriesHTML[currentSubject]) {
                 chatMessages.innerHTML = chatHistoriesHTML[currentSubject];
             } else {
-                const welcomeText = (currentSubject === 'valenciano')
-                    ? "Hola! Què repassem hui? 😊"
-                    : "¡Hola! ¿Qué repasamos hoy? 😊";
+                let welcomeText = "¡Hola! Soy tu chat de aprendizaje. ¿Qué quieres repasar hoy? 😊";
+                if (currentSubject === 'valenciano') {
+                    welcomeText = "Hola! Què repassem hui? 😊";
+                } else if (currentSubject === 'competencia_lectora') {
+                    welcomeText = "¡Hola! ¿Qué leemos hoy? 😊";
+                }
 
                 chatMessages.innerHTML = `
                     <div class="message assistant">
@@ -163,8 +188,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Input Placeholder
             if (currentSubject === 'valenciano') {
                 userInput.placeholder = "Pregunta el que vulgues...";
+                btnEstudiar.textContent = "Anem a repassar!";
+            } else if (currentSubject === 'competencia_lectora') {
+                userInput.placeholder = "Pregunta lo que quieras...";
+                btnEstudiar.textContent = "¡Vamos a leer!";
+            } else if (currentSubject === 'ingles') {
+                userInput.placeholder = "Pregunta lo que quieras...";
+                btnEstudiar.textContent = "Let's go!";
             } else {
                 userInput.placeholder = "Pregunta lo que quieras...";
+                btnEstudiar.textContent = "¡Vamos a repasar!";
             }
 
             // Scroll to bottom
@@ -202,7 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const cursoObj = currentTemarioData[cursoIdx];
         if (cursoObj && cursoObj.bloques) {
-            Object.keys(cursoObj.bloques).forEach(bloqueName => {
+            const bloqueNames = Object.keys(cursoObj.bloques);
+            bloqueNames.forEach(bloqueName => {
                 const opt = document.createElement('option');
                 opt.value = bloqueName;
                 // Capitalize first letter, handle valencian translation
@@ -213,7 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = displayText;
                 filterBloque.appendChild(opt);
             });
-            filterBloque.disabled = false;
+
+            // If there's only 1 block, select it automatically and hide the selector
+            if (bloqueNames.length === 1) {
+                filterBloque.value = bloqueNames[0];
+                if (groupBloque) groupBloque.style.display = 'none';
+                // Manually trigger change to populate contents dropdown
+                filterBloque.dispatchEvent(new Event('change'));
+            } else {
+                if (groupBloque) groupBloque.style.display = 'block';
+                filterBloque.disabled = false;
+            }
         }
     });
 
@@ -259,31 +303,124 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const contenidoStr = currentTemarioData[cursoIdx].bloques[bloqueName][contenidoIdx];
 
-        // Format the message just like if the user typed it
-        const generatedMessage = (currentSubject === 'valenciano')
-            ? `Vull repassar ${bloqueStr}: ${contenidoStr}`
-            : `Quiero repasar ${bloqueStr}: ${contenidoStr}`;
+        // ✅ Save active session labels so every subsequent turn uses them
+        activeSessionCurso = cursoStr;
+        activeSessionBloque = bloqueStr;
+        activeSessionContenido = contenidoStr;
+        currentExerciseIndex = 0;
+        window._lastQuestionId = 0;
 
-        // Add to UI visibly
+        // Show user message
+        let generatedMessage = (currentSubject === 'valenciano')
+            ? `Vull repassar: ${contenidoStr}`
+            : `Quiero repasar: ${contenidoStr}`;
+        if (currentSubject === 'competencia_lectora') {
+            generatedMessage = `Quiero leer: ${contenidoStr}`;
+        }
         addMessage(generatedMessage, 'user');
+        // ── DB-ONLY FLOW ──────────────────────────────────────────────────
+        if (currentSubject !== 'competencia_lectora') {
+            // 1. Get explanation from DB
+            const loadingId = addLoadingIndicator();
+            try {
+                const gradeMatch = cursoStr.match(/\d+/);
+                const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
+                const expParams = new URLSearchParams({ subject: currentSubject, grade, bloque: bloqueStr, contenido: contenidoStr });
+                const expResp = await fetch(`/explanations/get?${expParams}`);
+                removeMessage(loadingId);
+                if (expResp.ok) {
+                    const expData = await expResp.json();
+                    if (expData.content) {
+                        addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null);
+                    }
+                }
+            } catch(e) {
+                removeMessage(loadingId);
+            }
 
-        // Reset dropdowns for next time (optional, maybe keep them selected)
-        // filterCurso.value = "";
-        // filterBloque.value = "";
-        // filterContenido.value = "";
-        // filterBloque.disabled = true; filterContenido.disabled = true; btnEstudiar.disabled = true;
-
-        // Instead of calling the AI, we fetch a deterministic question from our new DB Question Bank
-        await fetchNextDBQuestion(generatedMessage);
+            // 2. Fetch and show first question from DB
+            totalExercisesInSeries = 3;
+            await fetchAndShowQuestion(currentSubject, cursoStr, bloqueStr, contenidoStr, 1);
+        } else {
+            // Competencia lectora: still AI-led for now
+            totalExercisesInSeries = 10;
+            currentExerciseIndex = 1;
+            const prompt = `[LECTURA]: ${contenidoStr}. Muestra el texto de la lectura y luego hazme la primera pregunta (Ejercicio 1/10) para practicar la comprensión.`;
+            await sendMessageToBackend(prompt, false, true);
+        }
     });
 
+    // ── Fetch question from DB and render it ─────────────────────────────
+    async function fetchAndShowQuestion(subject, curso, bloque, contenido, exerciseNum) {
+        // Parse grade from curso string (e.g. "1º Primaria" → 1)
+        const gradeMatch = curso.match(/\d+/);
+        const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
+
+        const params = new URLSearchParams({ subject, grade, bloque, contenido });
+        if (window._lastQuestionId) params.append('exclude_id', window._lastQuestionId);
+
+        const loadingId = addLoadingIndicator();
+        try {
+            const resp = await fetch(`/questions/next?${params}`);
+            removeMessage(loadingId);
+
+            if (!resp.ok) {
+                const err = await resp.json();
+                addMessage(`No hay más ejercicios verificados para este tema.`, 'assistant');
+                return;
+            }
+
+            const q = await resp.json();
+            window._lastQuestionId = q.id;
+            window.currentDBQuestion = {
+                id: q.id,
+                question: q.question,
+                answer: q.answer,
+                feedback_correct:   q.feedback_correct   || '',
+                feedback_incorrect: q.feedback_incorrect || ''
+            };
+            window.currentCorrectAnswer = q.answer;
+            currentExerciseIndex = exerciseNum;
+
+            // Build exercise bubble
+            let idTag = q.identifier ? `<span class="exercise-id" title="Referencia">${q.identifier}</span>` : '';
+            let html = `<p><strong>Ejercicio ${exerciseNum}/3:</strong> ${q.question} ${idTag}</p>`;
+            html += '<div class="interactive-options">';
+            q.options.forEach(opt => {
+                const safe = opt.replace(/"/g, '&quot;');
+                html += `<button class="interactive-btn" onclick="window.sendInteractiveAnswer('${safe}', this)">${opt}</button>`;
+            });
+            html += '</div>';
+
+            // Disable previous buttons
+            document.querySelectorAll('.interactive-btn').forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.pointerEvents = 'none';
+            });
+
+            addMessage(html, 'assistant', true, false, true, q.visual_url || null, q.audio_url || null);
+
+            // Update progress bar
+            if (progressBar) {
+                const pct = (exerciseNum / 3) * 100;
+                progressBar.style.width = `${pct}%`;
+            }
+        } catch(e) {
+            removeMessage(loadingId);
+            addMessage('Error al obtener la pregunta. Inténtalo de nuevo.', 'assistant');
+        }
+    }
+
     // Helper to send message to backend
-    async function sendMessageToBackend(messageText, isHidden = false, resetHistory = false) {
+    async function sendMessageToBackend(messageText, isHidden = false, resetHistory = false, exerciseNum = 0) {
+        // Clear DB state to ensure we always prioritize the AI's natural flow
+        window.currentDBQuestion = null;
+
         // Show loading indicator
         const loadingId = addLoadingIndicator();
 
         try {
-            // Include context in the prompt temporarily since we don't have true RAG yet
             const prefixedMessage = `[Contexto: asignatura actual es ${themes[currentSubject].name}] ${messageText}`;
 
             const formData = new URLSearchParams();
@@ -293,12 +430,34 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resetHistory) {
                 formData.append('reset_history', 'true');
             }
+            if (exerciseNum > 0) {
+                formData.append('exercise_num', exerciseNum);
+            }
 
             let courseLevel = "";
-            if ((currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles') && filterCurso.value !== "") {
-                courseLevel = currentTemarioData[filterCurso.value].curso;
+            let bloqueStr = "";
+            let contenidoStr = "";
+
+            // Use persisted session labels if available, otherwise fall back to UI dropdowns
+            if (activeSessionCurso) {
+                courseLevel   = activeSessionCurso;
+                bloqueStr     = activeSessionBloque;
+                contenidoStr  = activeSessionContenido;
+            } else if (filterCurso.value !== "") {
+                const cursoIdx = filterCurso.value;
+                courseLevel = currentTemarioData[cursoIdx].curso;
+                if (filterBloque.value !== "") {
+                    bloqueStr = filterBloque.value;
+                    if (filterContenido.value !== "") {
+                        const contentIdx = filterContenido.value;
+                        contenidoStr = currentTemarioData[cursoIdx].bloques[bloqueStr][contentIdx];
+                    }
+                }
             }
+            
             formData.append('course_level', courseLevel);
+            formData.append('bloque', bloqueStr);
+            formData.append('contenido', contenidoStr);
 
             const response = await fetch('/chat', {
                 method: 'POST',
@@ -319,28 +478,64 @@ document.addEventListener('DOMContentLoaded', () => {
                     : `Oops, un pequeño error falló: ${data.error}`;
                 addMessage(errorMsg, 'assistant');
             } else {
-                // Play audio for the entire response once
-                playAudioForResponse(data.response);
-
-                // Clean the response slightly to remove standalone [CORRECTO] blocks 
-                // so they don't form empty bubbles or mess up splitting
                 let cleanResponse = data.response;
 
-                // We want to extract [CORRECTO]/[INCORRECTO] to handle UI state, 
-                // but we can do that inside addMessage. To prevent them from creating 
-                // empty bubbles, we'll let addMessage handle it, but we'll add a check 
-                // in addMessage to abort rendering if the resulting text is empty.
+                // Update the clicked button's visual state (green/red)
+                if (window.lastClickedInteractiveButton) {
+                    const looksCorrect = /\[CORRECTO\]|\[CORRECTE\]|\[CORRECT\]/i.test(cleanResponse);
+                    const looksIncorrect = /\[INCORRECTO\]|\[INCORRECTE\]|\[INCORRECT\]/i.test(cleanResponse);
+                    window.lastClickedInteractiveButton.classList.remove('loading');
+                    if (looksCorrect) {
+                        window.lastClickedInteractiveButton.classList.add('correct');
+                    } else if (looksIncorrect) {
+                        window.lastClickedInteractiveButton.classList.add('incorrect');
+                        const container = window.lastClickedInteractiveButton.parentElement;
+                        container.querySelectorAll('.interactive-btn').forEach(btn => {
+                            btn.disabled = false;
+                            btn.style.opacity = '1';
+                        });
+                    }
+                    window.lastClickedInteractiveButton = null;
+                }
 
-                // Stop buttons from separating from the question text
-                cleanResponse = cleanResponse.replace(/\n\n+(?=\s*\[BOTON:)/gi, '\n');
+                // Clean evaluation tags and formatting artifacts
+                cleanResponse = cleanResponse.replace(/\[CORRECTO\]|\[CORRECTE\]|\[CORRECT\]/gi, '');
+                cleanResponse = cleanResponse.replace(/\[INCORRECTO\]|\[INCORRECTE\]|\[INCORRECT\]/gi, '');
+                cleanResponse = cleanResponse.replace(/\n+(?=\s*\[BOTON:)/gi, ' ');
+                cleanResponse = cleanResponse.replace(/[¡!]{2,}/g, '!');
+                cleanResponse = cleanResponse.replace(/[¿?]{2,}/g, '?');
+                cleanResponse = cleanResponse.replace(/([¡!¿?])\s+([¡!¿?])/g, '$1');
+                // Strip any '¿Quieres seguir?' the AI adds by itself — JS controls this
+                cleanResponse = cleanResponse.replace(/---?\s*[\n]?\s*¿Quieres seguir\?/gi, '').trim();
+                cleanResponse = cleanResponse.trim();
 
-                // Split AI response by double newlines into blocks to render as separate bubbles
-                const blocks = cleanResponse.split('\n\n').filter(b => b.trim() !== '');
+                playAudioForResponse(cleanResponse);
 
-                blocks.forEach(block => {
-                    const parsedResponse = marked.parse(block);
-                    addMessage(parsedResponse, 'assistant', true, false, true);
+                // Split by '---' into separate bubbles
+                const segments = cleanResponse.split('---').map(s => s.trim()).filter(s => {
+                    if (!s) return false;
+                    if (!/[a-z0-9áéíóúÁÉÍÓÚñÑ]/i.test(s) && !s.includes('[BOTON:')) return false;
+                    if (s.length < 5 && /^[¡! \.]+$/.test(s)) return false;
+                    return true;
                 });
+
+                segments.forEach((segment, idx) => {
+                    const parsedResponse = marked.parse(segment.trim());
+                    const isExerciseSegment = segment.toLowerCase().includes('ejercicio') || segment.includes('[BOTON:');
+                    const vUrl = isExerciseSegment ? data.visual_url : null;
+                    const aUrl = isExerciseSegment ? data.audio_url : null;
+                    addMessage(parsedResponse, 'assistant', true, false, true, vUrl, aUrl);
+                });
+
+                // If JS flagged end of series, show the 'Continue?' bubble after AI reply
+                if (window._pendingEndOfSeries) {
+                    window._pendingEndOfSeries = false;
+                    setTimeout(() => {
+                        const endMsg = `¿Quieres seguir practicando?\n\n[BOTON: Sí]\n[BOTON: No]`;
+                        addMessage(marked.parse(endMsg), 'assistant', true, false, true);
+                        currentExerciseIndex = 0; // Reset for next series
+                    }, 300);
+                }
             }
         } catch (error) {
             removeMessage(loadingId);
@@ -367,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await sendMessageToBackend(message, false);
     });
 
-    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false) {
+    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null) {
         if (isHidden) return; // Do not render anything if it's a hidden message
 
         const msgEl = document.createElement('div');
@@ -376,26 +571,34 @@ document.addEventListener('DOMContentLoaded', () => {
         msgEl.className = `message ${sender}`;
 
         const contentEl = document.createElement('div');
-        contentEl.className = 'bubble'; // Changed from 'message-content' to 'bubble' to match existing CSS
+        contentEl.className = 'bubble';
+
+        // Add Media if present
+        let mediaHtml = '';
+        if (visualUrl) {
+            mediaHtml += `<div class="message-media"><img src="${visualUrl}" alt="Ejercicio visual" class="chat-img" onclick="window.open('${visualUrl}')"></div>`;
+        }
+        if (audioUrl) {
+            mediaHtml += `<div class="message-audio"><audio controls src="${audioUrl}" class="chat-audio"></audio></div>`;
+        }
 
         // Parse custom interactive buttons: [BOTON: text]
         let formattedText = text;
+        let foundStatus = null;
 
-        // Intercept [CORRECTO] and [INCORRECTO] tags for animations and button states
-        // Adding English variations because Gemini sometimes translates the tag
-        const correctoRegex = /\[CORRECTO\]|\[CORRECT\]/gi;
-        const incorrectoRegex = /\[INCORRECTO\]|\[INCORRECT\]/gi;
-
-        let foundStatus = null; // Can be 'correct' or 'incorrect'
-
-        if (formattedText.match(correctoRegex)) {
-            formattedText = formattedText.replace(correctoRegex, '').trim();
-            // Wait slightly so the message renders first
-            setTimeout(playSuccessAnimation, 0);
-            foundStatus = 'correct';
-        } else if (formattedText.match(incorrectoRegex)) {
-            formattedText = formattedText.replace(incorrectoRegex, '').trim();
-            foundStatus = 'incorrect';
+        // Detect Exercise Number (e.g. Ejercicio 1/3) for progress bar
+        const exerciseRegex = /Ejercicio\s+(\d+)\/(\d+)/i;
+        const exerciseMatch = formattedText.match(exerciseRegex);
+        if (exerciseMatch) {
+            const current = parseInt(exerciseMatch[1]);
+            const total = parseInt(exerciseMatch[2]);
+            const percent = (current / total) * 100;
+            if (progressBar) {
+                progressBar.style.width = `${percent}%`;
+                progressBar.style.background = percent === 100
+                    ? 'linear-gradient(90deg, var(--color-green), #4ade80)'
+                    : 'linear-gradient(90deg, var(--color-blue), #60a5fa)';
+            }
         }
 
         // Intercept [DB_ID: X] tag to set currentDBQuestion state
@@ -408,6 +611,10 @@ document.addEventListener('DOMContentLoaded', () => {
             window.currentDBQuestion = { id: qid };
             formattedText = formattedText.replace(dbIdRegex, '').trim();
         }
+        
+        // Style Exercise Identifier [ID: PMAT1N0001]
+        const exerciseIdRegex = /\[ID:\s*([^\]]+)\]/gi;
+        formattedText = formattedText.replace(exerciseIdRegex, '<span class="exercise-id" title="Referencia del ejercicio">$1</span>');
 
         // If there is a pending button, resolve its state visually
         if (sender === 'assistant' && window.lastClickedInteractiveButton) {
@@ -429,6 +636,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let interactiveButtonsHtml = '';
 
         if (formattedText.includes('[BOTON:')) {
+            // Extract the hidden correct answer key FIRST (before removing it from text)
+            const correctAnswerMatch = formattedText.match(/\[RESPUESTA_CORRECTA:\s*([^\]]+)\]/i);
+            if (correctAnswerMatch) {
+                window.currentCorrectAnswer = correctAnswerMatch[1].trim();
+                // Remove the hidden tag from the displayed text
+                formattedText = formattedText.replace(/\[RESPUESTA_CORRECTA:[^\]]+\]/gi, '').trim();
+            }
+
             // Extract all button matches
             const buttonRegex = /\[BOTON:\s*([^\]]+)\]/g;
             let match;
@@ -444,7 +659,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate HTML for the interactive buttons container
             if (buttons.length > 0) {
                 // Safeguard: Disable all PREVIOUS interactive buttons in the chat to avoid duplication and clutter
-                // This ensures the student only interacts with the most recent question
                 document.querySelectorAll('.interactive-btn').forEach(btn => {
                     btn.disabled = true;
                     btn.style.opacity = '0.6';
@@ -453,7 +667,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 interactiveButtonsHtml = '<div class="interactive-options">';
                 buttons.forEach(btnText => {
-                    // Escape quotes just in case
                     const safeText = btnText.replace(/"/g, '&quot;');
                     interactiveButtonsHtml += `<button class="interactive-btn" onclick="window.sendInteractiveAnswer('${safeText}', this)">${btnText}</button>`;
                 });
@@ -463,6 +676,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Always convert markdown-like bold text **text** to HTML just in case marked missed it
         formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        // No longer using stylized labels for Explicación to reduce repetition
+
+        // Convert any "quoted text" to bold (as requested by user)
+        // CRITICAL FIX: Skip this if the text looks like an SVG attribute (e.g. fill="purple" or width="200")
+        // We use a negative lookbehind/lookahead strategy or simply avoid common SVG keywords
+        formattedText = formattedText.replace(/(?<![=a-zA-Z])"([^"<>]+)"(?![=a-zA-Z])/g, '<strong>$1</strong>');
 
         // Only run these manual replacements if it wasn't already processed by Marked
         if (!isHTML) {
@@ -484,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        contentEl.innerHTML = formattedText + interactiveButtonsHtml;
+        contentEl.innerHTML = formattedText + mediaHtml + interactiveButtonsHtml;
         msgEl.appendChild(contentEl);
         chatMessages.appendChild(msgEl);
 
@@ -615,17 +835,84 @@ document.addEventListener('DOMContentLoaded', () => {
         btnElement.classList.add('loading');
         window.lastClickedInteractiveButton = btnElement;
 
-        // Route to DB checker or AI depending on question source
-        if (window.currentDBQuestion && window.currentDBQuestion.id) {
-            // ── Server-side evaluation (instant, 100% reliable) ──
-            window.sendDBAnswer(answer, btnElement);
-        } else {
-            // ── AI evaluation (legacy path) ──
-            if (window.doHiddenSend) {
-                // We add a prefix to help the AI understand this is a button click, 
-                // preventing it from thinking it's a new command or a page number.
-                window.doHiddenSend(`[OPCION_ELEGIDA]: ${answer}`);
+        // ⭐ OPTION B: Apply visual feedback IMMEDIATELY (no need to wait for AI)
+        if (window.currentCorrectAnswer) {
+            const isCorrect = answer.trim().toLowerCase() === window.currentCorrectAnswer.trim().toLowerCase();
+            btnElement.classList.remove('loading');
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                userStars = parseInt(localStorage.getItem('aula_stars') || '0');
+                userStars += 1;
+                localStorage.setItem('aula_stars', userStars);
+                const starsLabel = document.getElementById('stars-count');
+                if (starsLabel) {
+                    starsLabel.textContent = userStars;
+                    starsLabel.parentElement.classList.add('pop');
+                    setTimeout(() => starsLabel.parentElement.classList.remove('pop'), 800);
+                }
+                setTimeout(playSuccessAnimation, 0);
+            } else {
+                btnElement.classList.add('incorrect');
+                // Re-enable buttons so user can try again
+                allButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                });
+                btnElement.disabled = true; // Keep selected one locked
             }
+            window.currentCorrectAnswer = null;
+        } else {
+            // Fallback if no stored answer: show loading while waiting for AI
+            btnElement.classList.add('loading');
+            window.lastClickedInteractiveButton = btnElement;
+        }
+
+        // Increment exercise counter
+        currentExerciseIndex++;
+        const exerciseNum = currentExerciseIndex;
+        const isLastExercise = exerciseNum >= totalExercisesInSeries;
+
+        // 1. Record answer in DB (progress tracking)
+        if (window.currentDBQuestion && window.currentDBQuestion.id) {
+            fetch('/questions/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
+            }).catch(() => {});
+        }
+
+        // 2. Show feedback from DB (no AI)
+        const isCorrect = window.currentCorrectAnswer
+            ? answer.trim().toLowerCase() === window.currentCorrectAnswer.trim().toLowerCase()
+            : null;
+
+        if (isCorrect !== null) {
+            const q = window.currentDBQuestion || {};
+            let feedbackHtml;
+            if (isCorrect) {
+                const fb = q.feedback_correct || '';
+                feedbackHtml = fb
+                    ? `<p>✅ ¡Correcto! ${fb}</p>`
+                    : `<p>✅ ¡Correcto!</p>`;
+            } else {
+                const correctTxt = window.currentCorrectAnswer || '';
+                const fb = q.feedback_incorrect || '';
+                feedbackHtml = fb
+                    ? `<p>❌ La respuesta correcta es <strong>${correctTxt}</strong>. ${fb}</p>`
+                    : `<p>❌ La respuesta correcta es <strong>${correctTxt}</strong>.</p>`;
+            }
+            addMessage(feedbackHtml, 'assistant', true, false, true);
+        }
+
+        // 3. Fetch next question from DB or show end-of-series
+        if (!isLastExercise) {
+            await fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, exerciseNum + 1);
+        } else {
+            setTimeout(() => {
+                const endMsg = `¿Quieres seguir practicando?\n\n[BOTON: Sí]\n[BOTON: No]`;
+                addMessage(marked.parse(endMsg), 'assistant', true, false, true);
+                currentExerciseIndex = 0;
+            }, 300);
         }
     };
 
@@ -664,9 +951,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             addMessage(marked.parse(block), 'assistant', true, false, true);
                         });
                     }
-                    // Clear DB question and fetch next
-                    window.currentDBQuestion = null;
-                    fetchNextDBQuestion();
+                    // Incrementar índice y seguir
+                    currentExerciseIndex++;
+                    if (currentExerciseIndex <= totalExercisesInSeries) {
+                        fetchNextDBQuestion();
+                    } else {
+                        // Serie terminada
+                        const endMsg = (currentSubject === 'valenciano')
+                            ? "¡Hem acabat la sèrie! 🎉 ¿Vols seguir practicant amb més preguntes?\n\n[BOTON: Sí]\n[BOTON: No]"
+                            : "¡Hemos terminado la serie! 🎉 ¿Quieres seguir practicando con más problemas?\n\n[BOTON: Sí]\n[BOTON: No]";
+                        addMessage(marked.parse(endMsg), 'assistant', true, false, true);
+                        currentExerciseIndex = 0; // Reset
+                    }
                 }, 300);
 
             } else {
@@ -714,13 +1010,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filterCurso.value && currentTemarioData[filterCurso.value]) {
             params.append('grade', currentTemarioData[filterCurso.value].curso.replace(/[^0-9]/g, '') || '');
         }
-        if (filterBloque.value) params.append('bloque', filterBloque.value);
-        if (filterContenido.value) params.append('contenido', filterContenido.value);
+
+        // Use the actual labels from the selectors as the DB filters
+        if (filterBloque.value && filterBloque.selectedIndex >= 0) {
+            const bText = filterBloque.options[filterBloque.selectedIndex].text;
+            if (bText && !bText.startsWith("Selecciona")) {
+                params.append('bloque', bText);
+            }
+        }
+        if (filterContenido.value && filterContenido.selectedIndex >= 0) {
+            const cText = filterContenido.options[filterContenido.selectedIndex].text;
+            if (cText && !cText.startsWith("Selecciona")) {
+                params.append('contenido', cText);
+            }
+        }
 
         try {
             const res = await fetch(`/questions/random?${params}`);
             if (!res.ok) {
-                if (fallbackMessage) await sendMessageToBackend(fallbackMessage, false, true);
+                if (res.status === 401) {
+                    addMessage("Sesión expirada. Por favor, recarga la página o entra de nuevo. 🔐", 'assistant');
+                } else {
+                    const errorData = await res.json().catch(() => ({}));
+                    console.error('Question Bank Error:', errorData);
+                    if (fallbackMessage) {
+                        await sendMessageToBackend(fallbackMessage, false, true);
+                    } else {
+                        addMessage("No he encontrado preguntas específicas para este tema en la base de datos. 😅 ¡Prueba con otro bloque o curso!", 'assistant');
+                    }
+                }
                 return;
             }
             const q = await res.json();
@@ -731,7 +1049,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             window.currentDBQuestion = q;
 
-            let html = `${q.question}\n\n`;
+            const label = (currentSubject === 'valenciano') ? 'Exercici' : 'Ejercicio';
+            let html = `**${label} ${currentExerciseIndex}/${totalExercisesInSeries}**\n\n${q.question}\n\n`;
             q.options.forEach(opt => { html += `[BOTON: ${opt}]\n`; });
             addMessage(marked.parse(html), 'assistant', true, false, true);
         } catch (e) {
@@ -751,7 +1070,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('sendHiddenMessage', { detail: { text: answer } }));
     };
 
-    document.addEventListener('sendHiddenMessage', (e) => {
+    // Guard: only register the sendHiddenMessage listener ONCE per page load
+    if (!window._hiddenSendListenerRegistered) {
+        window._hiddenSendListenerRegistered = true;
+        document.addEventListener('sendHiddenMessage', (e) => {
         const messageText = e.detail.text;
         // The addMessage step is skipped for hidden messages. Just show loading and fetch
 
@@ -765,7 +1087,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('subject', currentSubject);
 
         let courseLevel = "";
-        if ((currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles') && filterCurso.value !== "") {
+        if ((currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles' || currentSubject === 'competencia_lectora') && filterCurso.value !== "") {
             courseLevel = currentTemarioData[filterCurso.value].curso;
         }
         formData.append('course_level', courseLevel);
@@ -791,9 +1113,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Evaluate correctness immediately to update the clicked button
                     let isCorrect = false;
                     let isIncorrect = false;
-                    if (cleanResponse.match(/\[CORRECTO\]|\[CORRECT\]/i)) {
+                    if (cleanResponse.match(/\[CORRECTO\]|\[CORRECTE\]|\[CORRECT\]/i)) {
                         isCorrect = true;
-                    } else if (cleanResponse.match(/\[INCORRECTO\]|\[INCORRECT\]/i)) {
+                    } else if (cleanResponse.match(/\[INCORRECTO\]|\[INCORRECTE\]|\[INCORRECT\]/i)) {
                         isIncorrect = true;
                     }
 
@@ -815,29 +1137,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Strip tags so addMessage doesn't process them again
-                    cleanResponse = cleanResponse.replace(/\[CORRECTO\]/gi, '').trim();
-                    cleanResponse = cleanResponse.replace(/\[CORRECT\]/gi, '').trim();
-                    cleanResponse = cleanResponse.replace(/\[INCORRECTO\]/gi, '').trim();
-                    cleanResponse = cleanResponse.replace(/\[INCORRECT\]/gi, '').trim();
+                    cleanResponse = cleanResponse.replace(/\[CORRECTO\]/gi, '');
+                    cleanResponse = cleanResponse.replace(/\[CORRECTE\]/gi, '');
+                    cleanResponse = cleanResponse.replace(/\[CORRECT\]/gi, '');
+                    cleanResponse = cleanResponse.replace(/\[INCORRECTO\]/gi, '');
+                    cleanResponse = cleanResponse.replace(/\[INCORRECTE\]/gi, '');
+                    cleanResponse = cleanResponse.replace(/\[INCORRECT\]/gi, '');
+                    cleanResponse = cleanResponse.trim();
 
                     // No stripping buttons anymore, we allow duplication but handle it in addMessage
 
                     // Stop buttons from separating from the question text
-                    cleanResponse = cleanResponse.replace(/\n\n+(?=\s*\[BOTON:)/gi, '\n');
-
-                    const blocks = cleanResponse.split('\n\n').filter(b => b.trim() !== '');
+                    cleanResponse = cleanResponse.replace(/\n+(?=\s*\[BOTON:)/gi, ' ');
 
                     // Wait 300ms so the user can process the UI feedback (red/green) and star animation before text arrives
                     setTimeout(() => {
                         removeMessage(loadingId);
                         playAudioForResponse(cleanResponse);
 
-                        // Add elements immediately without stagger
-                        blocks.forEach((block, index) => {
-                            setTimeout(() => {
-                                const parsedResponse = marked.parse(block);
-                                addMessage(parsedResponse, 'assistant', true, false, true);
-                            }, 0);
+                        const segments = cleanResponse.split('---').map(s => s.trim()).filter(s => s !== '');
+                        segments.forEach(segment => {
+                            const parsedResponse = marked.parse(segment);
+                            addMessage(parsedResponse, 'assistant', true, false, true);
                         });
                     }, 300);
                 }
@@ -849,7 +1170,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     : "Algo fue mal con la conexión.";
                 addMessage(connError, 'assistant');
             });
-    });
+        }); // end addEventListener
+    } // end guard if
 
     // Function to play the magical star animation
     function playSuccessAnimation() {

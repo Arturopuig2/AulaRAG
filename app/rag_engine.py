@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -7,6 +8,8 @@ import random as _random
 from .database import SessionLocal
 from . import models
 from sqlalchemy import func
+from typing import Optional, List
+from datetime import datetime, timezone
 
 # Load variables from .env file
 load_dotenv()
@@ -16,53 +19,117 @@ API_KEY = os.environ.get("GEMINI_API_KEY", "")
 # Initialize the new google-genai client
 client = genai.Client(api_key=API_KEY) if API_KEY else None
 
-# Model to use - gemini-2.5-flash is fast and capable, with a big context window
+# Model to use - gemini-2.5-flash is the most current model in your account list
 MODEL_NAME = "gemini-2.5-flash"
 
-SYSTEM_INSTRUCTION = (
-    "Eres 'Aula', un profesor virtual paciente y claro diseñado para niños de Educación Primaria (6 a 12 años). "
-    "Tu objetivo principal es ayudar al alumno de forma pedagógica pero directa, sin rodeos innecesarios. "
-    "Sigue estas reglas:\n\n"
-    "1. TONO Y LENGUAJE: Usa un tono tranquilo, amable y directo. Usa un lenguaje sencillo. Trata al niño de tú. Apenas utilices emojis o caritas.\n"
-    "2. RESPUESTAS DIRIGIDAS: Sé claro y un poco más directo al contestar. Ayuda al alumno a llegar a la solución explicándole el concepto o los pasos, sin darle obligatoriamente el resultado final de sopetón en los deberes, pero dándole información concreta y clara desde el principio para que avance rápido.\n"
-    "3. CELEBRA SUS LOGROS: Si el alumno responde bien, confírmalo con un '¡Muy bien!' o 'Correcto', pero sin un entusiasmo excesivo ni frases muy largas.\n"
-    "4. USO DE LA INFORMACIÓN: Utiliza SIEMPRE la información de los adjuntos para formular explicaciones y ejercicios, PERO ACTÚA COMO SI FUESEN TUYOS. ESTÁ ESTRICTAMENTE PROHIBIDO mencionar o hacer referencia al material de origen. NUNCA digas frases como 'vamos a hacer un ejercicio de tu libro', 'según el PDF', 'en la página X' o 'el ejercicio 4 nos pide'. REGLA SUPREMA: Tienes terminantemente prohibido mencionar números de página bajo cualquier circunstancia. Si el alumno escribe un número, nunca supongas que es una página.\n"
-    "5. FORMATO AMIGABLE: Sé muy conciso. Usa párrafos cortos (máximo 2 o 3 líneas) y negritas para destacar palabras importantes. En tu primera respuesta a una nueva pregunta, utiliza un máximo de 60 palabras de forma muy directa y al grano.\n"
-    "6. ROL: Eres un profesor virtual; si el alumno pregunta cosas fuera del entorno escolar, reconduce la conversación hacia los estudios de forma neutral.\n"
-    "7. RUTINA DE 3 EJERCICIOS Y BOTONES: El 100% de tus ejercicios prácticos deben ser de hacer clic en un botón. ESTÁ TERMINANTEMENTE PROHIBIDO pedir al alumno que escriba. OBLIGATORIO: Cuando el usuario pida repasar un tema, harás una serie de EXACTAMENTE 3 ejercicios seguidos, UNO A UNO. Para no perder la cuenta, DEBES enumerar cada pregunta explícitamente como 'Ejercicio 1/3', 'Ejercicio 2/3' y 'Ejercicio 3/3'. Haces el 1, recibes respuesta; corriges el 1 y presentas el 2; recibes respuesta; corriges el 2 y presentas el 3. SÓLO cuando el alumno responda al Ejercicio 3/3, le dirás que ha terminado la serie de 3 y preguntarás si quiere hacer 3 más. ESTÁ PROHIBIDO preguntar si quiere continuar antes de que el alumno haya respondido a la tercera pregunta real.\n"
-    "8. OBLIGATORIEDAD DE BOTONES EN TODO EJERCICIO: Incluso si el ejercicio es de completar letras o elegir entre dos opciones (ej: Ü vs U), ES OBLIGATORIO incluir los botones [BOTON: U] y [BOTON: Ü]. NUNCA envíes un enunciado solo con el hueco vacío sin ofrecer los botones de respuesta inmediatamente debajo."
+def clean_ai_text(text: str) -> str:
+    """Removes segments that only contain punctuation or artifacts like '¡!'."""
+    if not text:
+        return text
+    
+    # Remove specific nonsensical combinations (junk artifacts)
+    text = re.sub(r'¡!', '', text)
+    text = re.sub(r'!¡', '', text)
+    text = re.sub(r'¿\?', '', text)
+    text = re.sub(r'\?¿', '', text)
 
-    "9. VALIDACIÓN DE PREGUNTAS: Antes de enviar un ejercicio tipo test de varias opciones, ASEGÚRATE AL 100% de que una (y solo una) de las opciones sea verdaderamente correcta, y que el resto de opciones sean TOTALMENTE INCORRECTAS de forma inequívoca. Nunca le des dos posibles respuestas correctas a un niño. NUNCA le des opciones donde todas sean falsas o donde la premisa de la pregunta sea engañosa (por ejemplo, nunca le preguntes '¿Cuál no es un polígono?' ofreciendo solo figuras que sí son polígonos). REGLA CRÍTICA: JAMÁS generes dos botones o opciones que tengan EXACTAMENTE el mismo texto (por ejemplo, nunca hagas [Cohet] y [Cohet]). Todas las opciones deben ser textual y visualmente distintas. PROHIBIDO generar ejercicios de completar letras si no incluyes exactamente la letra correcta que falta dentro de uno de los botones.\n"
-    "10. ORTOGRAFÍA IMPECABLE: Tienes terminantemente prohibido cometer o inventar faltas de ortografía (por ejemplo, escribir 'berenjena' con v, o 'hacer' sin h). Si creas un ejercicio donde el niño deba identificar la forma correcta de escribir una palabra, la opción correcta debe cumplir estrictamente las normas ortográficas de la RAE. ADEMÁS: Si explicas qué es la **diéresis**, debes decir EXACTAMENTE que son dos puntitos que se ponen sobre la 'u' ÚNICAMENTE en las sílabas 'güe' y 'güi' para que la 'u' suene. Tienes absolutamente prohibido decir que se pone 'sobre todo' o 'generalmente' antes de 'e' o 'i'. Es una regla estricta e invariable.\n"
-    "11. *** REGLAS VITALES DE EVALUACIÓN VISUAL ***:\n"
-    "   - Si el alumno ACIERTA un ejercicio, responde bien a tu pregunta, o elige el botón correcto, TIENES QUE INCLUIR OBLIGATORIAMENTE el texto exacto [CORRECTO] al principio de tu respuesta. Una vez acierte, felicítale y PASA al siguiente ejercicio de la rutina (o pregunta si quiere más si era el tercero).\n"
-    "   - Si el alumno FALLA el ejercicio, se equivoca, o elige un botón erróneo, ES ABSOLUTAMENTE OBLIGATORIO Y CRÍTICO que incluyas el texto exacto [INCORRECTO] al principio de tu respuesta. Si no escribes [INCORRECTO], el sistema fallará. Además de escribir [INCORRECTO], NO pases a otra pregunta ni le preguntes si quiere hacer otro ejercicio. Dale una pista de por qué ha fallado y dile que lo vuelva a intentar hasta que acierte. REGLA SUPREMA: Para facilitar el re-intento, DEBES VOLVER A INCLUIR los botones ([BOTON: Opción]) y el enunciado del ejercicio en tu mensaje de corrección. El alumno necesita ver las opciones siempre cerca de tu pista.\n"
-    "   - EXCEPCIÓN MUY IMPORTANTE: Cuando el alumno pulse los botones [Sí] o [No] para decidir si quiere otro ejercicio, NO escribas ni [CORRECTO] ni [INCORRECTO], ya que no es un ejercicio académico.\n"
-    "12. REGLA PARA EJERCICIOS DE ORTOGRAFÍA: Cuando hagas ejercicios de ortografía (por ejemplo, uso de la H, B/V, acentuación, diéresis), NUNCA preguntes '¿Qué palabra no lleva X?' dando como opciones palabras que están TODAS bien escritas. EN SU LUGAR, debes plantear el ejercicio de una de estas dos formas:\n"
-    "   - A) Completar el hueco: 'H__bit' -> Opciones: [Hà] y [À]. REGLA CRÍTICA DE LOS HUECOS: El hueco (___) DEBE estar situado EXACTAMENTE en la posición de la letra o sílaba que el alumno debe adivinar. ESTÁ TERMINANTEMENTE PROHIBIDO poner el hueco en otras letras que no vienen al caso. Por ejemplo, si estás evaluando la diéresis en la palabra 'pingüí', el ejercicio correcto es 'ping__í' -> Opciones: [ü] y [u]. NUNCA debes poner 'p__ngüí' dejando a la vista la propia letra que quieres evaluar. IMPORTANTE 2: Si la palabra correcta NO lleva la letra por la que preguntas (por ejemplo, '___armonia' no lleva H), la correcta es 'armonia'. NUNCA des como opciones [H] y [A]. La opción correcta debe ser expresamente la palabra 'Nada' (o 'Cap' en Valencià) o el símbolo [-]. Ejemplo: '___armonia' -> Opciones: [H] y [Nada] (o [Cap]).\n"
-    "   - B) Identificar la palabra correcta entre una bien escrita y una mal escrita: 'Hàbit' vs 'Àbit' -> Opciones: [Hàbit] y [Àbit].\n"
-    "13. REGLA DE PROBABILIDAD (LENGUAJE DEL AZAR): Cuando generes ejercicios sobre probabilidad ('nunca', 'a veces', 'siempre', o 'seguro', 'posible', 'imposible'), TIENES ESTRICTAMENTE PROHIBIDO usar ejemplos ambiguos ligados a la ciencia, la naturaleza o la vida real (como hervir agua, el clima o comportamientos de animales). DEBES usar SIMPRE ejemplos matemáticamente puros e innegables: lanzar dados, sacar cartas de una baraja, o sacar bolas de colores de una urna (bolsas opacas).\n"
-    "14. CONCORDANCIA GRAMATICAL EN EXPLICACIONES: Cuando expliques el uso de UNA SOLA palabra, expresión o estructura gramatical (por ejemplo 'too much', 'never', 'el acento', 'la diéresis', un prefijo, un sufijo...), el verbo en español debe ir en SINGULAR. Di 'se usa', 'se escribe', 'se pone', 'se aplica' — NUNCA 'se usan', 'se escriben', 'se ponen' para referirte a un único elemento lingüístico.\n"
-    "16. IDIOMA DE LOS ENUNCIADOS EN INGLÉS: Cuando la asignatura sea Inglés, las frases de los ejercicios prácticos (las frases a completar, identificar o traducir) DEBEN estar escritas en INGLÉS. Las explicaciones, correcciones y animaciones pueden seguir en español, pero el enunciado del ejercicio tiene que ser en inglés. EJEMPLO CORRECTO: 'There is ___ salt in the soup.' [BOTON: too much] [BOTON: too many]. EJEMPLO INCORRECTO: 'Hay ___ sal en la sopa.' [BOTON: too much] [BOTON: too many].\n"
-    "17. CONTINUIDAD TRAS LOS EJERCICIOS: Cuando el alumno pulse [No] después de completar los 3 ejercicios, NO dejes la conversación en blanco. DEBES: (1) Hacer un breve resumen de lo practicado. (2) Preguntar simplemente: '¿Qué te gustaría repasar ahora?' o '¿Quieres elegir otro tema del menú?'. TIENES PROHIBIDO proponer tú un tema nuevo o un concepto diferente por tu cuenta. Deja que sea el alumno quien decida el siguiente paso.\n"
-    "15. *** REGLA CRÍTICA DE COHERENCIA DE TEMA ***: SE PROHÍBE TERMINANTEMENTE cambiar de tema o de concepto sin que el alumno lo pida explícitamente. (1) Identifica el ÚLTIMO concepto que explicaste en esta conversación — ese es el tema de los ejercicios. (2) Los 3 ejercicios de la rutina deben ser TODOS sobre ese mismo concepto, EXCLUSIVAMENTE. (3) Si el alumno responde a un ejercicio, TU ÚNICA MISIÓN es corregirlo y pasar al siguiente punto de ESE MISMO TEMA. Tienes prohibido usar cualquier palabra o número del alumno para saltar a un tema diferente del PDF que no sea el actual.\n"
-    "18. FORMATO DE INTRODUCCIÓN A UN TEMA NUEVO: Cuando el alumno te diga 'Quiero repasar [Bloque]: [Contenido]' o similar (es decir, cuando empieza un tema nuevo del temario), DEBES estructurar tu primera respuesta SIEMPRE así: (1) NUNCA digas 'Hola' ni saludes, ya que el alumno ya ha sido saludado por el sistema. Empieza directamente con entusiasmo confirmando lo que vais a repasar (ej: '¡Genial! Vamos a repasar...'). (2) Una brevísima explicación (1-2 frases máximo) de lo que el alumno va a aprender. (3) OMITIR OBLIGATORIAMENTE cualquier pregunta tipo '¿Estás listo?'. ESTÁ PROHIBIDO enviar la explicación sola sin el ejercicio. DEBES encadenar inmediatamente, en ese mismo mensaje, la explicación e INMEDIATAMENTE el primer ejercicio tipo test.\n"
-    "19. EJERCICIOS DE COMPLETAR PALABRAS: Cuando hagas un ejercicio de adivinar o completar letras faltantes en una palabra (por ejemplo, 'WH_T' para 'WHITE'), los botones de respuesta DEBEN contener ÚNICAMENTE las letras o sílabas que faltan en los huecos exactos marcados por los guiones bajos. ESTÁ TOTALMENTE PROHIBIDO crear botones que incluyan letras que ya están escritas en el enunciado. EJEMPLO CORRECTO para 'WH_T': [BOTON: I] [BOTON: A]. EJEMPLO INCORRECTO: [BOTON: ITE] [BOTON: ET].\n"
-    "20. REGLA PARA PROBLEMAS DE MATEMÁTICAS: Cuando el tema sea resolver 'Problemas' de Matemáticas, DEBES seguir estrictamente este orden: (1) Siempre empieza presentando el problema y preguntando PRIMERO por la operación. El enunciado DEBE terminar con: '¿Qué operación harías?' ofreciendo botones como [BOTON: Suma], [BOTON: Resta], etc. (2) Una vez el alumno acierte la operación, en tu siguiente turno, le pides el resultado numérico final. Asegúrate de que el alumno identifique la operación CORRECTA antes de dejarle calcular el número.\n"
-    "21. COHERENCIA LÓGICA Y VERIFICACIÓN: ESTÁ ESTRICTAMENTE PROHIBIDO contradecirte a ti mismo. Antes de corregir, detente y deletrea la palabra mentalmente. 'SWIMSUIT' se escribe con UNA sola 'm'. Si el alumno elige la opción correcta, NUNCA digas que está mal. Debes asegurar que tu corrección sea 100% fiel a la gramática y ortografía reales. El error de decir que una palabra 'no lleva una sola m' cuando sí la lleva es inaceptable. REGLA SUPREMA: Verifica la respuesta del alumno contra la realidad ortográfica antes de emitir un veredicto [CORRECTO] o [INCORRECTO].\n"
-    "22. USO DE LÁMINAS EN MATEMÁTICAS: Si recibes como contexto un documento llamado 'LAMINAS.pdf' en la asignatura de Matemáticas, utilízalo ÚNICAMENTE como material complementario si los contenidos y ejercicios visuales u operacionales de esas láminas coinciden EXACTAMENTE con el apartado del temario que el alumno ha pedido repasar. Si LAMINAS no coincide con el tema principal, ignóralo por completo y céntrate en la teoría.\n"
-    "24. TRANSICIONES OBLIGATORIAS: ESTÁ TERMINANTEMENTE PROHIBIDO terminar tus explicaciones teóricas con preguntas de transición como '¿Estás listo?', '¿Empezamos?', '¿Qué te parece?' o '¿Hacemos un ejercicio?'. NUNCA pidas confirmación para empezar a practicar. Cuando termines de dar una explicación teórica, DEBES presentar INMEDIATAMENTE y EN EL MISMO MENSAJE el primer ejercicio práctico con sus respectivos botones de respuesta [BOTON: X].\n"
-    "25. OBLIGATORIEDAD DE DIBUJAR LO QUE PREGUNTAS: Si en cualquier momento haces una pregunta que hace referencia a una imagen, figura o dibujo (por ejemplo, diciendo 'la figura de arriba', 'esta forma', 'el dibujo'), ESTÁS ABSOLUTAMENTE OBLIGADO a generar el código de ese dibujo (usando <svg> para Geometría) justo antes o junto a la pregunta. NUNCA hagas una pregunta sobre una figura matemática si no la has dibujado físicamente en ese mismo mensaje.\n"
-    "26. APLICACIÓN ESTRICTA DEL SENTIDO COMÚN AL EVALUAR: Antes de evaluar la respuesta de un alumno y decidir si escribes [CORRECTO] o [INCORRECTO], TIENES LA ABSOLUTA OBLIGACIÓN de contrastar la respuesta del botón que ha pulsado con el sentido común y la realidad física y matemática del mundo. ESTÁ TERMINANTEMENTE PROHIBIDO marcar como incorrecta (con [INCORRECTO]) una respuesta que es objetivamente y fácticamente cierta en el mundo real. REVISA con cuidado preguntas tipo '¿Cuál de estas palabras necesita diéresis?' para no equivocarte al validar si el alumno ha elegido la correcta.\n"
-    "27. CONTINUIDAD Y BOTONES EN EJERCICIOS: Cuando el alumno acierte ([CORRECTO]) y pases al siguiente ejercicio, DEBES incluir el nuevo enunciado y sus correspondientes botones en el MISMO mensaje. EJEMPLO: '[CORRECTO] ¡Molt bé! Ara, completa: Ai__ada [BOTON: U] [BOTON: Ü]'. Nunca envíes un ejercicio solo con texto si existe una opción lógica para ofrecer botones clicables.\n"
-    "28. PROHIBICIÓN ABSOLUTA DE INVENTAR PREGUNTAS: Cuando actúes como profesor y generes un ejercicio o pregunta para el alumno, TIENES ESTRICTAMENTE PROHIBIDO inventarlo de la nada o usar tu conocimiento general. ESTÁS OBLIGADO a extraer CADA PREGUNTA, CADA ENUNCIADO y CADA OPCIÓN única y exclusivamente del contenido de los documentos PDF proporcionados en tu contexto. Si no encuentras ejemplos suficientes en el PDF para el tema solicitado o el niño te pide más y se han acabado las del PDF, explícalo diciendo algo como '¡Ya hemos practicado todos los ejemplos del temario!', pero NUNCA BAJO NINGÚN CONCEPTO inventes una palabra o pregunta que no esté respaldada por el material.\n"
-    "29. HERRAMIENTA 'get_db_question': Tienes acceso a una base de datos de preguntas verificadas. ÚSALA SIEMPRE que quieras poner un reto oficial al alumno, especialmente si es de Geometría o si quieres asegurar que la pregunta sea 100% correcta. No abuses de ella, úsala con criterio pedagógico cuando consideres que el alumno está listo para un reto real.\n"
-    "30. ETIQUETADO DE PREGUNTAS DB: SIEMPRE que uses una pregunta obtenida mediante 'get_db_question', debes incluir al final de tu mensaje (de forma invisible para el usuario si es posible, o simplemente al final) la etiqueta exacta [DB_ID: número], donde 'número' es el ID que te devuelve la herramienta. Esto es VITAL para que el sistema valide la respuesta correctamente.\n"
-    "31. ADAPTIVE LEARNING: El sistema te proporcionará estadísticas sobre qué temas domina el niño y en cuáles falla. Usa esta información de forma discreta para proponer repasos de sus puntos débiles. Por ejemplo: 'Veo que las tildes a veces se nos escapan, ¿qué tal si practicamos un poco con ellas?'.\n"
-    "32. GESTIÓN DE OPCIONES [OPCION_ELEGIDA]: Cuando el alumno pulsa un botón, recibirás el mensaje con el prefijo '[OPCION_ELEGIDA]: valor'. Debes tratarlo SIEMPRE como la respuesta a tu ejercicio anterior. TIENES PROHIBIDO interpretar un número en este prefijo como un número de página o un cambio de tema. Si el alumno elige '46', comprueba si es la solución al problema de matemáticas que pusiste; NUNCA digas 'Veo que quieres repasar la página 46'. Céntrate en corregir basándote en el contexto de la conversación. REGLA DE ORO: No existen las páginas en tu mundo, solo temas y ejercicios.\n"
-    "33. PRECISIÓN GRAMATICAL: Debes ser extremadamente cuidadoso con la concordancia de número y género. Si el sujeto es plural (ej: 'los 6 números'), el verbo DEBE ir en plural (ej: 'pueden salir'). Evita errores como 'los números que puede salir'. Revisa mentalmente la gramática antes de responder para asegurar una calidad docente impecable.\n"
-    "34. BLOQUEO DE DERIVA TEMÁTICA: Tienes terminantemente prohibido saltar de un bloque de contenido a otro por asociación de palabras o proponer temas nuevos unilateralmente. Si el alumno está repasando 'Probabilidad', mantente en ese bloque. NO digas 'Ahora podemos ver X' si X es un contenido distinto. Tu misión es ser un tutor reactivo al tema elegido, no un guía que cambia de lección sin permiso."
-)
+    # Collapse repeating symbols (¡¡ -> ¡, !! -> !, etc.)
+    text = re.sub(r'¡{2,}', '¡', text)
+    text = re.sub(r'!{2,}', '!', text)
+    text = re.sub(r'¿{2,}', '¿', text)
+    text = re.sub(r'\?{2,}', '?', text)
+
+    # Remove junk like "! !" or "¡ !" while keeping symbols but no extra spaces between them
+    text = re.sub(r'([¡!¿?])\s+([¡!¿?])', r'\1\2', text)
+
+    # REGLA DE ORO DE ESPACIADO: Forzar espacio después de puntuación si no lo hay (ej: "?Sacar" -> "? Sacar")
+    text = re.sub(r'([.!?,;:])([a-zA-ZáéíóúÁÉÍÓÚñÑ0-9¿¡])', r'\1 \2', text)
+    text = re.sub(r'([!?])([a-zA-ZáéíóúÁÉÍÓÚñÑ0-9¿¡])', r'\1 \2', text)
+
+    # REGLA DE FORMATO: Convertir "texto" o 'texto' en **texto** (negrita) automáticamente
+    text = re.sub(r'"([^"]+)"', r'**\1**', text)
+    text = re.sub(r"(?<![a-zA-ZáéíóúÁÉÍÓÚñÑ])'([^']+)'(?![a-zA-ZáéíóúÁÉÍÓÚñÑ])", r"**\1**", text)
+
+    # --- FILTRO ANTI-PENSAMIENTO INTERNO ---
+    meta_patterns = [
+        r'El modelo no pudo encontrar[^.]+\.',
+        r'Debo crear una pregunta[^.]+\.',
+        r'Voy a generar[^.]+\.',
+        r'No hay preguntas verificadas[^.]+\.',
+        r'Será el Ejercicio \d+/\d+\.',
+        r'PROHIBICIÓN ESTRUCTURAL ABSOLUTA\.?',
+        r'Usa negrita \*\* \*\*\.?',
+        r'NUNCA uses? comillas\.?',
+        r'Obligatorio usar \[[^\]]+\]\.?',
+        r'Solo UN ejercicio por turno\.?',
+        r'No menciones reglas\.?',
+        r'I need to generate[^.]+\.',
+        r'Generating exercise[^.]+\.',
+        r'The student correctly[^.]+\.',
+        r'Paso \d+: Operación\.?',
+        r'Options:?'
+    ]
+    for p in meta_patterns:
+        text = re.sub(p, '', text, flags=re.IGNORECASE)
+
+    # Clean up double spaces or triple newlines left by pruning
+    text = re.sub(r' +', ' ', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    text = text.lstrip(" !.,\n")
+
+    # REGLA NEUTRA AUTOMÁTICA
+    replacements = {
+        r'\b[Cc]ampe[óo]n\b': 'genial',
+        r'\b[Cc]ampeona\b': 'genial',
+        r'\b[Ll]isto\b': 'brillante',
+        r'\b[Ll]ista\b': 'brillante',
+        r'\b[Nn]i[ñn]o\b': 'estudiante',
+        r'\b[Nn]i[ñn]a\b': 'estudiante'
+    }
+    for pattern, substitution in replacements.items():
+        text = re.sub(pattern, substitution, text)
+    
+    segments = text.split('---')
+    cleaned_segments = []
+    for seg in segments:
+        s = seg.strip()
+        if not s or not re.search(r'[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]', s):
+            continue
+        cleaned_segments.append(s)
+    
+    return '---'.join(cleaned_segments).strip()
+
+FEW_SHOT_EXAMPLES = """
+### EJEMPLOS DE ESTILO (AULA) ###
+
+1. INICIO DE REPASO:
+   USUARIO: "Quiero repasar los sustantivos."
+   TUTOR: "¡Genial! Los sustantivos son las palabras que usamos para nombrar todo lo que nos rodea: personas, animales, objetos o lugares. Por ejemplo: **casa**, **león**, o **Sofía**. --- Ejercicio 1/3: ¿Cuál de estas palabras es un sustantivo? [BOTON: Correr] [BOTON: Azul] [BOTON: Gato]"
+
+2. CORRECCIÓN POSITIVA:
+   USUARIO: "Resta" (en un problema de suma)
+   TUTOR: "[INCORRECTO] ¡Casi! Fíjate bien: si queremos saber cuánto tenemos en **total** al juntar dos cosas, lo que hacemos es **sumar**. ¡Inténtalo de nuevo! ¿Qué operación usas para juntar?"
+"""
+
+SYSTEM_INSTRUCTION = f"""
+Eres 'Aula', un tutor experto de primaria. Tu misión es ayudar a niños de 6 a 12 años ÚNICAMENTE con los contenidos verificados de la base de datos.
+
+### EL MANDATO SUPREMO (PROHIBIDO INVENTAR):
+1. **ENTORNO CERRADO**: Tienes terminantemente prohibido usar tus conocimientos generales de IA para inventar ejercicios o explicaciones. 
+2. **SOLO BASE DE DATOS**: Extrae preguntas y explicaciones ÚNICAMENTE de la base de datos y los archivos que se te proporcionan en el DASHBOARD.
+3. **BLOQUEO DE CONTENIDO**: Si en el Dashboard dice "NO hay preguntas verificadas", NO puedes poner ningún ejercicio. Limítate a dar una explicación teórica basada en la 'FUENTE DE VERDAD' proporcionada y termina la conversación ahí para ese tema. 
+4. **PROHIBIDO INTERNET**: No busques en internet ni asumas datos externos.
+
+### REGLAS DE TRABAJO:
+- **IDENTIFICADORES [ID: código]**: Es OBLIGATORIO incluir el código de la pregunta al final de cada enunciado extraído de la base de datos.
+- **FORMATO DE BOTONES**: Cada ejercicio debe tener botones: [BOTON: Texto].
+- **RESPUESTA_CORRECTA**: Incluye [RESPUESTA_CORRECTA: texto] al final de cada ejercicio para evaluación interna.
+- **SERIES DE 3**: Trabaja en grupos de 3 ejercicios. Tras el 3/3, pregunta: '¿Quieres seguir?'.
+- **NEGRILLA**: Usa **negrita** para conceptos clave.
+- **TONO**: Sé paciente y motivador, pero neutro (no uses 'campeón' o 'niño').
+
+{FEW_SHOT_EXAMPLES}
+"""
 
 # Per-subject chat history (preserved when switching subjects)
 chat_histories: dict[str, list] = {}  # subject -> list of Content messages
@@ -72,6 +139,37 @@ existing_files_cache = {}  # display_name -> genai File object
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 CACHE_FILE = os.path.join(DATA_DIR, "gemini_file_cache.json")
+CONTEXT_DIR = os.path.join(BASE_DIR, "context")
+
+
+def load_context_rules(subject: str = None) -> str:
+    """Lee reglas_generales.txt y reglas_{subject}.txt de la carpeta context/.
+    Ignora líneas vacías y comentarios (empiezan por #).
+    Devuelve el bloque de reglas formateado, o cadena vacía si no hay nada."""
+    rules_parts = []
+
+    def _read_rules(path: str, label: str):
+        if not os.path.exists(path):
+            return
+        with open(path, "r", encoding="utf-8") as f:
+            lines = [
+                line.strip() for line in f
+                if line.strip() and not line.strip().startswith("#")
+            ]
+        if lines:
+            rules_parts.append(f"[{label}]\n" + "\n".join(lines))
+
+    _read_rules(os.path.join(CONTEXT_DIR, "reglas_generales.txt"), "REGLAS GENERALES")
+    if subject:
+        subject_file = f"reglas_{subject.lower()}.txt"
+        _read_rules(os.path.join(CONTEXT_DIR, subject_file), f"REGLAS DE {subject.upper()}")
+
+    if not rules_parts:
+        return ""
+
+    block = "\n\n".join(rules_parts)
+    print(f"[context] Reglas cargadas para subject='{subject}' ({len(block)} chars)")
+    return block
 
 
 def _load_persistent_cache() -> dict:
@@ -194,12 +292,14 @@ def get_pdf_parts_for_context(subject: str, course_level: str):
         expected_patterns.append(f"Aula_english_{grade_num_padded}.pdf")
         expected_patterns.append(f"Aula_english_{grade_num_padded}_Part1.pdf")
         expected_patterns.append(f"Aula_english_{grade_num_padded}_Part2.pdf")
+    elif subject.lower() == "competencia_lectora":
+        expected_patterns.append(f"CL_{grade_match}_corregido.pdf")
     else:
         expected_patterns.append(f"Aula_{subject.capitalize()}_{grade_num_padded}_INTERIOR.pdf")
         
     parts = []
     
-    # Check for text fallback first (more reliable for problematic files like English 03)
+    # Prioritize Text Content (Much faster processing + lower token usage)
     txt_filename = f"Aula_{subject.lower()}_{grade_num_padded}.txt"
     if subject.lower() == "ingles":
         txt_filename = f"Aula_english_{grade_num_padded}.txt"
@@ -210,10 +310,13 @@ def get_pdf_parts_for_context(subject: str, course_level: str):
             with open(txt_path, "r", encoding="utf-8") as f:
                 text_content = f.read()
                 parts.append(types.Part(text=f"CONTENIDO DEL LIBRO ({subject} {course_level}):\n{text_content}"))
+                # If we have the text, we return EARLY to avoid sending the heavy PDF too
+                print(f"[speed] Using TEXT context for {subject} {grade_num_padded} - Skipping PDF.")
+                return parts
         except Exception as e:
             print(f"Error reading text fallback for {txt_path}: {e}")
 
-    # Also look for PDF parts in Gemini cache
+    # Fallback to PDF only if no text exists
     for pattern in expected_patterns:
         display_name = f"{subject}_{pattern}"
         cached_file = existing_files_cache.get(display_name)
@@ -227,37 +330,119 @@ if client:
     load_pdf_files_as_parts()
 
 def get_db_question(subject: str, grade: int = None, bloque: str = None, contenido: str = None) -> str:
-    """Extrae una pregunta aleatoria de la base de datos de preguntas verificadas."""
+    """Extrae una pregunta aleatoria optimizada para bases de datos grandes."""
+    import unicodedata
+    import random as _random
+    from sqlalchemy import func
+
+    def normalize_text(text):
+        if not text: return ""
+        return "".join(c for c in unicodedata.normalize('NFD', str(text)) if unicodedata.category(c) != 'Mn').lower()
+
     db = SessionLocal()
     try:
-        q = db.query(models.Question).filter(func.lower(models.Question.subject) == subject.lower())
+        norm_subject = normalize_text(subject)
+        # Handle "mates" -> "matematicas" mapping
+        if "matem" in norm_subject: norm_subject = "matematicas"
+        
+        print(f"[DB_DEBUG] Consulta: sub={norm_subject}, grade={grade}, bloque={bloque}")
+        
+        # 1. SQL-level filtering for performance
+        query = db.query(models.Question).filter(
+            models.Question.is_active == True,
+            models.Question.is_verified == True,
+            func.lower(models.Question.subject).contains(norm_subject)
+        )
+        
         if grade:
-            q = q.filter((models.Question.grade == grade) | (models.Question.grade == None))
-        if bloque:
-            q = q.filter(func.lower(models.Question.bloque) == bloque.lower())
-        if contenido:
-            q = q.filter(func.lower(models.Question.contenido) == contenido.lower())
+            query = query.filter(models.Question.grade == int(grade))
+            
+        all_q = query.all()
+        
+        if not all_q:
+            print(f"[DB_DEBUG] CERO resultados SQL para {norm_subject} grado {grade}")
+            return json.dumps({"error": f"No hay ejercicios verificados para {subject} - curso {grade}"})
 
-        picked = q.order_by(func.random()).first()
-        if not picked:
-            return json.dumps({"error": "No hay preguntas verificadas disponibles para estos filtros."})
+        # 2. Python-level matching for Bloque/Contenido (Fuzzy)
+        final_pool = all_q
+        if bloque or contenido:
+            norm_bloque = normalize_text(bloque)
+            norm_cont = normalize_text(contenido)
+            
+            strict_pool = []
+            for q in all_q:
+                q_bloque = normalize_text(q.bloque or "")
+                q_cont = normalize_text(q.contenido or "")
+                
+                match_b = (not norm_bloque) or (norm_bloque in q_bloque)
+                match_c = (not norm_cont) or (norm_cont in q_cont)
+                
+                if match_b and match_c:
+                    strict_pool.append(q)
+            
+            if strict_pool:
+                final_pool = strict_pool
+            else:
+                print(f"[DB_DEBUG] Sin coincidencia de bloque. Usando pool de asignatura ({len(all_q)} items).")
+
+        picked = _random.choice(final_pool)
 
         return json.dumps({
             "id": picked.id,
+            "identifier": picked.identifier or "",
             "question": picked.question,
             "options": json.loads(picked.options),
-            "answer": picked.answer, # AI needs to know the answer to evaluate it later if needed
-            "subject": picked.subject,
-            "bloque": picked.bloque,
-            "contenido": picked.contenido
+            "answer": picked.answer,
+            "visual_url": picked.visual_url,
+            "audio_url": picked.audio_url
         }, ensure_ascii=False)
     finally:
         db.close()
 
-# Limit for chat history to prevent memory leaks
-MAX_HISTORY_LENGTH = 10
+def get_db_explanation(subject: str, grade: int = None, bloque: str = None, contenido: str = None) -> Optional[str]:
+    """Busca una explicación verificada en la base de datos de Aula con normalización."""
+    import unicodedata
+    def normalize_text(text):
+        if not text: return ""
+        return "".join(c for c in unicodedata.normalize('NFD', str(text)) if unicodedata.category(c) != 'Mn').lower()
 
-async def get_gemini_response(user_message: str, subject: str = "general", course_level: str = "", user_id: str = "default", reset_history: bool = False, mastery_stats: list = None) -> str:
+    db = SessionLocal()
+    try:
+        norm_subject = normalize_text(subject)
+        # Only verified explanations (Rule 1)
+        q = db.query(models.Explanation).filter(
+            func.lower(models.Explanation.subject) == norm_subject,
+            models.Explanation.is_active == True,
+            models.Explanation.is_verified == True
+        )
+        
+        if grade:
+            q = q.filter((models.Explanation.grade == grade) | (models.Explanation.grade == None))
+            
+        # Prioridad 1: Búsqueda por Contenido exacto (normalizado)
+        if contenido:
+            norm_cont = normalize_text(contenido)
+            q_cont = q.filter(func.lower(models.Explanation.contenido).contains(norm_cont))
+            exp = q_cont.order_by(models.Explanation.id.desc()).first()
+            if exp: return exp.text
+
+        # Prioridad 2: Búsqueda por Bloque (normalizado)
+        if bloque:
+            norm_bloque = normalize_text(bloque)
+            q_bloque = q.filter(func.lower(models.Explanation.bloque).contains(norm_bloque))
+            exp = q_bloque.order_by(models.Explanation.id.desc()).first()
+            if exp: return exp.text
+
+        # Prioridad 3: Búsqueda genérica por asignatura (normalizada)
+        exp = q.order_by(models.Explanation.id.desc()).first()
+        return exp.text if exp else None
+    finally:
+        db.close()
+
+# Limit for chat history to prevent slowness and context confusion
+MAX_HISTORY_LENGTH = 6 
+
+async def get_gemini_response(user_message: str, subject: str = "general", course_level: str = "", user_id: str = "default", reset_history: bool = False, mastery_stats: list = None, bloque: str = None, contenido: str = None, exercise_num: int = 0) -> str:
     """Sends a message to Gemini using the new SDK and returns the response."""
     if not client:
         return "⚠️ Error: API Key de Gemini no configurada. Por favor, revisa el archivo .env."
@@ -277,103 +462,250 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
 
         messages = list(subject_history)
         
+        if history_key not in chat_histories:
+            chat_histories[history_key] = []
+        
+        subject_history = chat_histories[history_key]
+        
+        # Prepare context parts
         current_parts = []
         
-        # Inject Mastery Stats if available
+        # Add a clear separator if there's history
         if mastery_stats:
-            stats_text = "ESTADÍSTICAS DE PROGRESO DEL ALUMNO (Úsalas para personalizar la tutoría):\n"
-            for s in mastery_stats:
-                # Only show relevant stats or the ones where they fail most
-                stats_text += f"- {s['subject']} ({s['bloque']}: {s['contenido']}): Aciertos {s['rate']}% de {s['attempts']} intentos.\n"
+            stats_text = "Mastery stats for the user: " + ", ".join([f"{s['contenido']} ({s['bloque']}): {s['rate']}%" for s in mastery_stats])
             current_parts.append(types.Part(text=stats_text))
 
         pdf_parts = get_pdf_parts_for_context(subject, course_level)
         if pdf_parts:
             for part in pdf_parts:
                 current_parts.append(part)
-            current_parts.append(types.Part(text=f"Este es el material de referencia de {course_level} de {subject}. Úsalo de forma invisible para basar tus explicaciones o inventar ejercicios nuevos sin mencionar que extraes de aquí la información."))
-        else:
-            current_parts.append(types.Part(text="Responde a la pregunta del alumno de forma general."))
+
+        # ── EXPLANATION SOURCE OF TRUTH (NEW ADAPTIVE LOGIC) ──
+        # If it's a review turn, search for verified theory in DB
+        db_explanation = None
+        if any(kw in user_message.lower() for kw in ["repasar", "repaso", "tema", "quien", "ayuda", "explicaci"]):
+            # Try to infer content from previous messages or user message
+            # Try to infer content: anything after "repasar", "tema de", etc.
+            contenido_inferido = ""
+            # Priority 1: After ":" or "tema de"
+            match = re.search(r'(?:repasar|tema de?|estudiar)[:\s]+([\w\s]{3,})', user_message.lower())
+            if match:
+                contenido_inferido = match.group(1).strip()
+            else:
+                # Priority 2: Generic "repasar X"
+                match = re.search(r'repasar\s+([\w\s]{3,})', user_message.lower())
+                if match:
+                    contenido_inferido = match.group(1).strip()
             
-        current_parts.append(types.Part(text=user_message))
+            print(f"[DEBUG] Inferido/Enviado: '{contenido if contenido else contenido_inferido}' for message: '{user_message}'")
+            db_explanation = get_db_explanation(subject, grade=None, bloque=bloque, contenido=contenido if contenido else contenido_inferido)
+            if db_explanation:
+                print(f"[DEBUG] Found DB Explanation for '{contenido_inferido}'")
+            else:
+                print(f"[DEBUG] No DB Explanation for '{contenido_inferido}'. Using PDF Fallback.")
+
+        # Final instruction reminder
+        current_parts.append(types.Part(text=(
+            "RECUERDA: (1) Si el alumno pide un tema nuevo o dice 'repasar' y ya has saludado antes, PROHIBIDO saludar de nuevo. DEBES EMPEZAR SIEMPRE CON LA Explicación:. "
+            "(2) DEBES USAR PALABRAS REALES. (3) PROHIBIDO mencionar temas, lecciones, páginas o actividades. "
+            "(4) AISLAMIENTO DE EJERCICIOS: Todo ejercicio debe ir precedido por '---'. La burbuja del ejercicio debe contener ÚNICAMENTE el enunciado y las opciones. PROHIBIDO incluir mensajes de ánimo, explicaciones, intros o despedidas en la misma burbuja que el ejercicio. "
+            "(5) ESTRUCTURA DE MENSAJE: Si das teoría y luego un ejercicio, el formato OBLIGATORIO es: [Texto de Explicación] \n---\n Ejercicio X/3: [Solo el enunciado]. "
+            "(6) NEUTRO: Prohibido decir 'campeón', 'listo' o 'niño'. Usa lenguaje neutro. "
+            "(7) DATA PREFERENCE: Prioriza SIEMPRE la base de datos. Si hay una 'CONTENIDO_VERIFICADO_A_USAR' en el DASHBOARD, es OBLIGATORIO usarla PALABRA POR PALABRA. PROHIBIDO inventar o parafrasear. "
+            "(8) IDENTIFICADOR: Si usas la 'Pregunta disponible', DEBES incluir al final del enunciado el código [ID: código] tal cual viene en los datos. "
+            "(9) PRECISIÓN: Verifica 2 veces antes de poner [INCORRECTO]. "
+            "(10) MANDATO SUPREMO: EMPIEZA SIEMPRE con Explicación: antes de cualquier ejercicio nuevo. El ejercicio va después del '---' solo. PROHIBIDO decidir cuántos ejercicios hay o si la tanda ha terminado: eso lo controla el sistema automáticamente."
+        )))
         
-        messages.append(types.Content(role="user", parts=current_parts))
+        # Combine user message with history
+        messages = list(subject_history)
+        
+        # Prepare Turn-Specific Instruction (Compact & Anti-Redundancy)
+        is_review = any(kw in user_message.lower() for kw in ["repasar", "repaso", "tema", "quien", "ayuda", "explicaci"])
+        is_continuation = any(kw in user_message.lower() for kw in ["si", "siguiente", "otro", "vale", "continu", "mas"])
+        is_evaluation = "[CORRECTO]" in user_message or "[INCORRECTO]" in user_message
+        
+        turn_instruction = ""
+        is_option_chosen = "[OPCION_ELEGIDA]" in user_message
+        if is_option_chosen and exercise_num > 0:
+            next_num = exercise_num + 1
+            if next_num <= 3:
+                turn_instruction = (
+                    f"\n[MANDATO] El alumno acaba de responder. Evalúa brevemente (máximo 2 frases). "
+                    f"Después, usa '---' y presenta EXACTAMENTE el Ejercicio {next_num}/3 con la Pregunta disponible. "
+                    f"PROHIBIDO usar otro número de ejercicio."
+                )
+            else:
+                # exercise_num == 3, this is evaluation of the last one — JS will add the 'Continue?' bubble
+                turn_instruction = (
+                    f"\n[MANDATO] El alumno acaba de responder al último ejercicio (3/3). "
+                    f"Evalúa brevemente (máximo 2 frases). PROHIBIDO añadir '¿Quieres seguir?' ni preguntas de continuidad: eso lo gestiona el sistema."
+                )
+        elif is_evaluation:
+             turn_instruction = "\n[MANDATO] Verifica con extremo cuidado (Regla 34). Empieza SIEMPRE con [CORRECTO] o [INCORRECTO]."
+        elif is_review:
+             # Initial review request: Full Theory
+             turn_instruction = "\n[MANDATO] Empieza OBLIGATORIAMENTE con la lección teórica detallada (Regla 2). Luego '---' y el primer ejercicio."
+             if db_explanation:
+                 turn_instruction += f"\nUSA ESTA TEORÍA VERIFICADA: {db_explanation}"
+        elif is_continuation:
+             # Continuous exercises: Short reminder only to avoid verbatim repetition
+             turn_instruction = "\n[MANDATO] NO repitas la misma explicación de antes palabra por palabra. Da un breve recordatorio o pista de máximo 2 frases. Luego '---' y el ejercicio."
+        
+        modified_user_message = f"{user_message}\n{turn_instruction}" if turn_instruction else user_message
+        
+        # Search for a relevant question in the DB proactively to avoid tool calling (2x speed)
+        prefetched_question = None
+        if subject != "general":
+            try:
+                # Extract numeric grade from string like "1" or "1º"
+                grade_val = None
+                if course_level:
+                    grade_match = re.search(r'\d+', str(course_level))
+                    if grade_match:
+                        grade_val = int(grade_match.group())
+                
+                print(f"[RAG_FLOW] Iniciando búsqueda de pregunta: sub={subject}, grade={grade_val}")
+                prefetched_raw = get_db_question(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+                prefetched_question = json.loads(prefetched_raw)
+                
+                # PREFETCH EXPLANATION - New seal of truth
+                db_explanation = get_db_explanation(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+            except Exception as e:
+                print(f"[RAG_ERROR] Fallo en prefetch de datos DB: {str(e)}")
+                db_explanation = None
+                pass
 
-        # Dynamically adjust the system instruction based on the subject
-        dynamic_instruction = SYSTEM_INSTRUCTION
-        if subject.lower() == "valenciano":
-            dynamic_instruction += "\n\n13. IDIOMA OBLIGATORIO (VALENCIÀ): El alumno está estudiando 'Valencià'. Por tanto, DEBES escribir TODA tu respuesta, incluyendo explicaciones, ánimos, correcciones y ejercicios única y exclusivamente en idioma Valenciano (Valencià). NUNCA uses Castellano en esta asignatura.\n"
-            dynamic_instruction += "14. REGLA DE LA DIÈRESI (VALENCIÀ): En Valencià, la dièresi se usa EXACTAMENTE para que suene la 'u' en los grupos GÜE, GÜI, QÜE y QÜI. Es fundamental explicar que sin los dos puntitos, en los grupos 'que', 'qui', 'gue' y 'gui' la 'u' es muda (como en 'paquet', 'quilo', 'guerra' o 'guitarra'). Por tanto, usamos la dièresi para que la 'u' se escuche (como en 'qüestió', 'aqüeducte' o 'pingüí'). Ten muchísimo cuidado: 'aqüeducte' SÍ LLEVA DIÉRESI, es un error gravísimo decir que no la lleva. Usa siempre 'paquet', 'quilo', 'guerra' o 'guitarra' como ejemplos de 'u' muda. Incluye siempre los 4 grupos y esta distinción cuando expliques la regla.\n"
-            dynamic_instruction += "15. TRADUCCIÓN DE BOTONES Y MENSAJES: Si en un ejercicio de ortografía necesitas usar la opción de 'ninguna letra' / 'nada', debes usar la palabra valenciana '[Cap]' en el botón, NUNCA '[Nada]'. IMPORTANTE: Cuando llegues al tercer ejercicio, la frase obligatoria debe traducirse exactamente a: 'Has completat 3 exercicis! Vols fer-ne 3 més?' ofreciendo los botones [BOTON: Sí] y [BOTON: No].\n"
+        # Generate model response (WITH AUTOMATIC RETRIES for 503 high demand or 403 file errors)
+        import asyncio
+        max_retries = 3
+        retry_delay = 2
+        response = None
+        
+        for attempt in range(max_retries):
+            # RE-PREPARE prompts and parts on every attempt to ensure file URIs are fresh if cache was cleared
+            current_parts = []
+            
+            # 1. Cargar Instrucciones Universales
+            dynamic_instruction = SYSTEM_INSTRUCTION
 
-        # Tools configuration
-        tools = [types.Tool(function_declarations=[
-            types.FunctionDeclaration(
-                name="get_db_question",
-                description="Busca una pregunta verificada en la base de datos de Aula.",
-                parameters={
-                    "type": "OBJECT",
-                    "properties": {
-                        "subject": {"type": "STRING", "description": "Asignatura (matematicas, lengua, ingles, valenciano)"},
-                        "grade": {"type": "INTEGER", "description": "Curso escolar (1-6)"},
-                        "bloque": {"type": "STRING", "description": "Bloque del temario (opcional)"},
-                        "contenido": {"type": "STRING", "description": "Contenido específico (opcional)"}
-                    },
-                    "required": ["subject"]
-                }
-            )
-        ])]
+            # 2. Cargar Agente Especialista
+            subject_rules = load_context_rules(subject)
+            if subject_rules:
+                dynamic_instruction += f"\n\n*** AGENTE ESPECIALISTA: {subject.upper()} ***\n{subject_rules}\n"
+            else:
+                dynamic_instruction += f"\n\n[AVISO] Eres un tutor de {subject}. Sigue las reglas generales de pedagogía."
 
-        response = client.models.generate_content(
-            model=MODEL_NAME,
-            contents=messages,
-            config=types.GenerateContentConfig(
-                system_instruction=dynamic_instruction,
-                tools=tools
-            )
-        )
+            # 3. Inyectar Contexto de Clase (Oculto)
+            context_info = f"\n\n### DASHBOARD DEL TUTOR (DATOS REALES):\n- Asignatura: {subject}\n- Curso: {course_level if course_level else 'Primaria'}"
+            if mastery_stats:
+                context_info += f"\n- Debilidades del alumno: {json.dumps(mastery_stats, ensure_ascii=False)}"
+            
+            # --- CONTEXTO DEL LIBRO (PDF/Texto) ---
+            book_context = get_pdf_parts_for_context(subject, course_level)
+            current_parts.extend(book_context)
 
-        # Handle Function Calling
-        if response.candidates[0].content.parts:
-            for part in response.candidates[0].content.parts:
-                if part.function_call:
-                    call = part.function_call
-                    if call.name == "get_db_question":
-                        # Execute the tool
-                        q_json = get_db_question(**call.args)
-                        # Add tool response to history
-                        tool_msg = types.Content(role="user", parts=[
-                            types.Part(function_response=types.FunctionResponse(
-                                name="get_db_question",
-                                response=json.loads(q_json)
-                            ))
-                        ])
-                        messages.append(response.candidates[0].content)
-                        messages.append(tool_msg)
-                        
-                        # Generate final response based on tool output
-                        final_response = client.models.generate_content(
-                            model=MODEL_NAME,
-                            contents=messages,
-                            config=types.GenerateContentConfig(
-                                system_instruction=dynamic_instruction,
-                                tools=tools
-                            )
-                        )
-                        
-                        # Guardar en historial
-                        subject_history.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
-                        subject_history.append(final_response.candidates[0].content)
-                        return final_response.text
+            if prefetched_question and "question" in prefetched_question:
+                context_info += f"\n\n### [MANDATO_SUPREMO] CONTENIDO_VERIFICADO_A_USAR:\n"
+                context_info += f"ENUNCIADO: {prefetched_question['question']}\n"
+                context_info += f"OPCIONES: {json.dumps(prefetched_question['options'], ensure_ascii=False)}\n"
+                context_info += f"RESPUESTA_CORRECTA: {prefetched_question['answer']}\n"
+                context_info += f"IDENTIFICADOR: {prefetched_question.get('identifier', 'S/N')}\n"
+                context_info += "\n[INSTRUCCIÓN] Usa este enunciado EXACTAMENTE palabra por palabra. Este contenido está VERIFICADO por un administrador y es OBLIGATORIO usarlo."
+            else:
+                context_info += f"\n\n### [BLOQUEO_TOTAL_DE_GENERACIÓN]\n"
+                context_info += "ADVERTENCIA: No se han encontrado contenidos verificados para esta consulta.\n"
+                context_info += "MANDATO: Tienes TERMINANTEMENTE PROHIBIDO inventar un ejercicio. Solo puedes mostrar contenido marcado como 'Verificado' en la base de datos."
+            
+            dynamic_instruction += context_info
 
-        # Append to the subject-specific history to maintain per-subject context
+            # Turn-specific mandate
+            mandate_text = ""
+            if is_evaluation:
+                 mandate_text = "[MANDATO_CRÍTICO] VERIFICA con extremo cuidado (Regla 34). Empieza SIEMPRE con [CORRECTO] o [INCORRECTO]."
+            elif is_review:
+                 mandate_text = "[MANDATO_CRÍTICO] Empieza SIEMPRE con la lección teórica detallada. Luego '---' y el primer ejercicio."
+                 if db_explanation:
+                      mandate_text += f"\n\n[FUENTE_DE_VERDAD_TEÓRICA] Usa esta explicación EXACTAMENTE PALABRA POR PALABRA: {db_explanation}\nPROHIBIDO parafrasear, resumir, 'corregir' o cambiar el texto. Úsalo íntegro tal cual. NO añadas ni una sola palabra de tu propia cosecha."
+
+            if mandate_text:
+                 current_parts.append(types.Part(text=f"\n\n*** {mandate_text} ***"))
+            
+            current_parts.append(types.Part(text=modified_user_message))
+            
+            # Prepare final messages list
+            messages = list(subject_history)
+            messages.append(types.Content(role="user", parts=current_parts))
+
+            try:
+                response = await client.aio.models.generate_content(
+                    model=MODEL_NAME,
+                    contents=messages,
+                    config=types.GenerateContentConfig(
+                        system_instruction=dynamic_instruction,
+                        temperature=0.0
+                    )
+                )
+                break # Success!
+            except Exception as e:
+                err_str = str(e).upper()
+                is_file_error = "403" in err_str or "PERMISSION_DENIED" in err_str or "FILE" in err_str
+                is_transient = "503" in err_str or "UNAVAILABLE" in err_str or "429" in err_str
+                
+                if is_file_error and attempt < max_retries - 1:
+                    print(f"[RETRY] 403 File error detected. Clearing cache and re-uploading context...")
+                    if os.path.exists(CACHE_FILE):
+                        try: os.remove(CACHE_FILE)
+                        except: pass
+                    global existing_files_cache
+                    existing_files_cache = {}
+                    load_pdf_files_as_parts()
+                    # The next loop iteration will naturally pick up the new files via get_pdf_parts_for_context()
+                    await asyncio.sleep(1)
+                    continue
+                elif is_transient and attempt < max_retries - 1:
+                    print(f"[RETRY] Servidor saturado (503/429). Reintento {attempt + 1}/{max_retries}...")
+                    await asyncio.sleep(retry_delay)
+                    retry_delay *= 2 
+                    continue
+                else:
+                    raise e
+
+        response_text = ""
+        is_correct = False
+        if response.candidates and response.candidates[0].content.parts:
+            # Direct response (clean)
+            response_text = clean_ai_text(response.text)
+            # Only detect correctness when the user clicked an interactive button
+            # and look for the STRUCTURED TAG at the start of the raw response
+            is_button_evaluation = "[OPCION_ELEGIDA]" in user_message
+            if is_button_evaluation:
+                is_correct = bool(re.match(r'^\s*\[(?:CORRECTO|CORRECTE|CORRECT)\]', response.text, re.IGNORECASE))
+            else:
+                is_correct = False
+        else:
+            response_text = "⚠️ Lo siento, no he podido generar una respuesta."
+
+        # Final safety check: ensure "¿Quieres seguir?" is ALWAYS separated by ---
+        if "Ejercicio 3/3" in response_text and "¿Quieres seguir?" in response_text:
+            if "---" not in response_text:
+                response_text = response_text.replace("¿Quieres seguir?", "---\n¿Quieres seguir?")
+            elif response_text.find("---") > response_text.find("¿Quieres seguir?"):
+                response_text = response_text.replace("¿Quieres seguir?", "---\n¿Quieres seguir?")
+
+        # Keep history in subjects dictionary (Internal state)
         subject_history.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
-        subject_history.append(types.Content(role="model", parts=[types.Part(text=response.text)]))
+        subject_history.append(types.Content(role="model", parts=[types.Part(text=response_text)]))
 
-        return response.text
+        media_info = {
+            "visual_url": prefetched_question.get("visual_url") if prefetched_question else None,
+            "audio_url": prefetched_question.get("audio_url") if prefetched_question else None
+        }
+        
+        return response_text, is_correct, media_info
     except Exception as e:
         print(f"Gemini API Error: {e}")
-        return f"⚠️ Error de API: {e}"
+        return f"⚠️ Error de API: {e}", False, {}
 
 def upload_new_file_to_gemini(file_path: str, subject: str) -> bool:
     """Uploads a new PDF to Gemini and updates the cache."""

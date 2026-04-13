@@ -2160,7 +2160,7 @@
   {
     "question": "¿Qué signo usamos para hacer una pregunta?",
     "options": [
-      "¡!",
+      "",
       "¿?",
       "."
     ],
@@ -2174,10 +2174,10 @@
     "question": "¿Qué signo ponemos para expresar sorpresa o alegría?",
     "options": [
       "¿?",
-      "¡!",
+      "",
       ","
     ],
-    "answer": "¡!",
+    "answer": "",
     "contenido": "Los signos de interrogación y de exclamación",
     "subject": "lengua",
     "grade": 2,
@@ -7543,10 +7543,10 @@
     "question": "¿Qué signos de puntuación utilizarías para expresar alegría o sorpresa?",
     "options": [
       "Signos de interrogación (¿?)",
-      "Signos de exclamación (¡!)",
+      "Signos de exclamación ()",
       "Un punto y coma (;)"
     ],
-    "answer": "Signos de exclamación (¡!)",
+    "answer": "Signos de exclamación ()",
     "contenido": "Frases interrogativas y exclamativas",
     "subject": "lengua",
     "grade": 6,
@@ -7816,10 +7816,10 @@
     "question": "Si queremos expresar sorpresa o una pregunta, ¿qué signos utilizamos al final de la frase?",
     "options": [
       "a) Puntos suspensivos (...)",
-      "b) Signos de interrogación (¿?) o exclamación (¡!)",
+      "b) Signos de interrogación (¿?) o exclamación ()",
       "c) Punto y seguido (.)"
     ],
-    "answer": "b) Signos de interrogación (¿?) o exclamación (¡!)",
+    "answer": "b) Signos de interrogación (¿?) o exclamación ()",
     "contenido": "Signos de puntuación",
     "subject": "lengua",
     "grade": 6,

@@ -1,0 +1,28 @@
+[
+    {
+        "subject": "competencia_lectora",
+        "grade": 1,
+        "bloque": "Comprensión Literal",
+        "contenido": "Lectura 1: Ejemplo",
+        "question": "Según el texto, ¿de qué color era el perro Lucas?",
+        "options": [
+            "Marrón",
+            "Blanco",
+            "Negro"
+        ],
+        "answer": "Blanco"
+    },
+    {
+        "subject": "competencia_lectora",
+        "grade": 2,
+        "bloque": "Comprensión Inferencial",
+        "contenido": "Lectura 2: Ejemplo",
+        "question": "¿Por qué crees que Lucas estaba moviendo la cola?",
+        "options": [
+            "Porque estaba enfadado",
+            "Porque estaba contento",
+            "Porque tenía sueño"
+        ],
+        "answer": "Porque estaba contento"
+    }
+]

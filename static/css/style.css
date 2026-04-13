@@ -25,6 +25,19 @@
     --border-radius-xl: 32px;
 }
 
+.exercise-id {
+    display: inline-block;
+    font-size: 0.65rem;
+    background: #f1f5f9;
+    color: #94a3b8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-family: monospace;
+    vertical-align: middle;
+    border: 1px solid #e2e8f0;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -245,6 +258,50 @@ body {
     font-weight: 800;
     color: var(--color-blue);
     transition: color 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.subject-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.gamification-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-container {
+    width: 200px;
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-blue), #60a5fa);
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stars-counter {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 800;
+    color: #f59e0b;
+    font-size: 1.1rem;
+    background: #fef3c7;
+    padding: 2px 10px;
+    border-radius: 20px;
+    border: 1px solid #fcd34d;
+}
+
+.star-icon {
+    font-size: 1.2rem;
 }
 
 .audio-toggle-btn {
@@ -282,7 +339,7 @@ body {
 
 .message {
     display: flex;
-    max-width: 80%;
+    max-width: 95%;
 }
 
 .message.user {
@@ -296,7 +353,7 @@ body {
 .bubble {
     padding: 15px 20px;
     border-radius: var(--border-radius-lg);
-    font-size: 18px;
+    font-size: 26px;
     line-height: 1.5;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
@@ -325,12 +382,18 @@ body {
     font-weight: 800;
 }
 
+.explanation-label {
+    font-weight: 800;
+    font-size: 1.1em;
+    margin-right: 5px;
+}
+
 /* Interactive Minijuegos Buttons */
 .interactive-options {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 15px;
+    margin-top: 5px;
     justify-content: center;
 }
 
@@ -525,4 +588,59 @@ body {
         display: none;
         /* Only show icons on mobile */
     }
+}
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.stars-counter.pop {
+    animation: pop 0.3s ease-out;
+    background: #fde68a;
+}
+
+/* Media in Chat */
+.message-media {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+.chat-img {
+    display: block;
+    width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    cursor: zoom-in;
+    transition: transform 0.2s;
+}
+.chat-img:hover {
+    transform: scale(1.02);
+}
+.message-audio {
+    margin-bottom: 10px;
+}
+.chat-audio {
+    width: 100%;
+    height: 32px;
+}
+
+
+/* Style for illustrations in assistant messages */
+.message.assistant .message-media {
+    margin: 12px 0;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.message.assistant .chat-img {
+    display: block;
+    max-width: 100%;
+    max-height: 350px;
+    width: auto;
+    border-radius: 12px;
+    border: 1.5px solid #e2e8f0;
+    object-fit: contain;
 }

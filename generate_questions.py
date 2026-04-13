@@ -106,7 +106,7 @@ def generate_via_gemini(subject: str, grade: int | None, bloque: str | None, con
         if subject.lower() == "matematicas":
             local_pdf = os.path.join(source_dir, f"Aula_Matematicas_{grade_padded}_INTERIOR.pdf")
         elif subject.lower() == "lengua":
-            local_pdf = os.path.join(source_dir, f"Aula_Lengua_{grade_padded}.pdf") # Adjust if needed
+            local_pdf = os.path.join(source_dir, f"Aula_Lengua_{grade_padded}_INTERIOR.pdf")
         elif subject.lower() == "valenciano":
             local_pdf = os.path.join(source_dir, f"AULA_VALENCIANO_{grade}.pdf")
         elif subject.lower() == "ingles":
@@ -117,7 +117,7 @@ def generate_via_gemini(subject: str, grade: int | None, bloque: str | None, con
     # Helper to upload/re-upload
     def upload_file(path):
         print(f"Uploading {os.path.basename(path)} to Gemini...")
-        uploaded = client.files.upload(path=path)
+        uploaded = client.files.upload(file=path)
         # Update cache in memory/file if possible, but at least return uri
         cache_file = os.path.join(base_dir, "data", "gemini_file_cache.json")
         try:
@@ -174,6 +174,7 @@ INSTRUCCIONES MUY IMPORTANTES:
 4. JAMÁS incluyas opciones donde ninguna sea correcta, o donde varias lo sean.
 5. Responde ÚNICAMENTE con un JSON válido, sin ningún texto antes ni después.
 6. DEBES INCLUIR LA CLAVE 'contenido' EN CADA OBJETO JSON con el nombre exacto del contenido al que pertenece la pregunta.
+7. REGLA DE AUTO-VERIFICACIÓN (CRÍTICA): Antes de fijar la 'answer', busca en el texto adjunto la frase exacta que la confirma. Si no hay evidencia textual directa, NO generes la pregunta. La coherencia con el texto es vital (ej: si el texto dice 'mañana de primavera', la respuesta debe ser 'Primavera', nunca 'Verano').
 
 Formato de respuesta (array JSON):
 [
@@ -301,6 +302,38 @@ def import_via_api(questions: list[dict], base_url: str, token: str):
         print(f"❌ Error al importar: {response.status_code} — {response.text}")
 
 
+def generate_course(subject: str, grade: int, num_per_content: int):
+    """Iterate through the temario JSON and generate questions for all contents."""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    temario_path = os.path.join(base_dir, "data", "source_files", subject.lower(), f"temario_{subject.lower()}.json")
+    if not os.path.exists(temario_path):
+        print(f"❌ No se encontró el temario en: {temario_path}")
+        return []
+
+    with open(temario_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # Find the correct course
+    grade_str = f"{grade}º de primaria"
+    course_data = next((c for c in data["temario"] if c["curso"].lower() == grade_str.lower()), None)
+    if not course_data:
+        print(f"❌ No se encontró el curso {grade_str} en el temario.")
+        return []
+
+    all_questions = []
+    for bloque, contenidos in course_data["bloques"].items():
+        print(f"\n📦 Generando para Bloque: {bloque}...")
+        for contenido in contenidos:
+            print(f"  🔹 {contenido}...")
+            try:
+                qs = generate_via_gemini(subject, grade, bloque, contenido, num_per_content)
+                all_questions.extend(qs)
+            except Exception as e:
+                print(f"    ⚠️ Error en {contenido}: {e}")
+    
+    return all_questions
+
+
 def main():
     parser = argparse.ArgumentParser(description="AulaRAG Question Bank Generator")
     parser.add_argument("--subject",   help="Asignatura: lengua, matematicas, valenciano, ingles")
@@ -313,6 +346,7 @@ def main():
     parser.add_argument("--api-import",dest="api_import",  help="Importar vía la API REST del servidor")
     parser.add_argument("--url",       default="http://localhost:8000", help="URL del servidor")
     parser.add_argument("--token",     help="JWT token de administrador para importar vía API")
+    parser.add_argument("--bulk-course", type=int, help="Generar TODAS las preguntas de un curso completo (grado 1-6)")
 
     args = parser.parse_args()
 
@@ -332,6 +366,18 @@ def main():
         with open(args.api_import, encoding="utf-8") as f:
             questions = json.load(f)
         import_via_api(questions, args.url, args.token)
+        return
+
+    # --- Bulk Generation mode ---
+    if args.bulk_course:
+        if not args.subject:
+            print("ERROR: Necesitas --subject para usar --bulk-course")
+            sys.exit(1)
+        print(f"🚀 INICIANDO GENERACIÓN MASIVA: {args.subject} G{args.bulk_course}...")
+        questions = generate_course(args.subject, args.bulk_course, args.num)
+        # Import directly to DB if bulk generating
+        db_path = os.path.join(os.path.dirname(__file__), "data", "aula_rag.db")
+        import_to_db_direct(questions, db_path)
         return
 
     # --- Generation mode ---

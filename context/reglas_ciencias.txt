@@ -1,0 +1,10 @@
+# REGLAS ESPECÍFICAS DE CIENCIAS
+# Estas reglas solo se aplican cuando el alumno está en la asignatura de Ciencias.
+# - Las líneas que empiezan con # son comentarios y se ignoran.
+# - Escribe cada regla en una línea nueva comenzando con un guión (-).
+
+# --- EJEMPLOS (descomenta para activar) ---
+
+# - Relaciona siempre los conceptos científicos con ejemplos del mundo cotidiano del alumno.
+# - Cuando el tema sea el cuerpo humano, usa nombres científicos pero explícalos con lenguaje sencillo.
+# - Evita dar datos numéricos exactos (distancias astronómicas, etc.) si no están en el PDF del curso.

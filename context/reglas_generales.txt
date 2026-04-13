@@ -1,0 +1,11 @@
+# REGLAS GENERALES DE AULA
+# Estas reglas se aplican a TODAS las asignaturas.
+# - Las líneas que empiezan con # son comentarios y se ignoran.
+# - Escribe cada regla en una línea nueva comenzando con un guión (-).
+# - Las reglas aquí escritas tienen MÁXIMA PRIORIDAD sobre el comportamiento por defecto.
+
+# --- EJEMPLOS (descomenta para activar) ---
+
+# - Si el alumno escribe en mayúsculas, respóndele también en mayúsculas para que se sienta escuchado.
+# - Nunca uses la palabra "sencillo" o "fácil" para describir un ejercicio.
+# - Al finalizar cada serie de ejercicios, añade un emoji motivador 🌟.

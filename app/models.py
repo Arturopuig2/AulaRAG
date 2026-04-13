@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -15,28 +17,102 @@ class User(Base):
 
 
 class Question(Base):
+    """A verified question stored in the question bank."""
     __tablename__ = "questions"
 
     id = Column(Integer, primary_key=True, index=True)
-    subject   = Column(String, nullable=False)   # "matematicas", "lengua", "valenciano", "ingles"
-    grade     = Column(Integer, nullable=True)    # 1-6, null = all grades
-    bloque    = Column(String, nullable=True)     # e.g. "Geometría", "Ortografía"
-    contenido = Column(String, nullable=True)     # specific topic within bloque
-    question  = Column(Text, nullable=False)      # Question text displayed to user
-    options   = Column(Text, nullable=False)      # JSON array: ["Opción A", "Opción B", "Opción C"]
-    answer    = Column(String, nullable=False)    # The exact correct option string
-    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # --- Classification ---
+    identifier  = Column(String, unique=True, index=True, nullable=True)   # e.g. PMAT1N0001
+    subject     = Column(String, nullable=False, index=True)               # matematicas | lengua | valenciano | ingles | competencia_lectora
+    grade       = Column(Integer, nullable=True, index=True)               # 1–6
+    bloque      = Column(String, nullable=True, index=True)                # Tema (from temario JSON)
+    contenido   = Column(String, nullable=True, index=True)                # Epígrafe
+    dificultad  = Column(String, nullable=True, default="normal")          # basica | normal | avanzada
+
+    # --- Content ---
+    question_type = Column(String, nullable=False, default="seleccion")    # seleccion | verdadero_falso | pasos
+    question      = Column(Text, nullable=False)                           # Enunciado
+    options       = Column(Text, nullable=True)                            # JSON: ["Opción A", "Opción B", …]
+    answer        = Column(String, nullable=False)                         # Exact correct option string
+    explanation         = Column(Text, nullable=True)                            # Legacy generic explanation
+    feedback_correct    = Column(Text, nullable=True)                            # Shown when student answers correctly
+    feedback_incorrect  = Column(Text, nullable=True)                            # Shown when student answers incorrectly
+
+    # --- Media (paths relative to Render persistent storage) ---
+    visual_url  = Column(String, nullable=True)   # Image URL
+    audio_url   = Column(String, nullable=True)   # Audio URL
+
+    # --- Metadata ---
+    source      = Column(String, nullable=True, default="manual")          # manual | ia_pdf | ia_csv | ia_internet
+    is_active   = Column(Boolean, default=True)                            # Soft delete
+    is_verified = Column(Boolean, default=False)                           # Quality seal for RAG
+    created_by  = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at  = Column(DateTime, default=datetime.utcnow)
+    updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    creator = relationship("User", foreign_keys=[created_by])
+
+
+class Explanation(Base):
+    """A pedagogical explanation linked to a topic or question."""
+    __tablename__ = "explanations"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    # --- Classification ---
+    identifier  = Column(String, unique=True, index=True, nullable=True)   # e.g. EMAT1N0001
+    subject     = Column(String, nullable=False, index=True)
+    grade       = Column(Integer, nullable=True, index=True)
+    bloque      = Column(String, nullable=True, index=True)
+    contenido   = Column(String, nullable=True, index=True)
+    dificultad  = Column(String, nullable=True, default="normal")          # basica | normal | avanzada
+
+    # --- Content ---
+    text         = Column(Text, nullable=False)                            # Main explanation text
+    steps        = Column(Text, nullable=True)                             # JSON: ["Paso 1…", "Paso 2…"]
+    easier_version = Column(Text, nullable=True)                           # Simpler alternative explanation
+    examples     = Column(Text, nullable=True)                             # JSON: ["Ejemplo 1…", "Ejemplo 2…"]
+
+    # --- Media ---
+    audio_url   = Column(String, nullable=True)
+    video_url   = Column(String, nullable=True)
+    visual_url  = Column(String, nullable=True)
+
+    # --- Metadata ---
+    source      = Column(String, nullable=True, default="manual")          # manual | ia_pdf | ia_csv
+    is_active   = Column(Boolean, default=True)
+    is_verified = Column(Boolean, default=False)
+    created_by  = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at  = Column(DateTime, default=datetime.utcnow)
+    updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    creator = relationship("User", foreign_keys=[created_by])
 
 
 class UserProgress(Base):
     __tablename__ = "user_progress"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, index=True, nullable=False)
-    subject = Column(String, index=True, nullable=False)
-    grade = Column(Integer, nullable=True)
-    bloque = Column(String, nullable=True)
+    user_id  = Column(Integer, index=True, nullable=False)
+    subject  = Column(String, index=True, nullable=False)
+    grade    = Column(Integer, nullable=True)
+    bloque   = Column(String, nullable=True)
     contenido = Column(String, nullable=True)
     attempts = Column(Integer, default=0)
     successes = Column(Integer, default=0)
     last_attempt = Column(DateTime, default=datetime.utcnow)
+
+
+class TopicExplanation(Base):
+    """Legacy table kept for backwards compatibility."""
+    __tablename__ = "topic_explanations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    subject     = Column(String, nullable=False, index=True)
+    grade       = Column(Integer, nullable=True)
+    bloque      = Column(String, nullable=True)
+    contenido   = Column(String, nullable=True, index=True)
+    explanation = Column(Text, nullable=False)
+    created_at  = Column(DateTime, default=datetime.utcnow)
+    updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

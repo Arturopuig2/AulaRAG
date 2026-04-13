@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula - Asistente Escolar</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css?v=6">
+    <link rel="stylesheet" href="/static/css/style.css?v=8">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
                     <span class="icon">🇬🇧</span>
                     <span class="label">Inglés</span>
                 </button>
-                <button class="subject-btn btn-purple" data-subject="competencia_lectora">
+                <button class="subject-btn btn-red" data-subject="competencia_lectora">
                     <span class="icon">📖</span>
                     <span class="label">Lectura</span>
                 </button>
@@ -44,19 +44,19 @@
             <div id="syllabus-filters" class="syllabus-filters" style="display: none;">
                 <h3>Filtrar Temario</h3>
 
-                <div class="filter-group">
+                <div class="filter-group" id="group-curso">
                     <select id="filter-curso">
                         <option value="">Selecciona Curso...</option>
                     </select>
                 </div>
 
-                <div class="filter-group">
+                <div class="filter-group" id="group-bloque">
                     <select id="filter-bloque" disabled>
                         <option value="">Selecciona Bloque...</option>
                     </select>
                 </div>
 
-                <div class="filter-group">
+                <div class="filter-group" id="group-contenido">
                     <select id="filter-contenido" disabled>
                         <option value="">Selecciona Contenido...</option>
                     </select>
@@ -76,7 +76,18 @@
         <!-- Main Chat Area -->
         <main class="chat-container">
             <header class="chat-header">
-                <h2 id="current-subject-title">Pizarra Digital - Matemáticas</h2>
+                <div class="subject-info">
+                    <h2 id="current-subject-title">Pizarra Digital - Matemáticas</h2>
+                    <div class="gamification-stats">
+                        <div class="progress-container">
+                            <div class="progress-bar" id="series-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="stars-counter">
+                            <span class="star-icon">⭐</span>
+                            <span id="stars-count">0</span>
+                        </div>
+                    </div>
+                </div>
                 <button id="audio-toggle" class="audio-toggle-btn muted" title="Activar Narración por Voz"></button>
             </header>
 
@@ -84,7 +95,7 @@
                 <!-- Welcome Message -->
                 <div class="message assistant">
                     <div class="bubble" id="welcome-message">
-                        ¡Hola! ¿Qué repasamos hoy? 😊
+                        ¡Hola! Soy tu chat de aprendizaje. ¿Qué quieres repasar hoy? 😊
                     </div>
                 </div>
             </div>
@@ -119,10 +130,22 @@
             }).then(r => r.json()).then(data => {
                 if (data.name) {
                     document.getElementById('user-display-name').textContent = data.name;
+                    if (data.is_admin) {
+                        const adminBtn = document.createElement('a');
+                        adminBtn.href = '/admin';
+                        adminBtn.innerHTML = '⚙️';
+                        adminBtn.style = 'background:rgba(255,255,255,0.1);border-radius:8px;padding:4px 8px;text-decoration:none;margin-left:8px;font-size:1.1rem;';
+                        adminBtn.title = 'Administración';
+                        document.querySelector('.user-profile').insertBefore(adminBtn, document.getElementById('logout-btn'));
+                    }
                 } else {
+                    document.cookie = 'access_token=; path=/; max-age=0';
                     window.location.href = '/login';
                 }
-            }).catch(() => window.location.href = '/login');
+            }).catch(() => {
+                document.cookie = 'access_token=; path=/; max-age=0';
+                window.location.href = '/login';
+            });
         }
         function logout() {
             document.cookie = 'access_token=; path=/; max-age=0';

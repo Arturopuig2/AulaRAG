@@ -1,0 +1,10 @@
+# REGLAS ESPECÍFICAS DE LENGUA
+# Estas reglas solo se aplican cuando el alumno está en la asignatura de Lengua Castellana.
+# - Las líneas que empiezan con # son comentarios y se ignoran.
+# - Escribe cada regla en una línea nueva comenzando con un guión (-).
+
+# --- EJEMPLOS (descomenta para activar) ---
+
+# - Cuando expliques acentuación, indica siempre los tres tipos: agudas, llanas y esdrújulas.
+# - Usa siempre ejemplos con palabras cotidianas (mesa, casa, árbol) antes de usar palabras complejas.
+# - Si el alumno comete un error ortográfico en su respuesta, corrígelo con delicadeza al finalizar el turno.

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador de Aula - Gestión de Ejercicios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% -20%, #312e81, transparent);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 4rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--border);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select,
+        input,
+        textarea {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            animation: scaleUp 0.5s ease-out;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1.25rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-edit:hover {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div>
+                <h1>Aula Administrator</h1>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Gestión profesional del banco de contenidos</p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <a href="/" class="btn btn-outline" style="text-decoration: none; color: white;">Volver al Chat</a>
+                <button class="btn btn-primary" onclick="openModal('exercise')">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Nuevo Ejercicio
+                </button>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" id="tab-exercises" onclick="switchTab('exercises')">Ejercicios</div>
+            <div class="tab" id="tab-explanations" onclick="switchTab('explanations')">Explicaciones (Teoría)</div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Asignatura</label>
+                <select id="filter-subject" onchange="loadData()">
+                    <option value="">Todas</option>
+                    <option value="matematicas">Matemáticas</option>
+                    <option value="lengua">Lengua</option>
+                    <option value="valenciano">Valencià</option>
+                    <option value="ingles">Inglés</option>
+                    <option value="competencia_lectora">Comprensión Lectora</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Curso</label>
+                <select id="filter-grade" onchange="loadData()">
+                    <option value="">Todos</option>
+                    <option value="1">1º Primaria</option>
+                    <option value="2">2º Primaria</option>
+                    <option value="3">3º Primaria</option>
+                    <option value="4">4º Primaria</option>
+                    <option value="5">5º Primaria</option>
+                    <option value="6">6º Primaria</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Buscar tema</label>
+                <input type="text" id="filter-tema" placeholder="Ej: Diptongos..." oninput="debounceLoad()">
+            </div>
+        </div>
+
+        <!-- Exercises View -->
+        <div id="view-exercises" class="card">
+            <table id="table-exercises">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Tema</th>
+                        <th style="width: 50%">Pregunta</th>
+                        <th style="width: 25%">Respuesta Correcta</th>
+                        <th style="width: 10%">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loaded via JS -->
+                </tbody>
+            </table>
+            <div id="empty-exercises"
+                style="padding: 4rem; text-align: center; color: var(--text-muted); display: none;">
+                No se han encontrado ejercicios.
+            </div>
+        </div>
+
+        <!-- Explanations View -->
+        <div id="view-explanations" class="card" style="display: none;">
+            <table id="table-explanations">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Tema</th>
+                        <th style="width: 30%">Contenido Principal</th>
+                        <th style="width: 45%">Vista Previa Teoría</th>
+                        <th style="width: 10%">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loaded via JS -->
+                </tbody>
+            </table>
+            <div id="empty-explanations"
+                style="padding: 4rem; text-align: center; color: var(--text-muted); display: none;">
+                No se han encontrado explicaciones.
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ejercicio -->
+    <div id="modal-exercise" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="exercise-modal-title">Añadir Nuevo Ejercicio</h2>
+                <button class="btn-icon" onclick="closeModal('exercise')">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="q-id">
+                <div class="form-grid">
+                    <div class="filter-group">
+                        <label>Asignatura</label>
+                        <select id="q-subject" required>
+                            <option value="matematicas">Matemáticas</option>
+                            <option value="lengua">Lengua</option>
+                            <option value="valenciano">Valencià</option>
+                            <option value="ingles">Inglés</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Nivel (Curso)</label>
+                        <select id="q-grade">
+                            <option value="">Todos</option>
+                            <option value="1">1º Primaria</option>
+                            <option value="2">2º Primaria</option>
+                            <option value="3">3º Primaria</option>
+                            <option value="4">4º Primaria</option>
+                            <option value="5">5º Primaria</option>
+                            <option value="6">6º Primaria</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Bloque (Ej: Geometría)</label>
+                        <input type="text" id="q-bloque" placeholder="Opcional">
+                    </div>
+                    <div class="filter-group">
+                        <label>Contenido (Tema)</label>
+                        <input type="text" id="q-contenido" placeholder="Ej: Las fracciones" required>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label>Pregunta para el alumno</label>
+                        <textarea id="q-question" rows="3" placeholder="Escribe el enunciado exacto..."
+                            required></textarea>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label>Opciones (Una por línea)</label>
+                        <textarea id="q-options" rows="4" placeholder="Opción A&#10;Opción B&#10;Opción C"
+                            required></textarea>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label>Respuesta Correcta (Debe ser idéntica a una opción)</label>
+                        <input type="text" id="q-answer" placeholder="Pega aquí la opción correcta" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('exercise')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveQuestion()">Guardar Ejercicio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Explicación -->
+    <div id="modal-explanation" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="explanation-modal-title">Configurar Teoría Verificada</h2>
+                <button class="btn-icon" onclick="closeModal('explanation')">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="e-id">
+                <div class="form-grid">
+                    <div class="filter-group">
+                        <label>Asignatura</label>
+                        <select id="e-subject" required>
+                            <option value="matematicas">Matemáticas</option>
+                            <option value="lengua">Lengua</option>
+                            <option value="valenciano">Valencià</option>
+                            <option value="ingles">Inglés</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Nivel (Curso)</label>
+                        <select id="e-grade">
+                            <option value="">Todos</option>
+                            <option value="1">1º Primaria</option>
+                            <option value="2">2º Primaria</option>
+                            <option value="3">3º Primaria</option>
+                            <option value="4">4º Primaria</option>
+                            <option value="5">5º Primaria</option>
+                            <option value="6">6º Primaria</option>
+                        </select>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label>Contenido (Tema exacto)</label>
+                        <input type="text" id="e-contenido" placeholder="Ej: El Sustantivo" required>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label>Teoría Maestra (Fuente de Verdad)</label>
+                        <textarea id="e-text" rows="10"
+                            placeholder="Escribe aquí la explicación técnica y completa del tema. El AI la usará para adaptarla al alumno."
+                            required></textarea>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            💡 <strong>Nota:</strong> Esta es la "Verdad Absoluta". El AI la simplificará para el niño,
+                            pero no se inventará datos que no pongas aquí.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('explanation')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveExplanation()">Guardar Teoría</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'exercises';
+        let exercises = [];
+        let explanations = [];
+        let debounceTimer;
+
+        // Load initial data
+        loadData();
+
+        async function loadData() {
+            const subject = document.getElementById('filter-subject').value;
+            const query = subject ? `?subject=${subject}` : '';
+
+            try {
+                const [exResp, explResp] = await Promise.all([
+                    fetch(`/api/admin/questions${query}`),
+                    fetch(`/api/admin/explanations${query}`)
+                ]);
+
+                exercises = await exResp.json();
+                explanations = await explResp.json();
+
+                render();
+            } catch (e) {
+                console.error("Error loading data", e);
+            }
+        }
+
+        function render() {
+            const temaFilter = document.getElementById('filter-tema').value.toLowerCase();
+
+            // Render Exercises
+            const exBody = document.querySelector('#table-exercises tbody');
+            exBody.innerHTML = '';
+            const filteredEx = exercises.filter(x =>
+                (x.contenido || '').toLowerCase().includes(temaFilter) ||
+                (x.question || '').toLowerCase().includes(temaFilter)
+            );
+
+            if (filteredEx.length === 0) {
+                document.getElementById('empty-exercises').style.display = 'block';
+                document.getElementById('table-exercises').style.display = 'none';
+            } else {
+                document.getElementById('empty-exercises').style.display = 'none';
+                document.getElementById('table-exercises').style.display = 'table';
+                filteredEx.forEach(q => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td>
+                        <span class="badge" style="margin-bottom: 0.5rem; display: block; width: fit-content;">${q.subject}</span>
+                        <div style="font-weight: 600; font-size: 0.9rem;">${q.contenido || '-'}</div>
+                    </td>
+                    <td style="font-size: 0.95rem; line-height: 1.5;">${q.question}</td>
+                    <td><div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.9rem;">${q.answer}</div></td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon btn-edit" title="Editar" onclick='editQuestion(${JSON.stringify(q).replace(/'/g, "&apos;")})'>
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                            <button class="btn-icon btn-delete" title="Eliminar" onclick="deleteQuestion(${q.id})">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                    exBody.appendChild(tr);
+                });
+            }
+
+            // Render Explanations
+            const explBody = document.querySelector('#table-explanations tbody');
+            explBody.innerHTML = '';
+            const filteredExpl = explanations.filter(x =>
+                (x.contenido || '').toLowerCase().includes(temaFilter) ||
+                (x.explanation || '').toLowerCase().includes(temaFilter)
+            );
+
+            if (filteredExpl.length === 0) {
+                document.getElementById('empty-explanations').style.display = 'block';
+                document.getElementById('table-explanations').style.display = 'none';
+            } else {
+                document.getElementById('empty-explanations').style.display = 'none';
+                document.getElementById('table-explanations').style.display = 'table';
+                filteredExpl.forEach(e => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td>
+                        <span class="badge" style="margin-bottom: 0.5rem; display: block; width: fit-content;">${e.subject}</span>
+                        <div style="font-weight: 600; font-size: 0.9rem;">${e.contenido || '-'}</div>
+                    </td>
+                    <td style="font-size: 0.9rem; color: var(--text-muted);">${e.bloque || '-'} (${e.grade || 'Todos'}º)</td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                        ${e.explanation.substring(0, 150)}...
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon btn-edit" title="Editar" onclick='editExplanation(${JSON.stringify(e).replace(/'/g, "&apos;")})'>
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                            <button class="btn-icon btn-delete" title="Eliminar" onclick="deleteExplanation(${e.id})">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                    explBody.appendChild(tr);
+                });
+            }
+        }
+
+        function switchTab(t) {
+            currentTab = t;
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${t}`).classList.add('active');
+
+            document.getElementById('view-exercises').style.display = t === 'exercises' ? 'block' : 'none';
+            document.getElementById('view-explanations').style.display = t === 'explanations' ? 'block' : 'none';
+
+            // Update Add Button action
+            const addBtn = document.querySelector('header .btn-primary');
+            if (t === 'exercises') {
+                addBtn.innerHTML = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Nuevo Ejercicio`;
+                addBtn.onclick = () => openModal('exercise');
+            } else {
+                addBtn.innerHTML = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Nueva Teoría`;
+                addBtn.onclick = () => openModal('explanation');
+            }
+        }
+
+        function debounceLoad() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(render, 300);
+        }
+
+        // Modal helpers
+        function openModal(type) {
+            document.getElementById(`modal-${type}`).style.display = 'flex';
+            if (type === 'exercise') resetExerciseForm();
+            else resetExplanationForm();
+        }
+
+        function closeModal(type) {
+            document.getElementById(`modal-${type}`).style.display = 'none';
+        }
+
+        function resetExerciseForm() {
+            document.getElementById('q-id').value = '';
+            document.getElementById('q-question').value = '';
+            document.getElementById('q-options').value = '';
+            document.getElementById('q-answer').value = '';
+            document.getElementById('exercise-modal-title').innerText = 'Añadir Nuevo Ejercicio';
+        }
+
+        function resetExplanationForm() {
+            document.getElementById('e-id').value = '';
+            document.getElementById('e-text').value = '';
+            document.getElementById('explanation-modal-title').innerText = 'Configurar Teoría Verificada';
+        }
+
+        async function saveQuestion() {
+            const data = {
+                id: document.getElementById('q-id').value,
+                subject: document.getElementById('q-subject').value,
+                grade: document.getElementById('q-grade').value ? parseInt(document.getElementById('q-grade').value) : null,
+                bloque: document.getElementById('q-bloque').value,
+                contenido: document.getElementById('q-contenido').value,
+                question: document.getElementById('q-question').value,
+                options: document.getElementById('q-options').value.split('\n').map(s => s.trim()).filter(s => s),
+                answer: document.getElementById('q-answer').value
+            };
+
+            if (!data.subject || !data.contenido || !data.question || data.options.length === 0 || !data.answer) {
+                alert("Por favor, completa todos los campos obligatorios");
+                return;
+            }
+
+            const resp = await fetch('/admin/questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (resp.ok) {
+                closeModal('exercise');
+                loadData();
+            } else {
+                alert("Error al guardar el ejercicio");
+            }
+        }
+
+        async function saveExplanation() {
+            const data = {
+                id: document.getElementById('e-id').value,
+                subject: document.getElementById('e-subject').value,
+                grade: document.getElementById('e-grade').value ? parseInt(document.getElementById('e-grade').value) : null,
+                bloque: '', // Optional/Legacy
+                contenido: document.getElementById('e-contenido').value,
+                explanation: document.getElementById('e-text').value
+            };
+
+            if (!data.subject || !data.contenido || !data.explanation) {
+                alert("Por favor, completa todos los campos");
+                return;
+            }
+
+            const resp = await fetch('/api/admin/explanations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (resp.ok) {
+                closeModal('explanation');
+                loadData();
+            } else {
+                alert("Error al guardar la teoría");
+            }
+        }
+
+        function editQuestion(q) {
+            document.getElementById('q-id').value = q.id;
+            document.getElementById('q-subject').value = q.subject;
+            document.getElementById('q-grade').value = q.grade || '';
+            document.getElementById('q-bloque').value = q.bloque || '';
+            document.getElementById('q-contenido').value = q.contenido || '';
+            document.getElementById('q-question').value = q.question;
+            document.getElementById('q-options').value = q.options.join('\n');
+            document.getElementById('q-answer').value = q.answer;
+
+            document.getElementById('exercise-modal-title').innerText = 'Editar Ejercicio';
+            document.getElementById('modal-exercise').style.display = 'flex';
+        }
+
+        function editExplanation(e) {
+            document.getElementById('e-id').value = e.id;
+            document.getElementById('e-subject').value = e.subject;
+            document.getElementById('e-grade').value = e.grade || '';
+            document.getElementById('e-contenido').value = e.contenido || '';
+            document.getElementById('e-text').value = e.explanation;
+
+            document.getElementById('explanation-modal-title').innerText = 'Editar Teoría Verificada';
+            document.getElementById('modal-explanation').style.display = 'flex';
+        }
+
+        async function deleteQuestion(id) {
+            if (!confirm('¿Seguro que quieres eliminar este ejercicio?')) return;
+            const resp = await fetch(`/api/admin/questions/${id}`, { method: 'DELETE' });
+            if (resp.ok) loadData();
+        }
+
+        async function deleteExplanation(id) {
+            if (!confirm('¿Seguro que quieres eliminar esta explicación?')) return;
+            const resp = await fetch(`/api/admin/explanations/${id}`, { method: 'DELETE' });
+            if (resp.ok) loadData();
+        }
+    </script>
+</body>
+
+</html>
