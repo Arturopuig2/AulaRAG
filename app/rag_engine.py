@@ -706,11 +706,7 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
     except Exception as e:
         err_str = str(e).upper()
         print(f"Gemini API Error: {e}")
-        if "503" in err_str or "UNAVAILABLE" in err_str or "TIMED OUT" in err_str:
-            return "El servidor de IA está temporalmente ocupado. Por favor, inténtalo de nuevo en unos segundos. 🙏", False, {}
-        if "429" in err_str or "QUOTA" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-            return "Hemos alcanzado el límite de consultas. Por favor, espera un momento e inténtalo de nuevo. ⏳", False, {}
-        return "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo. 🔄", False, {}
+        return "¡Ups! Algo ha fallado. Por favor, vuelve a intentarlo.", False, {}
 
 def upload_new_file_to_gemini(file_path: str, subject: str) -> bool:
     """Uploads a new PDF to Gemini and updates the cache."""
