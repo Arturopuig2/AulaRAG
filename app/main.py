@@ -422,6 +422,7 @@ async def get_next_question(
         "question": picked.question,
         "options": opts,
         "answer": picked.answer,
+        "dificultad": picked.dificultad or "",
         "feedback_correct":   picked.feedback_correct   or picked.explanation or "",
         "feedback_incorrect": picked.feedback_incorrect or picked.explanation or "",
         "visual_url": picked.visual_url or "",
