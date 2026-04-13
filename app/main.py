@@ -381,6 +381,7 @@ async def get_next_question(
     grade: int,
     bloque: str = "",
     contenido: str = "",
+    dificultad: str = "",
     exclude_id: int = 0,
     db: Session = Depends(get_db),
 ):
@@ -403,6 +404,8 @@ async def get_next_question(
         query = query.filter(models.Question.bloque == bloque)
     if contenido:
         query = query.filter(models.Question.contenido == contenido)
+    if dificultad:
+        query = query.filter(models.Question.dificultad == dificultad)
     if exclude_id:
         query = query.filter(models.Question.id != exclude_id)
 

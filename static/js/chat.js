@@ -367,9 +367,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 2. Fetch and show first question from DB
-        totalExercisesInSeries = (currentSubject === 'competencia_lectora') ? 10 : 3;
+        totalExercisesInSeries = (currentSubject === 'competencia_lectora') ? 10 : 9;
         await fetchAndShowQuestion(currentSubject, cursoStr, bloqueStr, contenidoStr, 1);
     });
+
+    // ── Difficulty helper ─────────────────────────────────────────────────
+    function getDificultad(n) {
+        if (n <= 3) return 'basica';
+        if (n <= 6) return 'normal';
+        return 'avanzada';
+    }
+    const DIF_LABELS = { basica: '🟢 Básico', normal: '🟡 Medio', avanzada: '🔴 Avanzado' };
 
     // ── Fetch question from DB and render it ─────────────────────────────
     async function fetchAndShowQuestion(subject, curso, bloque, contenido, exerciseNum) {
@@ -377,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradeMatch = curso.match(/\d+/);
         const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
 
-        const params = new URLSearchParams({ subject, grade, bloque, contenido });
+        const dif = getDificultad(exerciseNum);
+        const params = new URLSearchParams({ subject, grade, bloque, contenido, dificultad: dif });
         if (window._lastQuestionId) params.append('exclude_id', window._lastQuestionId);
 
         const loadingId = addLoadingIndicator();
@@ -404,8 +413,10 @@ document.addEventListener('DOMContentLoaded', () => {
             currentExerciseIndex = exerciseNum;
 
             // Build exercise bubble
-            let idTag = q.id ? `<span class="exercise-id" title="ID en base de datos: ${q.id}">#${q.id}</span>` : '';
-            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question} ${idTag}</p>`;
+            const dif = getDificultad(exerciseNum);
+            const difLabel = DIF_LABELS[dif] || '';
+            let idTag = q.id ? `<span class="exercise-id" title="ID: ${q.id}">#${q.id}</span>` : '';
+            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}</strong> <span class="dif-badge dif-${dif}">${difLabel}</span>: ${q.question} ${idTag}</p>`;
             html += '<div class="interactive-options">';
             q.options.forEach(opt => {
                 const safe = opt.replace(/"/g, '&quot;');
@@ -886,6 +897,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(async () => {
                 if (!isLastExercise) {
+                    // Reset exclude_id when switching difficulty level
+                    if (getDificultad(exerciseNum + 1) !== getDificultad(exerciseNum)) {
+                        window._lastQuestionId = 0;
+                    }
                     await fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, exerciseNum + 1);
                 } else {
                     const endHtml = `<p>¿Quieres seguir practicando?</p><div class="interactive-options"><button class="interactive-btn" onclick="window.handleSeriesEnd(true, this)">Sí</button><button class="interactive-btn" onclick="window.handleSeriesEnd(false, this)">No</button></div>`;
