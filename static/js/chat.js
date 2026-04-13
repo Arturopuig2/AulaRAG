@@ -371,8 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentExerciseIndex = exerciseNum;
 
             // Build exercise bubble
-            let idTag = q.identifier ? `<span class="exercise-id" title="Referencia">${q.identifier}</span>` : '';
-            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question} ${idTag}</p>`;
+            let idTag = q.id ? `<span class="exercise-id" title="ID en base de datos: ${q.id}">#${q.id}</span> ` : '';
+            let html = `<p>${idTag}<strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question}</p>`;
             html += '<div class="interactive-options">';
             q.options.forEach(opt => {
                 const safe = opt.replace(/"/g, '&quot;');
