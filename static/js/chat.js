@@ -136,6 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalExercisesInSeries = 3;
     let userStars = parseInt(localStorage.getItem('aula_stars') || '0');
 
+    // ── Difficulty progression rule: basica → normal → avanzada ────
+    const DIFFICULTY_ORDER = ['basica', 'normal', 'avanzada'];
+    const DIFFICULTY_NEXT_LABEL = { basica: '🟡 Nivel Medio', normal: '🔴 Nivel Avanzado', avanzada: '🟢 Nivel Básico' };
+    let currentDifficultyIndex = 0;
+
     // Session state: persist the active topic labels across all turns
     let activeSessionCurso = "";
     let activeSessionBloque = "";
@@ -366,7 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
             removeMessage(loadingId);
         }
 
-        // 2. Fetch and show first question from DB
+        // 2. Fetch and show first question from DB (reset difficulty to basica)
+        currentDifficultyIndex = 0;
         totalExercisesInSeries = (currentSubject === 'competencia_lectora') ? 10 : 3;
         await fetchAndShowQuestion(currentSubject, cursoStr, bloqueStr, contenidoStr, 1);
     });
@@ -379,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradeMatch = curso.match(/\d+/);
         const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
 
-        const params = new URLSearchParams({ subject, grade, bloque, contenido });
+        const dif = DIFFICULTY_ORDER[currentDifficultyIndex] || 'basica';
+        const params = new URLSearchParams({ subject, grade, bloque, contenido, dificultad: dif });
         if (window._lastQuestionId) params.append('exclude_id', window._lastQuestionId);
 
         const loadingId = addLoadingIndicator();
@@ -408,9 +415,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Build exercise bubble — difficulty badge from DB field
             const dif = q.dificultad || '';
             const difLabel = DIF_LABELS[dif] || '';
-            let idTag = q.id ? `<span class="exercise-id" title="ID: ${q.id}">#${q.id}</span>` : '';
+            let idTag  = q.id ? `<span class="exercise-id" title="ID: ${q.id}">#${q.id}</span>` : '';
             let difTag = difLabel ? `<span class="dif-badge dif-${dif}">${difLabel}</span>` : '';
-            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}</strong> ${difTag}: ${q.question} ${idTag}</p>`;
+            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question} ${idTag}${difTag}</p>`;
             html += '<div class="interactive-options">';
             q.options.forEach(opt => {
                 const safe = opt.replace(/"/g, '&quot;');
@@ -813,12 +820,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handler for end-of-series Sí/No buttons
     window.handleSeriesEnd = function (continuar, btnElement) {
-        // Disable both buttons
         const allBtns = btnElement.parentElement.querySelectorAll('.interactive-btn');
         allBtns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; b.style.pointerEvents = 'none'; });
         btnElement.classList.add('correct');
 
         if (continuar) {
+            // ── REGLA: avanzar al siguiente nivel de dificultad ──────────
+            currentDifficultyIndex = (currentDifficultyIndex + 1) % DIFFICULTY_ORDER.length;
             currentExerciseIndex = 0;
             window._lastQuestionId = 0;
             fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, 1);
@@ -893,7 +901,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isLastExercise) {
                     await fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, exerciseNum + 1);
                 } else {
-                    const endHtml = `<p>¿Quieres seguir practicando?</p><div class="interactive-options"><button class="interactive-btn" onclick="window.handleSeriesEnd(true, this)">Sí</button><button class="interactive-btn" onclick="window.handleSeriesEnd(false, this)">No</button></div>`;
+                    const nextDif = DIFFICULTY_ORDER[(currentDifficultyIndex + 1) % DIFFICULTY_ORDER.length];
+                    const nextLabel = DIFFICULTY_NEXT_LABEL[DIFFICULTY_ORDER[currentDifficultyIndex]] || '';
+                    const endHtml = `<p>¿Quieres seguir con <strong>${nextLabel}</strong>?</p><div class="interactive-options"><button class="interactive-btn" onclick="window.handleSeriesEnd(true, this)">Sí</button><button class="interactive-btn" onclick="window.handleSeriesEnd(false, this)">No</button></div>`;
                     addMessage(endHtml, 'assistant', true, false, true);
                     currentExerciseIndex = 0;
                 }
