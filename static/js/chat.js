@@ -371,11 +371,25 @@ document.addEventListener('DOMContentLoaded', () => {
             removeMessage(loadingId);
         }
 
-        // 2. Fetch and show first question from DB (reset difficulty to basica)
+        // 2. Ask student before starting exercises
         currentDifficultyIndex = 0;
         totalExercisesInSeries = (currentSubject === 'competencia_lectora') ? 10 : 3;
-        await fetchAndShowQuestion(currentSubject, cursoStr, bloqueStr, contenidoStr, 1);
+        const inviteHtml = `<p>¿Probamos con 3 ejercicios?</p><div class="interactive-options"><button class="interactive-btn" onclick="window.handleStartSeries(true, this)">Sí</button><button class="interactive-btn" onclick="window.handleStartSeries(false, this)">No</button></div>`;
+        addMessage(inviteHtml, 'assistant', true, false, true);
     });
+
+    // Handler for the initial "¿Probamos con 3 ejercicios?" prompt
+    window.handleStartSeries = function(empezar, btnElement) {
+        const allBtns = btnElement.parentElement.querySelectorAll('.interactive-btn');
+        allBtns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; b.style.pointerEvents = 'none'; });
+        btnElement.classList.add('correct');
+
+        if (empezar) {
+            fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, 1);
+        } else {
+            addMessage('<p>¡De acuerdo! Cuando quieras practicar, pulsa el botón de nuevo. 👋</p>', 'assistant', true, false, true);
+        }
+    };
 
     const DIF_LABELS = { basica: '🟢 Básico', normal: '🟡 Medio', avanzada: '🔴 Avanzado' };
 
