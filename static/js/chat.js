@@ -515,15 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     addMessage(parsedResponse, 'assistant', true, false, true, vUrl, aUrl);
                 });
 
-                // If JS flagged end of series, show the 'Continue?' bubble after AI reply
-                if (window._pendingEndOfSeries) {
-                    window._pendingEndOfSeries = false;
-                    setTimeout(() => {
-                        const endMsg = `¿Quieres seguir practicando?\n\n[BOTON: Sí]\n[BOTON: No]`;
-                        addMessage(marked.parse(endMsg), 'assistant', true, false, true);
-                        currentExerciseIndex = 0; // Reset for next series
-                    }, 300);
-                }
             }
         } catch (error) {
             removeMessage(loadingId);
@@ -589,36 +580,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Intercept [DB_ID: X] tag to set currentDBQuestion state
-        const dbIdRegex = /\[DB_ID:\s*(\d+)\]/i;
-        const dbIdMatch = formattedText.match(dbIdRegex);
-        if (dbIdMatch) {
-            const qid = dbIdMatch[1];
-            // We set the state so the next button click knows to use the DB checker
-            // Note: We don't have the options yet, but sendDBAnswer only really needs the ID and the text of the clicked button
-            window.currentDBQuestion = { id: qid };
-            formattedText = formattedText.replace(dbIdRegex, '').trim();
-        }
-        
+
         // Style Exercise Identifier [ID: PMAT1N0001]
         const exerciseIdRegex = /\[ID:\s*([^\]]+)\]/gi;
         formattedText = formattedText.replace(exerciseIdRegex, '<span class="exercise-id" title="Referencia del ejercicio">$1</span>');
 
-        // If there is a pending button, resolve its state visually
-        if (sender === 'assistant' && window.lastClickedInteractiveButton) {
-            if (foundStatus === 'correct') {
-                window.lastClickedInteractiveButton.classList.remove('loading');
-                window.lastClickedInteractiveButton.classList.add('correct');
-            } else if (foundStatus === 'incorrect') {
-                window.lastClickedInteractiveButton.classList.remove('loading');
-                window.lastClickedInteractiveButton.classList.add('incorrect');
-            } else {
-                // Fallback, if bot didn't include the tag but responded, just clear loading
-                window.lastClickedInteractiveButton.classList.remove('loading');
-            }
-            // Clear the reference since we've handled it
-            window.lastClickedInteractiveButton = null;
-        }
 
         // Parse custom interactive buttons: [BOTON: text]
         let interactiveButtonsHtml = '';
@@ -867,6 +833,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // ── Clear global state ────────────────────────────────────────────
         window.currentCorrectAnswer = null;
 
+        // ── Track answer in DB (progress) ─────────────────────────────────
+        if (window.currentDBQuestion && window.currentDBQuestion.id) {
+            fetch('/questions/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
+            }).catch(() => {});
+        }
+
         // ── Text feedback (solo si hay texto en la BD) ──────────────────
         if (isCorrect) {
             const fb = q.feedback_correct || '';
@@ -894,262 +869,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Server-side evaluation for DB questions — no AI involved in grading
-    window.sendDBAnswer = async function (answer, btnElement) {
-        const qid = window.currentDBQuestion.id;
-        try {
-            const res = await fetch('/questions/check', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question_id: qid, selected_option: answer })
-            });
-            const data = await res.json();
-
-            // Immediately color the button
-            btnElement.classList.remove('loading');
-            if (data.correct) {
-                btnElement.classList.add('correct');
-                playSuccessAnimation();
-
-                // Ask AI for a brief congratulatory explanation
-                const loadingId = addLoadingIndicator();
-                setTimeout(async () => {
-                    const formData = new URLSearchParams();
-                    formData.append('message', `[CORRECTO] El alumno eligió "${answer}" correctamente en esta pregunta: "${window.currentDBQuestion.question}". Felicítale brevemente (máximo 1 frase) y avanza.`);
-                    formData.append('subject', currentSubject);
-                    formData.append('course_level', filterCurso.value ? currentTemarioData[filterCurso.value].curso : '');
-                    const chatRes = await fetch('/chat', { method: 'POST', body: formData, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-                    const chatData = await chatRes.json();
-                    removeMessage(loadingId);
-                    if (chatData.response) {
-                        let txt = chatData.response.replace(/\[CORRECTO\]/gi, '').replace(/\[INCORRECTO\]/gi, '').trim();
-                        // No stripping buttons anymore
-                        txt = txt.replace(/\n\n+(?=\s*\[BOTON:)/gi, '\n');
-                        txt.split('\n\n').filter(b => b.trim()).forEach(block => {
-                            addMessage(marked.parse(block), 'assistant', true, false, true);
-                        });
-                    }
-                    // Incrementar índice y seguir
-                    currentExerciseIndex++;
-                    if (currentExerciseIndex <= totalExercisesInSeries) {
-                        fetchNextDBQuestion();
-                    } else {
-                        // Serie terminada
-                        const endMsg = (currentSubject === 'valenciano')
-                            ? "¡Hem acabat la sèrie! 🎉 ¿Vols seguir practicant amb més preguntes?\n\n[BOTON: Sí]\n[BOTON: No]"
-                            : "¡Hemos terminado la serie! 🎉 ¿Quieres seguir practicando con más problemas?\n\n[BOTON: Sí]\n[BOTON: No]";
-                        addMessage(marked.parse(endMsg), 'assistant', true, false, true);
-                        currentExerciseIndex = 0; // Reset
-                    }
-                }, 300);
-
-            } else {
-                btnElement.classList.add('incorrect');
-
-                // Re-enable all buttons in this question so user can try again
-                const container = btnElement.parentElement;
-                container.querySelectorAll('.interactive-btn').forEach(btn => {
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                });
-                window.lastClickedInteractiveButton = null;
-
-                // Ask AI for a hint
-                const loadingId = addLoadingIndicator();
-                setTimeout(async () => {
-                    const formData = new URLSearchParams();
-                    formData.append('message', `[INCORRECTO] El alumno eligió "${answer}" pero la respuesta correcta es "${data.answer}" en la pregunta: "${window.currentDBQuestion.question}". Da una pista breve y anímale a intentarlo de nuevo.`);
-                    formData.append('subject', currentSubject);
-                    formData.append('course_level', filterCurso.value ? currentTemarioData[filterCurso.value].curso : '');
-                    const chatRes = await fetch('/chat', { method: 'POST', body: formData, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-                    const chatData = await chatRes.json();
-                    removeMessage(loadingId);
-                    if (chatData.response) {
-                        let txt = chatData.response.replace(/\[CORRECTO\]/gi, '').replace(/\[INCORRECTO\]/gi, '').trim();
-                        // No stripping buttons anymore
-                        txt.split('\n\n').filter(b => b.trim()).forEach(block => {
-                            addMessage(marked.parse(block), 'assistant', true, false, true);
-                        });
-                    }
-                }, 300);
-            }
-        } catch (err) {
-            console.error('DB check error:', err);
-            btnElement.classList.remove('loading');
-            window.lastClickedInteractiveButton = null;
-        }
-    };
-
-    // Fetch the next question from the DB and render it in the chat
-    async function fetchNextDBQuestion(fallbackMessage = "") {
-
-        if (!currentSubject) return;
-        const params = new URLSearchParams({ subject: currentSubject });
-        if (filterCurso.value && currentTemarioData[filterCurso.value]) {
-            params.append('grade', currentTemarioData[filterCurso.value].curso.replace(/[^0-9]/g, '') || '');
-        }
-
-        // Use the actual labels from the selectors as the DB filters
-        if (filterBloque.value && filterBloque.selectedIndex >= 0) {
-            const bText = filterBloque.options[filterBloque.selectedIndex].text;
-            if (bText && !bText.startsWith("Selecciona")) {
-                params.append('bloque', bText);
-            }
-        }
-        if (filterContenido.value && filterContenido.selectedIndex >= 0) {
-            const cText = filterContenido.options[filterContenido.selectedIndex].text;
-            if (cText && !cText.startsWith("Selecciona")) {
-                params.append('contenido', cText);
-            }
-        }
-
-        try {
-            const res = await fetch(`/questions/random?${params}`);
-            if (!res.ok) {
-                if (res.status === 401) {
-                    addMessage("Sesión expirada. Por favor, recarga la página o entra de nuevo. 🔐", 'assistant');
-                } else {
-                    const errorData = await res.json().catch(() => ({}));
-                    console.error('Question Bank Error:', errorData);
-                    if (fallbackMessage) {
-                        await sendMessageToBackend(fallbackMessage, false, true);
-                    } else {
-                        addMessage("No he encontrado preguntas específicas para este tema en la base de datos. 😅 ¡Prueba con otro bloque o curso!", 'assistant');
-                    }
-                }
-                return;
-            }
-            const q = await res.json();
-            if (q.error) {
-                if (fallbackMessage) await sendMessageToBackend(fallbackMessage, false, true);
-                return;
-            }
-
-            window.currentDBQuestion = q;
-
-            const label = (currentSubject === 'valenciano') ? 'Exercici' : 'Ejercicio';
-            let html = `**${label} ${currentExerciseIndex}/${totalExercisesInSeries}**\n\n${q.question}\n\n`;
-            q.options.forEach(opt => { html += `[BOTON: ${opt}]\n`; });
-            addMessage(marked.parse(html), 'assistant', true, false, true);
-        } catch (e) {
-            console.log('fetchNextDBQuestion error (falling back to AI):', e);
-            if (fallbackMessage) await sendMessageToBackend(fallbackMessage, false, true);
-        }
-    }
-
-    // Expose fetchNextDBQuestion globally for the "Estudiar" button
-    window.fetchNextDBQuestion = fetchNextDBQuestion;
-
-
-    // Expose the internal send function globally so the buttons can hit the API silently
-    window.doHiddenSend = function (answer) {
-        // Find the sendMessageToBackend function in the current scope
-        // We'll dispatch a custom event that chat.js listens to
-        document.dispatchEvent(new CustomEvent('sendHiddenMessage', { detail: { text: answer } }));
-    };
-
-    // Guard: only register the sendHiddenMessage listener ONCE per page load
-    if (!window._hiddenSendListenerRegistered) {
-        window._hiddenSendListenerRegistered = true;
-        document.addEventListener('sendHiddenMessage', (e) => {
-        const messageText = e.detail.text;
-        // The addMessage step is skipped for hidden messages. Just show loading and fetch
-
-        // Show loading indicator
-        const loadingId = addLoadingIndicator();
-
-        // Let's copy the backend logic here to avoid scope issues inside the event listener
-        const prefixedMessage = `[Contexto: asignatura actual es ${themes[currentSubject].name}] ${messageText}`;
-        const formData = new URLSearchParams();
-        formData.append('message', prefixedMessage);
-        formData.append('subject', currentSubject);
-
-        let courseLevel = "";
-        if ((currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles' || currentSubject === 'competencia_lectora') && filterCurso.value !== "") {
-            courseLevel = currentTemarioData[filterCurso.value].curso;
-        }
-        formData.append('course_level', courseLevel);
-
-        fetch('/chat', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    removeMessage(loadingId);
-                    const errorMsg = (currentSubject === 'valenciano')
-                        ? `Ui, hi ha hagut un error: ${data.error}`
-                        : `Oops, un error falló: ${data.error}`;
-                    addMessage(errorMsg, 'assistant');
-                } else {
-                    let cleanResponse = data.response;
-
-                    // Evaluate correctness immediately to update the clicked button
-                    let isCorrect = false;
-                    let isIncorrect = false;
-                    if (cleanResponse.match(/\[CORRECTO\]|\[CORRECTE\]|\[CORRECT\]/i)) {
-                        isCorrect = true;
-                    } else if (cleanResponse.match(/\[INCORRECTO\]|\[INCORRECTE\]|\[INCORRECT\]/i)) {
-                        isIncorrect = true;
-                    }
-
-                    if (window.lastClickedInteractiveButton) {
-                        window.lastClickedInteractiveButton.classList.remove('loading');
-                        if (isCorrect) {
-                            window.lastClickedInteractiveButton.classList.add('correct');
-                            setTimeout(playSuccessAnimation, 0);
-                        } else if (isIncorrect) {
-                            window.lastClickedInteractiveButton.classList.add('incorrect');
-                            // Re-enable all buttons in the same container so user can try again
-                            const container = window.lastClickedInteractiveButton.parentElement;
-                            container.querySelectorAll('.interactive-btn').forEach(btn => {
-                                btn.disabled = false;
-                                btn.style.opacity = '1';
-                            });
-                        }
-                        window.lastClickedInteractiveButton = null;
-                    }
-
-                    // Strip tags so addMessage doesn't process them again
-                    cleanResponse = cleanResponse.replace(/\[CORRECTO\]/gi, '');
-                    cleanResponse = cleanResponse.replace(/\[CORRECTE\]/gi, '');
-                    cleanResponse = cleanResponse.replace(/\[CORRECT\]/gi, '');
-                    cleanResponse = cleanResponse.replace(/\[INCORRECTO\]/gi, '');
-                    cleanResponse = cleanResponse.replace(/\[INCORRECTE\]/gi, '');
-                    cleanResponse = cleanResponse.replace(/\[INCORRECT\]/gi, '');
-                    cleanResponse = cleanResponse.trim();
-
-                    // No stripping buttons anymore, we allow duplication but handle it in addMessage
-
-                    // Stop buttons from separating from the question text
-                    cleanResponse = cleanResponse.replace(/\n+(?=\s*\[BOTON:)/gi, ' ');
-
-                    // Wait 300ms so the user can process the UI feedback (red/green) and star animation before text arrives
-                    setTimeout(() => {
-                        removeMessage(loadingId);
-                        playAudioForResponse(cleanResponse);
-
-                        const segments = cleanResponse.split('---').map(s => s.trim()).filter(s => s !== '');
-                        segments.forEach(segment => {
-                            const parsedResponse = marked.parse(segment);
-                            addMessage(parsedResponse, 'assistant', true, false, true);
-                        });
-                    }, 300);
-                }
-            })
-            .catch(error => {
-                removeMessage(loadingId);
-                const connError = (currentSubject === 'valenciano')
-                    ? "Alguna cosa ha anat malament amb la connexió."
-                    : "Algo fue mal con la conexión.";
-                addMessage(connError, 'assistant');
-            });
-        }); // end addEventListener
-    } // end guard if
 
     // Function to play the magical star animation
     function playSuccessAnimation() {

@@ -22,7 +22,7 @@ from .auth import (
     ACCESS_TOKEN_EXPIRE_DAYS,
 )
 from .database import engine, get_db
-from datetime import timedelta
+
 
 # Create DB tables on startup
 models.Base.metadata.create_all(bind=engine)
