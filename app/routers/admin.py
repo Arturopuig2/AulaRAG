@@ -176,10 +176,14 @@ async def list_questions(
     if contenido:
         q = q.filter(Question.contenido == contenido)
     if search:
-        q = q.filter(or_(
+        filters = [
             Question.question.ilike(f"%{search}%"),
             Question.identifier.ilike(f"%{search}%"),
-        ))
+        ]
+        # If search looks like a plain number, also match by DB id
+        if search.strip().isdigit():
+            filters.append(Question.id == int(search.strip()))
+        q = q.filter(or_(*filters))
     total = q.count()
     items = q.order_by(Question.created_at.desc()).offset((page - 1) * 20).limit(20).all()
     return {
