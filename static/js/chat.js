@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // ── Default selection: 1º Primaria > Probabilidad > Lenguaje de azar ──
                         const defaultCurso    = '1º de primaria';
                         const defaultBloque   = 'probabilidad';
-                        const defaultContenido = 'Lenguaje de azar';
+                        const defaultContenido = 'lenguaje de azar: nunca, a veces, siempre';
 
                         const cursoIdx = currentTemarioData.findIndex(c =>
                             c.curso.toLowerCase() === defaultCurso.toLowerCase());
