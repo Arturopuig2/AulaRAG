@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null);
                 }
             }
-        } catch(e) {
+        } catch (e) {
             removeMessage(loadingId);
         }
 
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: q.id,
                 question: q.question,
                 answer: q.answer,
-                feedback_correct:   q.feedback_correct   || '',
+                feedback_correct: q.feedback_correct || '',
                 feedback_incorrect: q.feedback_incorrect || ''
             };
             window.currentCorrectAnswer = q.answer;
@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const pct = (exerciseNum / totalExercisesInSeries) * 100;
                 progressBar.style.width = `${pct}%`;
             }
-        } catch(e) {
+        } catch (e) {
             removeMessage(loadingId);
             addMessage('Error al obtener la pregunta. Inténtalo de nuevo.', 'assistant');
         }
@@ -428,9 +428,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Use persisted session labels if available, otherwise fall back to UI dropdowns
             if (activeSessionCurso) {
-                courseLevel   = activeSessionCurso;
-                bloqueStr     = activeSessionBloque;
-                contenidoStr  = activeSessionContenido;
+                courseLevel = activeSessionCurso;
+                bloqueStr = activeSessionBloque;
+                contenidoStr = activeSessionContenido;
             } else if (filterCurso.value !== "") {
                 const cursoIdx = filterCurso.value;
                 courseLevel = currentTemarioData[cursoIdx].curso;
@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            
+
             formData.append('course_level', courseLevel);
             formData.append('bloque', bloqueStr);
             formData.append('contenido', contenidoStr);
@@ -774,7 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.currentDBQuestion = null; // { id, question, options }
 
     // Handler for end-of-series Sí/No buttons
-    window.handleSeriesEnd = function(continuar, btnElement) {
+    window.handleSeriesEnd = function (continuar, btnElement) {
         // Disable both buttons
         const allBtns = btnElement.parentElement.querySelectorAll('.interactive-btn');
         allBtns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; b.style.pointerEvents = 'none'; });
@@ -839,7 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
-            }).catch(() => {});
+            }).catch(() => { });
         }
 
         // ── Text feedback (solo si hay texto en la BD) ──────────────────
