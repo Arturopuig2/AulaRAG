@@ -354,8 +354,6 @@ async def get_explanation(
         return JSONResponse({"error": "not_authenticated"}, status_code=401)
 
     query = db.query(models.Explanation).filter(
-        models.Explanation.is_active == True,
-        models.Explanation.is_verified == True,
         models.Explanation.subject == subject,
         models.Explanation.grade == grade,
     )
@@ -370,7 +368,7 @@ async def get_explanation(
 
     return {
         "id": exp.id,
-        "content": exp.content,
+        "content": exp.text,
         "visual_url": exp.visual_url or "",
         "audio_url": exp.audio_url or "",
     }

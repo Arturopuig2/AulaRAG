@@ -1,12 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Configure Marked to honor single line breaks as <br>
-    if (typeof marked !== 'undefined') {
-        marked.setOptions({
-            breaks: true,
-            gfm: true
-        });
-    }
-
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
     const chatMessages = document.getElementById('chat-messages');
@@ -61,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(`Error loading temario for ${subject}:`, e);
         }
     }
+    console.log("Cargando temarios...");
     loadTemario('lengua', '/api/temario/lengua');
     loadTemario('matematicas', '/api/temario/matematicas');
     loadTemario('valenciano', '/api/temario/valenciano');
@@ -205,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    console.log("Setup inicial completado");
+
     // --- SYLLABUS FILTERS LOGIC ---
     function populateCursos() {
         filterCurso.innerHTML = '<option value="">Selecciona Curso...</option>';
@@ -318,36 +313,29 @@ document.addEventListener('DOMContentLoaded', () => {
             generatedMessage = `Quiero leer: ${contenidoStr}`;
         }
         addMessage(generatedMessage, 'user');
-        // ── DB-ONLY FLOW ──────────────────────────────────────────────────
-        if (currentSubject !== 'competencia_lectora') {
-            // 1. Get explanation from DB
-            const loadingId = addLoadingIndicator();
-            try {
-                const gradeMatch = cursoStr.match(/\d+/);
-                const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
-                const expParams = new URLSearchParams({ subject: currentSubject, grade, bloque: bloqueStr, contenido: contenidoStr });
-                const expResp = await fetch(`/explanations/get?${expParams}`);
-                removeMessage(loadingId);
-                if (expResp.ok) {
-                    const expData = await expResp.json();
-                    if (expData.content) {
-                        addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null);
-                    }
-                }
-            } catch(e) {
-                removeMessage(loadingId);
-            }
 
-            // 2. Fetch and show first question from DB
-            totalExercisesInSeries = 3;
-            await fetchAndShowQuestion(currentSubject, cursoStr, bloqueStr, contenidoStr, 1);
-        } else {
-            // Competencia lectora: still AI-led for now
-            totalExercisesInSeries = 10;
-            currentExerciseIndex = 1;
-            const prompt = `[LECTURA]: ${contenidoStr}. Muestra el texto de la lectura y luego hazme la primera pregunta (Ejercicio 1/10) para practicar la comprensión.`;
-            await sendMessageToBackend(prompt, false, true);
+        // ── DB-ONLY FLOW (ALL SUBJECTS) ──────────────────────────────────
+        // 1. Get initial content (Explanation or Reading) from DB
+        const loadingId = addLoadingIndicator();
+        try {
+            const gradeMatch = cursoStr.match(/\d+/);
+            const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
+            const expParams = new URLSearchParams({ subject: currentSubject, grade, bloque: bloqueStr, contenido: contenidoStr });
+            const expResp = await fetch(`/explanations/get?${expParams}`);
+            removeMessage(loadingId);
+            if (expResp.ok) {
+                const expData = await expResp.json();
+                if (expData.content) {
+                    addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null);
+                }
+            }
+        } catch(e) {
+            removeMessage(loadingId);
         }
+
+        // 2. Fetch and show first question from DB
+        totalExercisesInSeries = (currentSubject === 'competencia_lectora') ? 10 : 3;
+        await fetchAndShowQuestion(currentSubject, cursoStr, bloqueStr, contenidoStr, 1);
     });
 
     // ── Fetch question from DB and render it ─────────────────────────────
@@ -384,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Build exercise bubble
             let idTag = q.identifier ? `<span class="exercise-id" title="Referencia">${q.identifier}</span>` : '';
-            let html = `<p><strong>Ejercicio ${exerciseNum}/3:</strong> ${q.question} ${idTag}</p>`;
+            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question} ${idTag}</p>`;
             html += '<div class="interactive-options">';
             q.options.forEach(opt => {
                 const safe = opt.replace(/"/g, '&quot;');
@@ -403,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update progress bar
             if (progressBar) {
-                const pct = (exerciseNum / 3) * 100;
+                const pct = (exerciseNum / totalExercisesInSeries) * 100;
                 progressBar.style.width = `${pct}%`;
             }
         } catch(e) {
@@ -819,100 +807,90 @@ document.addEventListener('DOMContentLoaded', () => {
     // Track the current DB question (if any)
     window.currentDBQuestion = null; // { id, question, options }
 
+    // Handler for end-of-series Sí/No buttons
+    window.handleSeriesEnd = function(continuar, btnElement) {
+        // Disable both buttons
+        const allBtns = btnElement.parentElement.querySelectorAll('.interactive-btn');
+        allBtns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; b.style.pointerEvents = 'none'; });
+        btnElement.classList.add('correct');
+
+        if (continuar) {
+            currentExerciseIndex = 0;
+            window._lastQuestionId = 0;
+            fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, 1);
+        } else {
+            addMessage('<p>¡Hasta luego! 👋</p>', 'assistant', true, false, true);
+        }
+    };
+
     // Global function to handle clicks on interactive buttons
-    window.sendInteractiveAnswer = function (answer, btnElement) {
-        // Find the container parent and disable all buttons inside it
+    window.sendInteractiveAnswer = async function (answer, btnElement) {
+        // ── Save correct answer BEFORE anything can nullify it ───────────
+        const savedCorrectAnswer = window.currentCorrectAnswer || '';
+        const isCorrect = savedCorrectAnswer
+            ? answer.trim().toLowerCase() === savedCorrectAnswer.trim().toLowerCase()
+            : false;
+        const q = window.currentDBQuestion || {};
+
+        // ── Disable ALL buttons in the container ─────────────────────────
         const container = btnElement.parentElement;
         const allButtons = container.querySelectorAll('.interactive-btn');
         allButtons.forEach(btn => {
             btn.disabled = true;
-            if (btn !== btnElement) {
-                btn.style.opacity = '0.5';
-            }
+            if (btn !== btnElement) btn.style.opacity = '0.5';
         });
+        btnElement.classList.remove('loading');
 
-        // Highlight the selected one as loading
-        btnElement.classList.add('loading');
-        window.lastClickedInteractiveButton = btnElement;
+        // ── Visual feedback on button ─────────────────────────────────────
+        if (isCorrect) {
+            btnElement.classList.add('correct');
+            // Stars
+            userStars = parseInt(localStorage.getItem('aula_stars') || '0') + 1;
+            localStorage.setItem('aula_stars', userStars);
+            const starsLabel = document.getElementById('stars-count');
+            if (starsLabel) {
+                starsLabel.textContent = userStars;
+                starsLabel.parentElement.classList.add('pop');
+                setTimeout(() => starsLabel.parentElement.classList.remove('pop'), 800);
+            }
+            setTimeout(playSuccessAnimation, 0);
+        } else {
+            btnElement.classList.add('incorrect');
+            // Re-enable buttons so student can retry
+            allButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            });
+            btnElement.disabled = true; // keep selected one locked
+        }
 
-        // ⭐ OPTION B: Apply visual feedback IMMEDIATELY (no need to wait for AI)
-        if (window.currentCorrectAnswer) {
-            const isCorrect = answer.trim().toLowerCase() === window.currentCorrectAnswer.trim().toLowerCase();
-            btnElement.classList.remove('loading');
-            if (isCorrect) {
-                btnElement.classList.add('correct');
-                userStars = parseInt(localStorage.getItem('aula_stars') || '0');
-                userStars += 1;
-                localStorage.setItem('aula_stars', userStars);
-                const starsLabel = document.getElementById('stars-count');
-                if (starsLabel) {
-                    starsLabel.textContent = userStars;
-                    starsLabel.parentElement.classList.add('pop');
-                    setTimeout(() => starsLabel.parentElement.classList.remove('pop'), 800);
+        // ── Clear global state ────────────────────────────────────────────
+        window.currentCorrectAnswer = null;
+
+        // ── Text feedback (solo si hay texto en la BD) ──────────────────
+        if (isCorrect) {
+            const fb = q.feedback_correct || '';
+            if (fb) addMessage(`<p>✅ ${fb}</p>`, 'assistant', true, false, true);
+
+            // ── Advance counter and fetch next question ───────────────────
+            const exerciseNum = currentExerciseIndex; // already set by fetchAndShowQuestion
+            const isLastExercise = exerciseNum >= totalExercisesInSeries;
+
+            setTimeout(async () => {
+                if (!isLastExercise) {
+                    await fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, exerciseNum + 1);
+                } else {
+                    const endHtml = `<p>¿Quieres seguir practicando?</p><div class="interactive-options"><button class="interactive-btn" onclick="window.handleSeriesEnd(true, this)">Sí</button><button class="interactive-btn" onclick="window.handleSeriesEnd(false, this)">No</button></div>`;
+                    addMessage(endHtml, 'assistant', true, false, true);
+                    currentExerciseIndex = 0;
                 }
-                setTimeout(playSuccessAnimation, 0);
-            } else {
-                btnElement.classList.add('incorrect');
-                // Re-enable buttons so user can try again
-                allButtons.forEach(btn => {
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                });
-                btnElement.disabled = true; // Keep selected one locked
-            }
-            window.currentCorrectAnswer = null;
+            }, 1000);
         } else {
-            // Fallback if no stored answer: show loading while waiting for AI
-            btnElement.classList.add('loading');
-            window.lastClickedInteractiveButton = btnElement;
-        }
-
-        // Increment exercise counter
-        currentExerciseIndex++;
-        const exerciseNum = currentExerciseIndex;
-        const isLastExercise = exerciseNum >= totalExercisesInSeries;
-
-        // 1. Record answer in DB (progress tracking)
-        if (window.currentDBQuestion && window.currentDBQuestion.id) {
-            fetch('/questions/check', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
-            }).catch(() => {});
-        }
-
-        // 2. Show feedback from DB (no AI)
-        const isCorrect = window.currentCorrectAnswer
-            ? answer.trim().toLowerCase() === window.currentCorrectAnswer.trim().toLowerCase()
-            : null;
-
-        if (isCorrect !== null) {
-            const q = window.currentDBQuestion || {};
-            let feedbackHtml;
-            if (isCorrect) {
-                const fb = q.feedback_correct || '';
-                feedbackHtml = fb
-                    ? `<p>✅ ¡Correcto! ${fb}</p>`
-                    : `<p>✅ ¡Correcto!</p>`;
-            } else {
-                const correctTxt = window.currentCorrectAnswer || '';
-                const fb = q.feedback_incorrect || '';
-                feedbackHtml = fb
-                    ? `<p>❌ La respuesta correcta es <strong>${correctTxt}</strong>. ${fb}</p>`
-                    : `<p>❌ La respuesta correcta es <strong>${correctTxt}</strong>.</p>`;
-            }
-            addMessage(feedbackHtml, 'assistant', true, false, true);
-        }
-
-        // 3. Fetch next question from DB or show end-of-series
-        if (!isLastExercise) {
-            await fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, exerciseNum + 1);
-        } else {
-            setTimeout(() => {
-                const endMsg = `¿Quieres seguir practicando?\n\n[BOTON: Sí]\n[BOTON: No]`;
-                addMessage(marked.parse(endMsg), 'assistant', true, false, true);
-                currentExerciseIndex = 0;
-            }, 300);
+            // ── Do NOT advance — let student retry ────────────────────────
+            const fb = q.feedback_incorrect || '';
+            if (fb) addMessage(`<p>❌ ${fb}</p>`, 'assistant', true, false, true);
+            // Restore currentCorrectAnswer so the next attempt can be checked
+            window.currentCorrectAnswer = savedCorrectAnswer;
         }
     };
 
