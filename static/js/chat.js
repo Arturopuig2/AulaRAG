@@ -429,9 +429,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Build exercise bubble — difficulty badge from DB field
             const dif = q.dificultad || '';
             const difLabel = DIF_LABELS[dif] || '';
-            let idTag  = q.id ? `<span class="exercise-id" title="ID: ${q.id}">#${q.id}</span>` : '';
-            let difTag = difLabel ? `<span class="dif-badge dif-${dif}">${difLabel}</span>` : '';
-            let html = `<p><strong>Ejercicio ${exerciseNum}/${totalExercisesInSeries}:</strong> ${q.question} ${idTag}${difTag}</p>`;
+            let idTag  = ''; // q.id ? `<span class="exercise-id" title="ID: ${q.id}">#${q.id}</span>` : '';
+            let difTag = ''; // difLabel ? `<span class="dif-badge dif-${dif}">${difLabel}</span>` : '';
+            let html = `<p>${q.question}</p>`; // Strong Exercise X/3 removed
             html += '<div class="interactive-options">';
             q.options.forEach(opt => {
                 const safe = opt.replace(/"/g, '&quot;');
@@ -624,25 +624,27 @@ document.addEventListener('DOMContentLoaded', () => {
         let formattedText = text;
         let foundStatus = null;
 
-        // Detect Exercise Number (e.g. Ejercicio 1/3) for progress bar
-        const exerciseRegex = /Ejercicio\s+(\d+)\/(\d+)/i;
+        // Detect and REMOVE Exercise Number (e.g. Ejercicio 1/3) for progress bar
+        const exerciseRegex = /Ejercicio\s+(\d+)\/(\d+):?/gi;
         const exerciseMatch = formattedText.match(exerciseRegex);
         if (exerciseMatch) {
-            const current = parseInt(exerciseMatch[1]);
-            const total = parseInt(exerciseMatch[2]);
-            const percent = (current / total) * 100;
-            if (progressBar) {
-                progressBar.style.width = `${percent}%`;
-                progressBar.style.background = percent === 100
-                    ? 'linear-gradient(90deg, var(--color-green), #4ade80)'
-                    : 'linear-gradient(90deg, var(--color-blue), #60a5fa)';
+            // Keep progress bar logic but remove text
+            const parts = exerciseRegex.exec(formattedText);
+            if (parts) {
+                const current = parseInt(parts[1]);
+                const total = parseInt(parts[2]);
+                const percent = (current / total) * 100;
+                if (progressBar) {
+                    progressBar.style.width = `${percent}%`;
+                }
             }
+            formattedText = formattedText.replace(exerciseRegex, '').trim();
         }
 
 
-        // Style Exercise Identifier [ID: PMAT1N0001]
+        // Remove Exercise Identifier [ID: PMAT1N0001]
         const exerciseIdRegex = /\[ID:\s*([^\]]+)\]/gi;
-        formattedText = formattedText.replace(exerciseIdRegex, '<span class="exercise-id" title="Referencia del ejercicio">$1</span>');
+        formattedText = formattedText.replace(exerciseIdRegex, '');
 
 
         // Parse custom interactive buttons: [BOTON: text]
@@ -895,11 +897,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ── Track answer in DB (progress) ─────────────────────────────────
         if (window.currentDBQuestion && window.currentDBQuestion.id) {
-            fetch('/questions/check', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
-            }).catch(() => { });
+            try {
+                const checkResp = await fetch('/questions/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
+                });
+                
+                if (checkResp.ok) {
+                    const checkData = await checkResp.json();
+                    // --- PEDAGOGY: Proactive rescue trigger ---
+                    if (checkData.trigger_rescue) {
+                        console.log("[PEDAGOGY] Error threshold reached. Requesting AUTO_RESCUE...");
+                        // Call chatbot for rescue theory + repeat question
+                        sendMessageToBackend("[AUTO_RESCUE]", false, false, currentExerciseIndex);
+                        return; // Exit: Chatbot will provide the feedback and repeat the question
+                    }
+                }
+            } catch (e) {
+                console.error("Error checking answer:", e);
+            }
         }
 
         // ── Text feedback (solo si hay texto en la BD) ──────────────────

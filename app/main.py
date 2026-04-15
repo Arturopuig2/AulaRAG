@@ -227,6 +227,7 @@ async def chat_endpoint(
                 "bloque": s.bloque,
                 "contenido": s.contenido,
                 "attempts": s.attempts,
+                "successes": s.successes,
                 "rate": round(rate * 100, 1)
             })
         mastery_stats.sort(key=lambda x: x["rate"])
@@ -397,19 +398,26 @@ async def get_next_question(
     query = db.query(models.Question).filter(
         models.Question.is_active == True,
         models.Question.is_verified == True,
-        models.Question.subject == subject,
+        sqlfunc.lower(models.Question.subject) == subject.lower(),
         models.Question.grade == grade,
     )
     if bloque:
-        query = query.filter(models.Question.bloque == bloque)
+        query = query.filter(sqlfunc.lower(models.Question.bloque) == bloque.lower())
     if contenido:
-        query = query.filter(models.Question.contenido == contenido)
-    if dificultad:
-        query = query.filter(models.Question.dificultad == dificultad)
+        query = query.filter(sqlfunc.lower(models.Question.contenido) == contenido.lower())
     if exclude_id:
         query = query.filter(models.Question.id != exclude_id)
 
-    questions = query.all()
+    # First attempt with requested difficulty
+    results_query = query
+    if dificultad:
+        results_query = query.filter(models.Question.dificultad == dificultad)
+
+    questions = results_query.all()
+
+    # Fallback: if no questions found with specific difficulty, take any from the same topic
+    if not questions and dificultad:
+        questions = query.all()
 
     if not questions:
         return JSONResponse({"error": "no_questions"}, status_code=404)
@@ -476,7 +484,16 @@ async def check_answer(
     progress.last_attempt = datetime.utcnow()
     db.commit()
 
-    return {"correct": correct, "answer": q.answer}
+    # --- PEDAGOGY: Detect if student reached the error threshold ---
+    errors = progress.attempts - progress.successes
+    trigger_rescue = (not correct) and (errors >= 2)
+
+    return {
+        "correct": correct, 
+        "answer": q.answer,
+        "trigger_rescue": trigger_rescue,
+        "errors": errors
+    }
 
 
 @app.get("/stats/mastery")

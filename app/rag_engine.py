@@ -22,6 +22,11 @@ client = genai.Client(api_key=API_KEY) if API_KEY else None
 # Model to use - gemini-2.5-flash is the most current model in your account list
 MODEL_NAME = "gemini-2.5-flash"
 
+def normalize_text(text):
+    import unicodedata
+    if not text: return ""
+    return "".join(c for c in unicodedata.normalize('NFD', str(text)) if unicodedata.category(c) != 'Mn').lower()
+
 def clean_ai_text(text: str) -> str:
     """Removes segments that only contain punctuation or artifacts like '¡!'."""
     if not text:
@@ -331,13 +336,8 @@ if client:
 
 def get_db_question(subject: str, grade: int = None, bloque: str = None, contenido: str = None) -> str:
     """Extrae una pregunta aleatoria optimizada para bases de datos grandes."""
-    import unicodedata
     import random as _random
     from sqlalchemy import func
-
-    def normalize_text(text):
-        if not text: return ""
-        return "".join(c for c in unicodedata.normalize('NFD', str(text)) if unicodedata.category(c) != 'Mn').lower()
 
     db = SessionLocal()
     try:
@@ -399,12 +399,8 @@ def get_db_question(subject: str, grade: int = None, bloque: str = None, conteni
     finally:
         db.close()
 
-def get_db_explanation(subject: str, grade: int = None, bloque: str = None, contenido: str = None) -> Optional[str]:
+def get_db_explanation(subject: str, grade: int = None, bloque: str = None, contenido: str = None, force_easier: bool = False) -> Optional[str]:
     """Busca una explicación verificada en la base de datos de Aula con normalización."""
-    import unicodedata
-    def normalize_text(text):
-        if not text: return ""
-        return "".join(c for c in unicodedata.normalize('NFD', str(text)) if unicodedata.category(c) != 'Mn').lower()
 
     db = SessionLocal()
     try:
@@ -424,18 +420,18 @@ def get_db_explanation(subject: str, grade: int = None, bloque: str = None, cont
             norm_cont = normalize_text(contenido)
             q_cont = q.filter(func.lower(models.Explanation.contenido).contains(norm_cont))
             exp = q_cont.order_by(models.Explanation.id.desc()).first()
-            if exp: return exp.text
+            if exp: return (exp.easier_version or exp.text) if force_easier else exp.text
 
         # Prioridad 2: Búsqueda por Bloque (normalizado)
         if bloque:
             norm_bloque = normalize_text(bloque)
             q_bloque = q.filter(func.lower(models.Explanation.bloque).contains(norm_bloque))
             exp = q_bloque.order_by(models.Explanation.id.desc()).first()
-            if exp: return exp.text
+            if exp: return (exp.easier_version or exp.text) if force_easier else exp.text
 
         # Prioridad 3: Búsqueda genérica por asignatura (normalizada)
         exp = q.order_by(models.Explanation.id.desc()).first()
-        return exp.text if exp else None
+        return ((exp.easier_version or exp.text) if force_easier else exp.text) if exp else None
     finally:
         db.close()
 
@@ -475,72 +471,100 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
             stats_text = "Mastery stats for the user: " + ", ".join([f"{s['contenido']} ({s['bloque']}): {s['rate']}%" for s in mastery_stats])
             current_parts.append(types.Part(text=stats_text))
 
-        pdf_parts = get_pdf_parts_for_context(subject, course_level)
-        if pdf_parts:
-            for part in pdf_parts:
-                current_parts.append(part)
-
-        # ── EXPLANATION SOURCE OF TRUTH (NEW ADAPTIVE LOGIC) ──
-        # If it's a review turn, search for verified theory in DB
+        # --- PRE-CARGA DE DATOS (DATA PREFETCH) ---
+        prefetched_question = None
         db_explanation = None
-        if any(kw in user_message.lower() for kw in ["repasar", "repaso", "tema", "quien", "ayuda", "explicaci"]):
-            # Try to infer content from previous messages or user message
-            # Try to infer content: anything after "repasar", "tema de", etc.
-            contenido_inferido = ""
-            # Priority 1: After ":" or "tema de"
-            match = re.search(r'(?:repasar|tema de?|estudiar)[:\s]+([\w\s]{3,})', user_message.lower())
+        grade_val = None
+        if course_level:
+            grade_match = re.search(r'\d+', str(course_level))
+            if grade_match: grade_val = int(grade_match.group())
+
+        if subject != "general":
+            try:
+                # Fetch question (to show next or repeat)
+                prefetched_raw = get_db_question(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+                prefetched_question = json.loads(prefetched_raw)
+                # Fetch standard explanation
+                db_explanation = get_db_explanation(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+            except Exception as e:
+                print(f"[RAG_ERROR] Fallo en prefetch inicial: {str(e)}")
+
+        # --- DETECCIÓN DE ESTADO PEDAGÓGICO ---
+        is_option_chosen = "[OPCION_ELEGIDA]" in user_message
+        is_rescue = "[AUTO_RESCUE]" in user_message
+        
+        # Si el rescatador viene del frontend, forzamos intervención
+        force_easier = is_rescue
+        repeating_exercise = is_rescue
+        
+        # Fallback eval (si no es rescue pero es elección manual)
+        is_wrong_answer = False
+        if is_option_chosen and prefetched_question and not is_rescue:
+            match = re.search(r'\[OPCION_ELEGIDA\]\s*(.*)', user_message)
             if match:
-                contenido_inferido = match.group(1).strip()
-            else:
-                # Priority 2: Generic "repasar X"
-                match = re.search(r'repasar\s+([\w\s]{3,})', user_message.lower())
-                if match:
-                    contenido_inferido = match.group(1).strip()
-            
-            print(f"[DEBUG] Inferido/Enviado: '{contenido if contenido else contenido_inferido}' for message: '{user_message}'")
-            db_explanation = get_db_explanation(subject, grade=None, bloque=bloque, contenido=contenido if contenido else contenido_inferido)
-            if db_explanation:
-                print(f"[DEBUG] Found DB Explanation for '{contenido_inferido}'")
-            else:
-                print(f"[DEBUG] No DB Explanation for '{contenido_inferido}'. Using PDF Fallback.")
+                chosen_opt = match.group(1).strip()
+                is_wrong_answer = (chosen_opt != prefetched_question.get('answer', '').strip())
+
+        # Si hay intervención forzada por rescate
+        if force_easier:
+            # Obtener la versión simplificada específicamente
+            db_explanation_rescue = get_db_explanation(subject, grade=grade_val, bloque=bloque, contenido=contenido, force_easier=True)
+            if db_explanation_rescue:
+                db_explanation = db_explanation_rescue
+                print(f"[PEDAGOGY] Intervención: Se ha cargado la versión fácil para '{contenido}'")
+
+        # Final instruction reminder
 
         # Final instruction reminder
         current_parts.append(types.Part(text=(
-            "RECUERDA: (1) Si el alumno pide un tema nuevo o dice 'repasar' y ya has saludado antes, PROHIBIDO saludar de nuevo. DEBES EMPEZAR SIEMPRE CON LA Explicación:. "
+            "RECUERDA: (1) Si el alumno pide un tema nuevo o dice 'repasar' y ya has saludado antes, PROHIBIDO saludar de nuevo. DEBES EMPEZAR SIEMPRE con la Explicación:. "
             "(2) DEBES USAR PALABRAS REALES. (3) PROHIBIDO mencionar temas, lecciones, páginas o actividades. "
             "(4) AISLAMIENTO DE EJERCICIOS: Todo ejercicio debe ir precedido por '---'. La burbuja del ejercicio debe contener ÚNICAMENTE el enunciado y las opciones. PROHIBIDO incluir mensajes de ánimo, explicaciones, intros o despedidas en la misma burbuja que el ejercicio. "
-            "(5) ESTRUCTURA DE MENSAJE: Si das teoría y luego un ejercicio, el formato OBLIGATORIO es: [Texto de Explicación] \n---\n Ejercicio X/3: [Solo el enunciado]. "
+            "(5) ESTRUCTURA DE MENSAJE: Si das teoría y luego un ejercicio, el formato OBLIGATORIO es: [Texto de Explicación] \n---\n [Solo el enunciado]. "
             "(6) NEUTRO: Prohibido decir 'campeón', 'listo' o 'niño'. Usa lenguaje neutro. "
             "(7) DATA PREFERENCE: Prioriza SIEMPRE la base de datos. Si hay una 'CONTENIDO_VERIFICADO_A_USAR' en el DASHBOARD, es OBLIGATORIO usarla PALABRA POR PALABRA. PROHIBIDO inventar o parafrasear. "
-            "(8) IDENTIFICADOR: Si usas la 'Pregunta disponible', DEBES incluir al final del enunciado el código [ID: código] tal cual viene en los datos. "
-            "(9) PRECISIÓN: Verifica 2 veces antes de poner [INCORRECTO]. "
-            "(10) MANDATO SUPREMO: EMPIEZA SIEMPRE con Explicación: antes de cualquier ejercicio nuevo. El ejercicio va después del '---' solo. PROHIBIDO decidir cuántos ejercicios hay o si la tanda ha terminado: eso lo controla el sistema automáticamente."
+            "(8) PRECISIÓN: Verifica 2 veces antes de poner [INCORRECTO]. "
+            "(9) MANDATO SUPREMO: EMPIEZA SIEMPRE con Explicación: antes de cualquier ejercicio nuevo. El ejercicio va después del '---' solo. PROHIBIDO decidir cuántos ejercicios hay o si la tanda ha terminado: eso lo controla el sistema automáticamente."
         )))
         
         # Combine user message with history
         messages = list(subject_history)
         
-        # Prepare Turn-Specific Instruction (Compact & Anti-Redundancy)
+        # --- PREPARACIÓN DEL MANDATO DEL TURNO ---
         is_review = any(kw in user_message.lower() for kw in ["repasar", "repaso", "tema", "quien", "ayuda", "explicaci"])
         is_continuation = any(kw in user_message.lower() for kw in ["si", "siguiente", "otro", "vale", "continu", "mas"])
-        is_evaluation = "[CORRECTO]" in user_message or "[INCORRECTO]" in user_message
+        is_evaluation = "[CORRECTO]" in user_message or "[INCORRECTO]" in user_message or is_option_chosen
         
         turn_instruction = ""
-        is_option_chosen = "[OPCION_ELEGIDA]" in user_message
-        if is_option_chosen and exercise_num > 0:
-            next_num = exercise_num + 1
-            if next_num <= 3:
+        if (is_option_chosen or is_rescue) and exercise_num > 0:
+            if is_rescue:
+                # INTERVENCIÓN PROACTIVA (RESCATE)
                 turn_instruction = (
-                    f"\n[MANDATO] El alumno acaba de responder. Evalúa brevemente (máximo 2 frases). "
-                    f"Después, usa '---' y presenta EXACTAMENTE el Ejercicio {next_num}/3 con la Pregunta disponible. "
-                    f"PROHIBIDO usar otro número de ejercicio."
+                    f"\n[MANDATO_CRÍTICO] El alumno necesita refuerzo. "
+                    f"1. Empieza OBLIGATORIAMENTE con [INCORRECTO]. "
+                    f"2. Proporciona esta EXPLICACIÓN SIMPLIFICADA de refuerzo: {db_explanation}. "
+                    f"3. Después usa '---' y ofrece OTRA OPORTUNIDAD repitiendo el Ejercicio {exercise_num}/3."
+                )
+            elif is_wrong_answer:
+                # Primer error o errores aislados
+                turn_instruction = (
+                    f"\n[MANDATO] El alumno ha fallado. Di [INCORRECTO], da una pequeña pista pedagógica (mínimo 1 frase, máximo 2) sin dar la respuesta. "
+                    f"Luego usa '---' y repite el Ejercicio {exercise_num}/3."
                 )
             else:
-                # exercise_num == 3, this is evaluation of the last one — JS will add the 'Continue?' bubble
-                turn_instruction = (
-                    f"\n[MANDATO] El alumno acaba de responder al último ejercicio (3/3). "
-                    f"Evalúa brevemente (máximo 2 frases). PROHIBIDO añadir '¿Quieres seguir?' ni preguntas de continuidad: eso lo gestiona el sistema."
-                )
+                # Acierto
+                next_num = exercise_num + 1
+                if next_num <= 3:
+                    turn_instruction = (
+                        f"\n[MANDATO] El alumno ha acertado. Di [CORRECTO] y felicítale con una curiosidad breve. "
+                        f"Luego usa '---' y presenta el Ejercicio {next_num}/3."
+                    )
+                else:
+                    turn_instruction = (
+                        f"\n[MANDATO] El alumno ha acertado el último ejercicio (3/3). Di [CORRECTO], felicítale. "
+                        f"PROHIBIDO sugerir más ejercicios o preguntar si quiere seguir: eso lo hace el sistema."
+                    )
+
         elif is_evaluation:
              turn_instruction = "\n[MANDATO] Verifica con extremo cuidado (Regla 34). Empieza SIEMPRE con [CORRECTO] o [INCORRECTO]."
         elif is_review:
@@ -554,27 +578,7 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
         
         modified_user_message = f"{user_message}\n{turn_instruction}" if turn_instruction else user_message
         
-        # Search for a relevant question in the DB proactively to avoid tool calling (2x speed)
-        prefetched_question = None
-        if subject != "general":
-            try:
-                # Extract numeric grade from string like "1" or "1º"
-                grade_val = None
-                if course_level:
-                    grade_match = re.search(r'\d+', str(course_level))
-                    if grade_match:
-                        grade_val = int(grade_match.group())
-                
-                print(f"[RAG_FLOW] Iniciando búsqueda de pregunta: sub={subject}, grade={grade_val}")
-                prefetched_raw = get_db_question(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
-                prefetched_question = json.loads(prefetched_raw)
-                
-                # PREFETCH EXPLANATION - New seal of truth
-                db_explanation = get_db_explanation(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
-            except Exception as e:
-                print(f"[RAG_ERROR] Fallo en prefetch de datos DB: {str(e)}")
-                db_explanation = None
-                pass
+        # Generate model response (WITH AUTOMATIC RETRIES for 503 high demand or 403 file errors)
 
         # Generate model response (WITH AUTOMATIC RETRIES for 503 high demand or 403 file errors)
         import asyncio
