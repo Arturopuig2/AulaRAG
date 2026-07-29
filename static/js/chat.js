@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(e);
         }
 
-        // If no static explanation was found in DB, use Gemini RAG to generate the complete theory explanation for this topic
+        // If no static explanation was found in DB, use Gemini RAG stream to generate the complete theory explanation in real-time!
         if (!staticFound) {
             const promptMsg = (currentSubject === 'valenciano')
                 ? `Explica'm detalladament la teoria i exemples de: ${contenidoStr}`
@@ -381,23 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('contenido', contenidoStr);
             formData.append('reset_history', 'true');
 
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                });
-                removeMessage(loadingId);
-                const data = await response.json();
-                if (data.response) {
-                    addMessage(marked.parse(data.response), 'assistant', true, false, true, data.visual_url || null, data.audio_url || null);
-                } else if (data.error) {
-                    addMessage(`Oops: ${data.error}`, 'assistant');
-                }
-            } catch (err) {
-                removeMessage(loadingId);
-                addMessage(`Error al obtener la teoría del tema.`, 'assistant');
-            }
+            await streamChatResponse(formData, loadingId);
         }
     });
 
@@ -516,7 +500,37 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('bloque', bloqueStr);
             formData.append('contenido', contenidoStr);
 
-            const response = await fetch('/chat', {
+            await streamChatResponse(formData, loadingId);
+        } catch (error) {
+            console.error('Error in sendMessage:', error);
+            removeMessage(loadingId);
+            const errorMsg = (currentSubject === 'valenciano')
+                ? 'Error de connexió. Torna a intentar-ho.'
+                : 'Error de conexión. Vuelve a intentarlo.';
+            addMessage(errorMsg, 'assistant');
+        }
+    }
+
+    async function streamChatResponse(formData, loadingIdToReplace = null) {
+        if (loadingIdToReplace) {
+            removeMessage(loadingIdToReplace);
+        }
+
+        const msgEl = document.createElement('div');
+        const messageId = 'msg-' + Date.now();
+        msgEl.id = messageId;
+        msgEl.className = 'message assistant';
+
+        const contentEl = document.createElement('div');
+        contentEl.className = 'bubble';
+        contentEl.innerHTML = '<span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>';
+        msgEl.appendChild(contentEl);
+        chatMessages.appendChild(msgEl);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        let accumulatedText = "";
+        try {
+            const response = await fetch('/chat/stream', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -524,73 +538,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const data = await response.json();
-
-            // Remove loading
-            removeMessage(loadingId);
-
-            if (data.error) {
-                const errorMsg = (currentSubject === 'valenciano')
-                    ? `Ui, hi ha hagut un xicotet error: ${data.error}`
-                    : `Oops, un pequeño error falló: ${data.error}`;
-                addMessage(errorMsg, 'assistant');
-            } else {
-                let cleanResponse = data.response;
-
-                // Update the clicked button's visual state (green/red)
-                if (window.lastClickedInteractiveButton) {
-                    const looksCorrect = /\[CORRECTO\]|\[CORRECTE\]|\[CORRECT\]/i.test(cleanResponse);
-                    const looksIncorrect = /\[INCORRECTO\]|\[INCORRECTE\]|\[INCORRECT\]/i.test(cleanResponse);
-                    window.lastClickedInteractiveButton.classList.remove('loading');
-                    if (looksCorrect) {
-                        window.lastClickedInteractiveButton.classList.add('correct');
-                    } else if (looksIncorrect) {
-                        window.lastClickedInteractiveButton.classList.add('incorrect');
-                        const container = window.lastClickedInteractiveButton.parentElement;
-                        container.querySelectorAll('.interactive-btn').forEach(btn => {
-                            btn.disabled = false;
-                            btn.style.opacity = '1';
-                        });
-                    }
-                    window.lastClickedInteractiveButton = null;
-                }
-
-                // Clean evaluation tags and formatting artifacts
-                cleanResponse = cleanResponse.replace(/\[CORRECTO\]|\[CORRECTE\]|\[CORRECT\]/gi, '');
-                cleanResponse = cleanResponse.replace(/\[INCORRECTO\]|\[INCORRECTE\]|\[INCORRECT\]/gi, '');
-                cleanResponse = cleanResponse.replace(/\n+(?=\s*\[BOTON:)/gi, ' ');
-                cleanResponse = cleanResponse.replace(/[¡!]{2,}/g, '!');
-                cleanResponse = cleanResponse.replace(/[¿?]{2,}/g, '?');
-                cleanResponse = cleanResponse.replace(/([¡!¿?])\s+([¡!¿?])/g, '$1');
-                // Strip any '¿Quieres seguir?' the AI adds by itself — JS controls this
-                cleanResponse = cleanResponse.replace(/---?\s*[\n]?\s*¿Quieres seguir\?/gi, '').trim();
-                cleanResponse = cleanResponse.trim();
-
-                playAudioForResponse(cleanResponse);
-
-                // Split by '---' into separate bubbles
-                const segments = cleanResponse.split('---').map(s => s.trim()).filter(s => {
-                    if (!s) return false;
-                    if (!/[a-z0-9áéíóúÁÉÍÓÚñÑ]/i.test(s) && !s.includes('[BOTON:')) return false;
-                    if (s.length < 5 && /^[¡! \.]+$/.test(s)) return false;
-                    return true;
-                });
-
-                segments.forEach((segment, idx) => {
-                    const parsedResponse = marked.parse(segment.trim());
-                    const isExerciseSegment = segment.toLowerCase().includes('ejercicio') || segment.includes('[BOTON:');
-                    const vUrl = isExerciseSegment ? data.visual_url : null;
-                    const aUrl = isExerciseSegment ? data.audio_url : null;
-                    addMessage(parsedResponse, 'assistant', true, false, true, vUrl, aUrl);
-                });
-
+            if (!response.ok) {
+                contentEl.innerHTML = "Oops, ha ocurrido un error al conectar con el servidor.";
+                return;
             }
-        } catch (error) {
-            removeMessage(loadingId);
-            const connError = (currentSubject === 'valenciano')
-                ? "Alguna cosa ha anat malament amb la connexió. Pots tornar a enviar-ho?"
-                : "Algo fue mal con la conexión. ¿Puedes enviarlo de nuevo?";
-            addMessage(connError, 'assistant');
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let buffer = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n\n');
+                buffer = lines.pop() || "";
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed.startsWith('data: ')) {
+                        try {
+                            const jsonStr = trimmed.slice(6);
+                            const payload = JSON.parse(jsonStr);
+                            if (payload.text) {
+                                accumulatedText += payload.text;
+                                contentEl.innerHTML = marked.parse(accumulatedText);
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            } else if (payload.done) {
+                                const finalMarkdown = payload.full_text || accumulatedText;
+                                contentEl.innerHTML = marked.parse(finalMarkdown);
+                                if (audioEnabled && window.speechSynthesis) {
+                                    speakText(finalMarkdown.replace(/<[^>]*>/g, ''));
+                                }
+                            } else if (payload.error) {
+                                contentEl.innerHTML = `Oops: ${payload.error}`;
+                            }
+                        } catch (e) {
+                            console.error("SSE JSON Error", e);
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Streaming error", err);
+            contentEl.innerHTML = "Error al recibir la respuesta en tiempo real.";
         }
     }
 

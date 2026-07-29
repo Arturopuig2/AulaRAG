@@ -116,3 +116,19 @@ class TopicExplanation(Base):
     explanation = Column(Text, nullable=False)
     created_at  = Column(DateTime, default=datetime.utcnow)
     updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class CachedExplanation(Base):
+    """Semantic cache for generated RAG explanations to save API tokens and respond in 0 ms."""
+    __tablename__ = "cached_explanations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    cache_key = Column(String, unique=True, index=True, nullable=False)
+    subject = Column(String, index=True, nullable=False)
+    course_level = Column(String, nullable=True)
+    bloque = Column(String, nullable=True)
+    contenido = Column(String, nullable=True)
+    prompt_query = Column(Text, nullable=False)
+    explanation_response = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+

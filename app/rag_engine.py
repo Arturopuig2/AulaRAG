@@ -271,9 +271,9 @@ def load_pdf_files_as_parts():
     else:
         print("[cache] Cache is up-to-date. No disk write needed.")
 
-def get_pdf_parts_for_context(subject: str, course_level: str):
-    """Returns a list of specific Gemini file parts for the requested subject and course, using the cache.
-       Supports multiple parts for the same course (e.g. Part1, Part2)."""
+def get_pdf_parts_for_context(subject: str, course_level: str, query_text: str = ""):
+    """Returns a list of specific Gemini file parts/chunks for the requested subject and course.
+       Uses vector embedding search (text-embedding-004) to filter top relevant chunks when query_text is present."""
     if not course_level:
         return []
         
@@ -294,7 +294,6 @@ def get_pdf_parts_for_context(subject: str, course_level: str):
     elif subject.lower() == "valenciano":
         expected_patterns.append(f"AULA_VALENCIANO_{grade_match}.pdf")
     elif subject.lower() == "ingles":
-        # Check for both the single file and potential split parts
         expected_patterns.append(f"Aula_english_{grade_num_padded}.pdf")
         expected_patterns.append(f"Aula_english_{grade_num_padded}_Part1.pdf")
         expected_patterns.append(f"Aula_english_{grade_num_padded}_Part2.pdf")
@@ -305,7 +304,52 @@ def get_pdf_parts_for_context(subject: str, course_level: str):
         
     parts = []
     
-    # Prioritize Text Content (Much faster processing + lower token usage)
+    # Also load any RAG JSON documents in the subject source folder (e.g. reglas_acentuacion_lomloe_rag.json)
+    subject_dir = os.path.join(DATA_DIR, "source_files", subject.lower())
+    json_chunks_candidates = []
+
+    if os.path.exists(subject_dir):
+        for f_name in os.listdir(subject_dir):
+            if f_name.endswith(".json") and not f_name.startswith("temario_"):
+                json_path = os.path.join(subject_dir, f_name)
+                try:
+                    with open(json_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        if isinstance(data, dict) and "chunks" in data:
+                            doc_title = data.get("title", f_name)
+                            for c in data["chunks"]:
+                                c_text = c.get("content", "")
+                                if c_text:
+                                    json_chunks_candidates.append({
+                                        "title": doc_title,
+                                        "text": f"[{doc_title} - {c.get('topic', '')}] {c_text}"
+                                    })
+                        elif isinstance(data, dict) and "text" in data:
+                            json_chunks_candidates.append({
+                                "title": f_name,
+                                "text": data["text"]
+                            })
+                except Exception as e:
+                    print(f"Error reading RAG JSON {json_path}: {e}")
+
+    # Apply Vector Search on RAG chunks if query_text is available
+    if json_chunks_candidates:
+        if query_text:
+            try:
+                from .vector_store import search_relevant_chunks
+                top_chunks = search_relevant_chunks(query_text, json_chunks_candidates, top_k=3)
+                combined = "\n\n".join([c["text"] for c in top_chunks])
+                parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG (SELECCIÓN VECTORIAL):\n{combined}"))
+                print(f"[vector_search] Retornando los {len(top_chunks)} chunks más relevantes para '{query_text[:30]}...'")
+            except Exception as ve:
+                print(f"Vector search error: {ve}")
+                combined = "\n\n".join([c["text"] for c in json_chunks_candidates[:5]])
+                parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG:\n{combined}"))
+        else:
+            combined = "\n\n".join([c["text"] for c in json_chunks_candidates[:5]])
+            parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG:\n{combined}"))
+
+    # Prioritize Text Content fallback
     txt_filename = f"Aula_{subject.lower()}_{grade_num_padded}.txt"
     if subject.lower() == "ingles":
         txt_filename = f"Aula_english_{grade_num_padded}.txt"
@@ -316,31 +360,10 @@ def get_pdf_parts_for_context(subject: str, course_level: str):
             with open(txt_path, "r", encoding="utf-8") as f:
                 text_content = f.read()
                 parts.append(types.Part(text=f"CONTENIDO DEL LIBRO ({subject} {course_level}):\n{text_content}"))
-                # If we have the text, we return EARLY to avoid sending the heavy PDF too
-                print(f"[speed] Using TEXT context for {subject} {grade_num_padded} - Skipping PDF.")
+                print(f"[speed] Using TEXT context for {subject} {grade_num_padded}.")
                 return parts
         except Exception as e:
             print(f"Error reading text fallback for {txt_path}: {e}")
-
-    # Also load any RAG JSON documents in the subject source folder (e.g. reglas_acentuacion_lomloe_rag.json)
-    subject_dir = os.path.join(DATA_DIR, "source_files", subject.lower())
-    if os.path.exists(subject_dir):
-        for f_name in os.listdir(subject_dir):
-            if f_name.endswith(".json") and not f_name.startswith("temario_"):
-                json_path = os.path.join(subject_dir, f_name)
-                try:
-                    with open(json_path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                        if isinstance(data, dict) and "chunks" in data:
-                            chunks_text = "\n\n".join([c.get("content", "") for c in data["chunks"] if c.get("content")])
-                            doc_title = data.get("title", f_name)
-                            parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG ({doc_title}):\n{chunks_text}"))
-                            print(f"[speed] Loaded RAG JSON document: {f_name}")
-                        elif isinstance(data, dict) and "text" in data:
-                            parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG ({f_name}):\n{data['text']}"))
-                            print(f"[speed] Loaded RAG JSON document: {f_name}")
-                except Exception as e:
-                    print(f"Error reading RAG JSON {json_path}: {e}")
 
     # Fallback to PDF only if no text exists
     for pattern in expected_patterns:
@@ -610,6 +633,141 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
             f.write(traceback.format_exc())
         print(f"Gemini API Error: {e}")
         return "¡Ups! Algo ha fallado. Por favor, vuelve a intentarlo.", False, {}
+
+def get_cached_explanation(db_session, subject: str, course_level: str, bloque: str, contenido: str, user_message: str):
+    """Retrieve explanation from semantic cache if available."""
+    if not db_session:
+        return None
+    try:
+        norm_msg = normalize_text(user_message).strip()
+        key = f"{normalize_text(subject)}_{normalize_text(course_level)}_{normalize_text(bloque)}_{normalize_text(contenido)}_{norm_msg}"
+        cached = db_session.query(models.CachedExplanation).filter(models.CachedExplanation.cache_key == key).first()
+        if cached:
+            return cached.explanation_response
+    except Exception as e:
+        print("Cache lookup error:", e)
+    return None
+
+def save_cached_explanation(db_session, subject: str, course_level: str, bloque: str, contenido: str, user_message: str, response_text: str):
+    """Save explanation to semantic cache."""
+    if not db_session or not response_text:
+        return
+    try:
+        norm_msg = normalize_text(user_message).strip()
+        key = f"{normalize_text(subject)}_{normalize_text(course_level)}_{normalize_text(bloque)}_{normalize_text(contenido)}_{norm_msg}"
+        existing = db_session.query(models.CachedExplanation).filter(models.CachedExplanation.cache_key == key).first()
+        if not existing:
+            cached = models.CachedExplanation(
+                cache_key=key,
+                subject=subject,
+                course_level=course_level,
+                bloque=bloque,
+                contenido=contenido,
+                prompt_query=user_message,
+                explanation_response=response_text
+            )
+            db_session.add(cached)
+            db_session.commit()
+    except Exception as e:
+        print("Cache save error:", e)
+
+async def get_gemini_response_stream(
+    user_message: str,
+    subject: str = "lengua",
+    course_level: str = "",
+    user_id: str = "default_user",
+    reset_history: bool = False,
+    mastery_stats: list = None,
+    bloque: str = "",
+    contenido: str = "",
+    db_session = None
+):
+    """Yields streaming SSE data chunks as Gemini generates the response in real-time, with semantic caching."""
+    # --- 1. Check Semantic Cache First ---
+    cached_text = get_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message)
+    if cached_text:
+        print(f"CACHE HIT [0 ms, 0 tokens]: {subject}/{course_level}/{bloque}/{contenido}")
+        yield f"data: {json.dumps({'text': cached_text})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'full_text': cached_text})}\n\n"
+        return
+
+    history_key = f"{user_id}_{subject}"
+    
+    if reset_history and history_key in chat_histories:
+        del chat_histories[history_key]
+
+    subject_history = chat_histories.setdefault(history_key, [])
+
+    current_parts = []
+    
+    turn_instruction = (
+        "RECUERDA: Eres un profesor paciente y experto. "
+        "Tu objetivo principal es enseñar la TEORÍA y proporcionar EJEMPLOS CLAROS. "
+        "PROHIBIDO realizar o proponer ejercicios, tests o cuestionarios al alumno. "
+        "Si el alumno tiene dudas, resuélvelas con ejemplos. "
+        "Usa lenguaje neutro y cercano."
+    )
+
+    if bloque or contenido:
+        filter_context = f"[Contexto de Filtrado: Bloque '{bloque}', Contenido '{contenido}']\n"
+        turn_instruction = filter_context + turn_instruction
+        
+    modified_user_message = f"{user_message}\n{turn_instruction}" if turn_instruction else user_message
+    
+    current_parts_loop = list(current_parts)
+    
+    # 1. Cargar Instrucciones Universales
+    dynamic_instruction = SYSTEM_INSTRUCTION
+
+    # 2. Cargar Agente Especialista
+    subject_rules = load_context_rules(subject)
+    if subject_rules:
+        dynamic_instruction += f"\n\n*** AGENTE ESPECIALISTA: {subject.upper()} ***\n{subject_rules}\n"
+    else:
+        dynamic_instruction += f"\n\n[AVISO] Eres un tutor de {subject}. Céntrate en teoría y ejemplos."
+
+    # 3. Inyectar Contexto
+    context_info = f"\n\n### DASHBOARD DEL TUTOR:\n- Asignatura: {subject}\n- Curso: {course_level if course_level else 'Primaria'}"
+    
+    # --- CONTEXTO DEL LIBRO (PDF/Texto/JSON con Búsqueda Vectorial) ---
+    book_context = get_pdf_parts_for_context(subject, course_level, query_text=user_message)
+    current_parts_loop.extend(book_context)
+
+    dynamic_instruction += context_info
+    current_parts_loop.append(types.Part(text=modified_user_message))
+    
+    messages = list(subject_history)
+    messages.append(types.Content(role="user", parts=current_parts_loop))
+
+    current_client = get_client()
+    full_response_text = ""
+    try:
+        stream = await current_client.aio.models.generate_content_stream(
+            model=MODEL_NAME,
+            contents=messages,
+            config=types.GenerateContentConfig(
+                system_instruction=dynamic_instruction,
+                temperature=0.0
+            )
+        )
+        async for chunk in stream:
+            if chunk.text:
+                full_response_text += chunk.text
+                yield f"data: {json.dumps({'text': chunk.text})}\n\n"
+        
+        cleaned_text = clean_ai_text(full_response_text)
+        subject_history.append(types.Content(role="user", parts=[types.Part(text=modified_user_message)]))
+        subject_history.append(types.Content(role="model", parts=[types.Part(text=cleaned_text)]))
+        
+        # Save to semantic cache for future instant responses (0 ms, 0 tokens)
+        if db_session:
+            save_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message, cleaned_text)
+
+        yield f"data: {json.dumps({'done': True, 'full_text': cleaned_text})}\n\n"
+    except Exception as e:
+        import traceback
+        print(f"Gemini Streaming Error: {e}")
+        yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
 def upload_new_file_to_gemini(file_path: str, subject: str) -> bool:
     """Uploads a new PDF to Gemini and updates the cache."""

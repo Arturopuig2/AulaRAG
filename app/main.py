@@ -1,10 +1,10 @@
-# Main FastAPI application for AulaRAG - updated syllabus theory flow
+# Main FastAPI application for AulaRAG - SSE streaming + Vector Search + Semantic Cache
 import json
 import os
 import re
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, UploadFile, File, BackgroundTasks
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 from typing import Optional, List
 
-from .rag_engine import get_gemini_response, upload_new_file_to_gemini
+from .rag_engine import get_gemini_response, get_gemini_response_stream, upload_new_file_to_gemini
 from . import models
 from .auth import (
     get_current_user,
@@ -240,14 +240,51 @@ async def chat_endpoint(
             bloque=bloque,
             contenido=contenido
         )
-        return {
-            "response": response_text, 
+        return JSONResponse({
+            "response": response_text,
             "is_correct": is_correct,
             "visual_url": media_info.get("visual_url"),
             "audio_url": media_info.get("audio_url")
-        }
+        })
     except Exception as e:
-        return {"error": str(e)}
+        print(f"Error in chat_endpoint: {e}")
+        return JSONResponse(
+            {"error": str(e)},
+            status_code=500
+        )
+
+@app.post("/chat/stream")
+async def chat_stream_endpoint(
+    request: Request,
+    message: str = Form(...),
+    subject: str = Form("general"),
+    course_level: str = Form(""),
+    bloque: str = Form(""),
+    contenido: str = Form(""),
+    reset_history: bool = Form(False),
+    db: Session = Depends(get_db),
+):
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    current_user.last_seen_at = datetime.now(timezone.utc)
+    db.commit()
+
+    return StreamingResponse(
+        get_gemini_response_stream(
+            user_message=message,
+            subject=subject,
+            course_level=course_level,
+            user_id=str(current_user.email),
+            reset_history=reset_history,
+            bloque=bloque,
+            contenido=contenido,
+            db_session=db
+        ),
+        media_type="text/event-stream"
+    )
 
 
 # ── Upload (admin) ────────────────────────────────────────────────────────────
