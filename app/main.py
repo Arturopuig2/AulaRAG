@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Guarantee Action Buttons (v=24)
+# Main FastAPI application for AulaRAG - Action Buttons Auto-hide on Listo (v=25)
 import json
 import os
 import re

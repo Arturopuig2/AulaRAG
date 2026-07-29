@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await sendMessageToBackend(message, false);
     });
 
-    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null) {
+    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null, preventTheoryButtons = false) {
         if (isHidden) return; // Do not render anything if it's a hidden message
 
         const msgEl = document.createElement('div');
@@ -704,8 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 interactiveButtonsHtml = '<div class="interactive-options">';
                 buttons.forEach(btnText => {
-                    const safeText = btnText.replace(/"/g, '&quot;');
-                    interactiveButtonsHtml += `<button class="interactive-btn" onclick="window.sendInteractiveAnswer('${safeText}', this)">${btnText}</button>`;
+                    interactiveButtonsHtml += `<button class="interactive-btn" onclick="window.handleInteractiveChoice('${btnText.replace(/'/g, "\\'")}', this)">${btnText}</button>`;
                 });
                 interactiveButtonsHtml += '</div>';
             }
@@ -737,12 +736,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const textContent = tempCheck.textContent || tempCheck.innerText || '';
 
         let theoryActionButtonsHtml = '';
-        if (sender === 'assistant' && !interactiveButtonsHtml && !formattedText.includes('theory-action-buttons')) {
+        if (sender === 'assistant' && !interactiveButtonsHtml && !preventTheoryButtons && !formattedText.includes('theory-action-buttons')) {
             theoryActionButtonsHtml = `
             <div class="theory-action-buttons">
-                <button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>
-                <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>
-                <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
+                <button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier', this)">💡 Más fácil</button>
+                <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example', this)">📝 Ejemplo</button>
+                <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done', this)">✅ Listo</button>
             </div>`;
         }
 
@@ -986,8 +985,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1650);
     }
 
-    // Handler for explanation action buttons: Más fácil, Ejemplo, Listo
-    window.handleTheoryAction = function(action) {
+    window.handleTheoryAction = function(action, btnEl) {
+        // Remove theory buttons from DOM when an option is selected
+        if (btnEl) {
+            const parentBtns = btnEl.closest('.theory-action-buttons');
+            if (parentBtns) parentBtns.remove();
+        } else {
+            document.querySelectorAll('.theory-action-buttons').forEach(el => el.remove());
+        }
+
         if (action === 'easier') {
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Pots explicar-ho de forma més fàcil?" 
@@ -1025,7 +1031,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const doneReply = (currentSubject === 'valenciano')
                 ? "Excel·lent treball! 🌟 Has repassat la teoria d'aquest tema. Quan vulgues, pots triar un altre tema del temari."
                 : "¡Excelente trabajo! 🌟 Has repasado la teoría de este tema. Cuando quieras, puedes seleccionar otro tema del temario.";
-            addMessage(marked.parse(doneReply), 'assistant', true, false, false);
+            // Pass preventTheoryButtons = true so NO buttons are added to the final closing message
+            addMessage(marked.parse(doneReply), 'assistant', true, false, false, null, null, true);
         }
     };
 });
