@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - SSE + Vector Search + Semantic Cache + Multimodal Active
+# Main FastAPI application for AulaRAG - SSE + Vector Search + Semantic Cache + Strict Multimodal Match
 import json
 import os
 import re

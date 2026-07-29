@@ -1,4 +1,5 @@
 import os
+import re
 import fitz  # PyMuPDF
 from PIL import Image
 import io
@@ -99,7 +100,11 @@ def extract_and_catalog_images(data_dir: str = "data/source_files", output_dir: 
 
 
 def get_relevant_book_image(subject: str, grade: int = None, query_text: str = "") -> str:
-    """Finds a relevant extracted book image for the given subject/grade/topic query."""
+    """Finds a relevant verified book image ONLY when there is a high-confidence match with the query.
+       Returns None if no matching educational illustration exists to prevent showing incorrect images."""
+    if not query_text or len(query_text.strip()) < 3:
+        return None
+
     db = SessionLocal()
     try:
         q = db.query(MultimodalImage).filter(MultimodalImage.subject.ilike(f"%{subject}%"))
@@ -110,14 +115,32 @@ def get_relevant_book_image(subject: str, grade: int = None, query_text: str = "
         if not all_imgs:
             return None
 
-        if query_text:
-            query_words = [w.lower() for w in query_text.split() if len(w) > 3]
-            for img in all_imgs:
-                if img.caption and any(w in img.caption.lower() for w in query_words):
-                    return img.image_url
+        # Filter out common stop words to focus on meaningful educational keywords
+        stop_words = {"para", "como", "esta", "este", "esto", "sobre", "entre", "desde", "hasta", "hacer", "quiero", "repasar", "explicame", "dime", "teoria", "ejemplo", "ejemplos", "leccion"}
+        query_words = [w.lower() for w in re.findall(r'\b[a-zA-ZáéíóúÁÉÍÓÚñÑ]{4,}\b', query_text) if w.lower() not in stop_words]
 
-        # Return first cataloged image for that subject/grade if no exact text match
-        return all_imgs[0].image_url
+        if not query_words:
+            return None
+
+        # Search for images whose page text caption contains at least 2 key query terms or a strong unique topic match
+        best_match = None
+        max_matches = 0
+
+        for img in all_imgs:
+            if not img.caption:
+                continue
+            caption_lower = img.caption.lower()
+            match_count = sum(1 for w in query_words if w in caption_lower)
+            if match_count > max_matches:
+                max_matches = match_count
+                best_match = img.image_url
+
+        # Require at least 2 matching key terms or 1 long specific term (>6 chars)
+        if max_matches >= 2 or (max_matches == 1 and any(len(w) >= 7 for w in query_words if any(w in (img.caption or "").lower() for img in all_imgs))):
+            return best_match
+
+        # Strict: Return None if no high-confidence educational match found
+        return None
     except Exception as e:
         print(f"Error getting book image: {e}")
         return None
