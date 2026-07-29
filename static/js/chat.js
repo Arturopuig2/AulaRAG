@@ -563,11 +563,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             const payload = JSON.parse(jsonStr);
                             if (payload.text) {
                                 accumulatedText += payload.text;
-                                contentEl.innerHTML = marked.parse(accumulatedText);
+                                let mediaHtml = '';
+                                if (payload.visual_url || window._currentStreamVisualUrl) {
+                                    const vUrl = payload.visual_url || window._currentStreamVisualUrl;
+                                    window._currentStreamVisualUrl = vUrl;
+                                    mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
+                                }
+                                contentEl.innerHTML = marked.parse(accumulatedText) + mediaHtml;
                                 chatMessages.scrollTop = chatMessages.scrollHeight;
                             } else if (payload.done) {
                                 const finalMarkdown = payload.full_text || accumulatedText;
-                                contentEl.innerHTML = marked.parse(finalMarkdown);
+                                let mediaHtml = '';
+                                if (payload.visual_url || window._currentStreamVisualUrl) {
+                                    const vUrl = payload.visual_url || window._currentStreamVisualUrl;
+                                    mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
+                                }
+                                contentEl.innerHTML = marked.parse(finalMarkdown) + mediaHtml;
+                                window._currentStreamVisualUrl = null;
                                 if (audioEnabled && window.speechSynthesis) {
                                     speakText(finalMarkdown.replace(/<[^>]*>/g, ''));
                                 }

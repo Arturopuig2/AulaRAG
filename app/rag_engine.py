@@ -682,13 +682,22 @@ async def get_gemini_response_stream(
     contenido: str = "",
     db_session = None
 ):
-    """Yields streaming SSE data chunks as Gemini generates the response in real-time, with semantic caching."""
+    """Yields streaming SSE data chunks as Gemini generates the response in real-time, with semantic caching and multimodal image support."""
+    # Look up multimodal book image
+    visual_url = None
+    try:
+        from .multimodal_engine import get_relevant_book_image
+        grade_num = int("".join([c for c in course_level if c.isdigit()])) if any(c.isdigit() for c in course_level) else None
+        visual_url = get_relevant_book_image(subject, grade_num, f"{bloque} {contenido} {user_message}")
+    except Exception as me:
+        print("Multimodal image lookup error:", me)
+
     # --- 1. Check Semantic Cache First ---
     cached_text = get_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message)
     if cached_text:
         print(f"CACHE HIT [0 ms, 0 tokens]: {subject}/{course_level}/{bloque}/{contenido}")
-        yield f"data: {json.dumps({'text': cached_text})}\n\n"
-        yield f"data: {json.dumps({'done': True, 'full_text': cached_text})}\n\n"
+        yield f"data: {json.dumps({'text': cached_text, 'visual_url': visual_url})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'full_text': cached_text, 'visual_url': visual_url})}\n\n"
         return
 
     history_key = f"{user_id}_{subject}"
@@ -753,7 +762,7 @@ async def get_gemini_response_stream(
         async for chunk in stream:
             if chunk.text:
                 full_response_text += chunk.text
-                yield f"data: {json.dumps({'text': chunk.text})}\n\n"
+                yield f"data: {json.dumps({'text': chunk.text, 'visual_url': visual_url})}\n\n"
         
         cleaned_text = clean_ai_text(full_response_text)
         subject_history.append(types.Content(role="user", parts=[types.Part(text=modified_user_message)]))
@@ -763,7 +772,7 @@ async def get_gemini_response_stream(
         if db_session:
             save_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message, cleaned_text)
 
-        yield f"data: {json.dumps({'done': True, 'full_text': cleaned_text})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'full_text': cleaned_text, 'visual_url': visual_url})}\n\n"
     except Exception as e:
         import traceback
         print(f"Gemini Streaming Error: {e}")
