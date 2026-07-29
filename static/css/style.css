@@ -465,6 +465,71 @@ body {
     cursor: default;
 }
 
+/* Theory Action Buttons (Más fácil, Ejemplo, Listo) */
+.theory-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    justify-content: flex-start;
+}
+
+.theory-btn {
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    color: #334155;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.theory-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.theory-btn.btn-easier {
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.theory-btn.btn-easier:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.theory-btn.btn-example {
+    border-color: #8b5cf6;
+    color: #6d28d9;
+    background: #f5f3ff;
+}
+
+.theory-btn.btn-example:hover {
+    background: #8b5cf6;
+    color: white;
+}
+
+.theory-btn.btn-done {
+    border-color: #10b981;
+    color: #047857;
+    background: #ecfdf5;
+}
+
+.theory-btn.btn-done:hover {
+    background: #10b981;
+    color: white;
+}
+
 /* Success Star Animation */
 .success-star {
     position: fixed;

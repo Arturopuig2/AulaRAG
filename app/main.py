@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - SSE + Vector Search + Semantic Cache + Paragraph Breaks
+# Main FastAPI application for AulaRAG - Action Buttons (Más fácil, Ejemplo, Listo)
 import json
 import os
 import re

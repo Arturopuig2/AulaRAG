@@ -578,7 +578,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
                                     mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
                                 }
-                                contentEl.innerHTML = marked.parse(finalMarkdown) + mediaHtml;
+
+                                const actionButtonsHtml = `
+                                <div class="theory-action-buttons">
+                                    <button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>
+                                    <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>
+                                    <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
+                                </div>`;
+
+                                contentEl.innerHTML = marked.parse(finalMarkdown) + mediaHtml + actionButtonsHtml;
                                 window._currentStreamVisualUrl = null;
                                 if (audioEnabled && window.speechSynthesis) {
                                     speakText(finalMarkdown.replace(/<[^>]*>/g, ''));
@@ -972,4 +980,47 @@ document.addEventListener('DOMContentLoaded', () => {
             star.remove();
         }, 1650);
     }
+
+    // Handler for explanation action buttons: Más fácil, Ejemplo, Listo
+    window.handleTheoryAction = function(action) {
+        if (action === 'easier') {
+            const userMsg = (currentSubject === 'valenciano') 
+                ? "Pots explicar-ho de forma més fàcil?" 
+                : "¿Me lo puedes explicar de forma más fácil y sencilla?";
+            addMessage(userMsg, 'user');
+            
+            const formData = new URLSearchParams();
+            formData.append('message', userMsg);
+            formData.append('subject', currentSubject);
+            if (activeSessionCurso) {
+                formData.append('course_level', activeSessionCurso);
+                formData.append('bloque', activeSessionBloque);
+                formData.append('contenido', activeSessionContenido);
+            }
+            streamChatResponse(formData);
+        } else if (action === 'example') {
+            const userMsg = (currentSubject === 'valenciano') 
+                ? "Dona'm un altre exemple pràctic." 
+                : "Dame otro ejemplo práctico sobre esto.";
+            addMessage(userMsg, 'user');
+
+            const formData = new URLSearchParams();
+            formData.append('message', userMsg);
+            formData.append('subject', currentSubject);
+            if (activeSessionCurso) {
+                formData.append('course_level', activeSessionCurso);
+                formData.append('bloque', activeSessionBloque);
+                formData.append('contenido', activeSessionContenido);
+            }
+            streamChatResponse(formData);
+        } else if (action === 'done') {
+            const userMsg = (currentSubject === 'valenciano') ? "Llest!" : "¡Listo!";
+            addMessage(userMsg, 'user');
+            
+            const doneReply = (currentSubject === 'valenciano')
+                ? "Excel·lent treball! 🌟 Has repassat la teoria d'aquest tema. Quan vulgues, pots triar un altre tema del temari."
+                : "¡Excelente trabajo! 🌟 Has repasado la teoría de este tema. Cuando quieras, puedes seleccionar otro tema del temario.";
+            addMessage(marked.parse(doneReply), 'assistant', true, false, false);
+        }
+    };
 });
