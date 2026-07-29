@@ -11,16 +11,19 @@ from sqlalchemy import func
 from typing import Optional, List
 from datetime import datetime, timezone
 
-# Load variables from .env file
-load_dotenv()
+# Load variables from .env file, overriding any system environment variables
+load_dotenv(override=True)
 
-API_KEY = os.environ.get("GEMINI_API_KEY", "")
+# Helper to always fetch a fresh client with current environment variables
+def get_client():
+    load_dotenv(override=True)
+    api_key = os.environ.get("GEMINI_API_KEY", "")
+    return genai.Client(api_key=api_key) if api_key else None
 
-# Initialize the new google-genai client
-client = genai.Client(api_key=API_KEY) if API_KEY else None
+client = get_client()
 
-# Model to use - gemini-2.5-flash is the most current model in your account list
-MODEL_NAME = "gemini-2.5-flash"
+# Model to use - gemini-flash-lite-latest has fast response times and avoids 503 demand spikes
+MODEL_NAME = "gemini-flash-lite-latest"
 
 def normalize_text(text):
     import unicodedata
@@ -107,31 +110,29 @@ def clean_ai_text(text: str) -> str:
 FEW_SHOT_EXAMPLES = """
 ### EJEMPLOS DE ESTILO (AULA) ###
 
-1. INICIO DE REPASO:
+1. EXPLICACIÓN TEÓRICA CON EJEMPLOS:
    USUARIO: "Quiero repasar los sustantivos."
-   TUTOR: "¡Genial! Los sustantivos son las palabras que usamos para nombrar todo lo que nos rodea: personas, animales, objetos o lugares. Por ejemplo: **casa**, **león**, o **Sofía**. --- Ejercicio 1/3: ¿Cuál de estas palabras es un sustantivo? [BOTON: Correr] [BOTON: Azul] [BOTON: Gato]"
+   TUTOR: "¡Genial! Los **sustantivos** son las palabras que usamos para nombrar todo lo que nos rodea: personas, animales, objetos o lugares. 
 
-2. CORRECCIÓN POSITIVA:
-   USUARIO: "Resta" (en un problema de suma)
-   TUTOR: "[INCORRECTO] ¡Casi! Fíjate bien: si queremos saber cuánto tenemos en **total** al juntar dos cosas, lo que hacemos es **sumar**. ¡Inténtalo de nuevo! ¿Qué operación usas para juntar?"
+   Por ejemplo:
+   * **Personas**: Sofía, profesor, niña.
+   * **Animales**: león, perro, pájaro.
+   * **Objetos**: casa, mesa, libro.
+
+   ¿Tienes alguna duda sobre los sustantivos o quieres ver más ejemplos?"
 """
 
 SYSTEM_INSTRUCTION = f"""
-Eres 'Aula', un tutor experto de primaria. Tu misión es ayudar a niños de 6 a 12 años ÚNICAMENTE con los contenidos verificados de la base de datos.
+Eres 'Aula', un tutor experto de primaria. Tu misión es enseñar TEORÍA y dar EJEMPLOS CLAROS a niños de 6 a 12 años ÚNICAMENTE con los contenidos verificados de la base de datos y los documentos RAG de consulta.
 
-### EL MANDATO SUPREMO (PROHIBIDO INVENTAR):
-1. **ENTORNO CERRADO**: Tienes terminantemente prohibido usar tus conocimientos generales de IA para inventar ejercicios o explicaciones. 
-2. **SOLO BASE DE DATOS**: Extrae preguntas y explicaciones ÚNICAMENTE de la base de datos y los archivos que se te proporcionan en el DASHBOARD.
-3. **BLOQUEO DE CONTENIDO**: Si en el Dashboard dice "NO hay preguntas verificadas", NO puedes poner ningún ejercicio. Limítate a dar una explicación teórica basada en la 'FUENTE DE VERDAD' proporcionada y termina la conversación ahí para ese tema. 
-4. **PROHIBIDO INTERNET**: No busques en internet ni asumas datos externos.
+### EL MANDATO SUPREMO:
+1. **HERRAMIENTA DE TEORÍA**: Tu objetivo es EXPLICAR CONCEPTOS Y DAR EJEMPLOS. Tienes estrictamente PROHIBIDO proponer ejercicios, cuestionarios, preguntas de examen o tests al alumno.
+2. **SOLO BASE DE DATOS Y RAG**: Basate ÚNICAMENTE en la información verificada de los documentos proporcionados.
+3. **PROHIBIDO INTERNET**: No busques en internet ni asumas datos externos.
 
 ### REGLAS DE TRABAJO:
-- **IDENTIFICADORES [ID: código]**: Es OBLIGATORIO incluir el código de la pregunta al final de cada enunciado extraído de la base de datos.
-- **FORMATO DE BOTONES**: Cada ejercicio debe tener botones: [BOTON: Texto].
-- **RESPUESTA_CORRECTA**: Incluye [RESPUESTA_CORRECTA: texto] al final de cada ejercicio para evaluación interna.
-- **SERIES DE 3**: Trabaja en grupos de 3 ejercicios. Tras el 3/3, pregunta: '¿Quieres seguir?'.
-- **NEGRILLA**: Usa **negrita** para conceptos clave.
-- **TONO**: Sé paciente y motivador, pero neutro (no uses 'campeón' o 'niño').
+- **FORMATO CLARO**: Usa listas, viñetas y **negrita** para conceptos clave.
+- **TONO**: Sé paciente, claro y motivador, pero neutro (no uses 'campeón' o 'niño').
 
 {FEW_SHOT_EXAMPLES}
 """
@@ -321,6 +322,26 @@ def get_pdf_parts_for_context(subject: str, course_level: str):
         except Exception as e:
             print(f"Error reading text fallback for {txt_path}: {e}")
 
+    # Also load any RAG JSON documents in the subject source folder (e.g. reglas_acentuacion_lomloe_rag.json)
+    subject_dir = os.path.join(DATA_DIR, "source_files", subject.lower())
+    if os.path.exists(subject_dir):
+        for f_name in os.listdir(subject_dir):
+            if f_name.endswith(".json") and not f_name.startswith("temario_"):
+                json_path = os.path.join(subject_dir, f_name)
+                try:
+                    with open(json_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        if isinstance(data, dict) and "chunks" in data:
+                            chunks_text = "\n\n".join([c.get("content", "") for c in data["chunks"] if c.get("content")])
+                            doc_title = data.get("title", f_name)
+                            parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG ({doc_title}):\n{chunks_text}"))
+                            print(f"[speed] Loaded RAG JSON document: {f_name}")
+                        elif isinstance(data, dict) and "text" in data:
+                            parts.append(types.Part(text=f"DOCUMENTO VERIFICADO RAG ({f_name}):\n{data['text']}"))
+                            print(f"[speed] Loaded RAG JSON document: {f_name}")
+                except Exception as e:
+                    print(f"Error reading RAG JSON {json_path}: {e}")
+
     # Fallback to PDF only if no text exists
     for pattern in expected_patterns:
         display_name = f"{subject}_{pattern}"
@@ -438,10 +459,10 @@ def get_db_explanation(subject: str, grade: int = None, bloque: str = None, cont
 # Limit for chat history to prevent slowness and context confusion
 MAX_HISTORY_LENGTH = 6 
 
-async def get_gemini_response(user_message: str, subject: str = "general", course_level: str = "", user_id: str = "default", reset_history: bool = False, mastery_stats: list = None, bloque: str = None, contenido: str = None, exercise_num: int = 0) -> str:
+async def get_gemini_response(user_message: str, subject: str = "general", course_level: str = "", user_id: str = "default", reset_history: bool = False, mastery_stats: list = None, bloque: str = None, contenido: str = None) -> str:
     """Sends a message to Gemini using the new SDK and returns the response."""
     if not client:
-        return "⚠️ Error: API Key de Gemini no configurada. Por favor, revisa el archivo .env."
+        return "⚠️ Error: API Key de Gemini no configurada. Por favor, revisa el archivo .env.", False, {}
 
     try:
         # Build full conversation with memory history for this specific subject and user
@@ -466,13 +487,7 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
         # Prepare context parts
         current_parts = []
         
-        # Add a clear separator if there's history
-        if mastery_stats:
-            stats_text = "Mastery stats for the user: " + ", ".join([f"{s['contenido']} ({s['bloque']}): {s['rate']}%" for s in mastery_stats])
-            current_parts.append(types.Part(text=stats_text))
-
-        # --- PRE-CARGA DE DATOS (DATA PREFETCH) ---
-        prefetched_question = None
+        # --- PRE-CARGA DE DATOS TEÓRICOS ---
         db_explanation = None
         grade_val = None
         if course_level:
@@ -481,114 +496,37 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
 
         if subject != "general":
             try:
-                # Fetch question (to show next or repeat)
-                prefetched_raw = get_db_question(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
-                prefetched_question = json.loads(prefetched_raw)
                 # Fetch standard explanation
                 db_explanation = get_db_explanation(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
             except Exception as e:
                 print(f"[RAG_ERROR] Fallo en prefetch inicial: {str(e)}")
 
-        # --- DETECCIÓN DE ESTADO PEDAGÓGICO ---
-        is_option_chosen = "[OPCION_ELEGIDA]" in user_message
-        is_rescue = "[AUTO_RESCUE]" in user_message
-        
-        # Si el rescatador viene del frontend, forzamos intervención
-        force_easier = is_rescue
-        repeating_exercise = is_rescue
-        
-        # Fallback eval (si no es rescue pero es elección manual)
-        is_wrong_answer = False
-        if is_option_chosen and prefetched_question and not is_rescue:
-            match = re.search(r'\[OPCION_ELEGIDA\]\s*(.*)', user_message)
-            if match:
-                chosen_opt = match.group(1).strip()
-                is_wrong_answer = (chosen_opt != prefetched_question.get('answer', '').strip())
-
-        # Si hay intervención forzada por rescate
-        if force_easier:
-            # Obtener la versión simplificada específicamente
-            db_explanation_rescue = get_db_explanation(subject, grade=grade_val, bloque=bloque, contenido=contenido, force_easier=True)
-            if db_explanation_rescue:
-                db_explanation = db_explanation_rescue
-                print(f"[PEDAGOGY] Intervención: Se ha cargado la versión fácil para '{contenido}'")
-
-        # Final instruction reminder
-
-        # Final instruction reminder
         current_parts.append(types.Part(text=(
-            "RECUERDA: (1) Si el alumno pide un tema nuevo o dice 'repasar' y ya has saludado antes, PROHIBIDO saludar de nuevo. DEBES EMPEZAR SIEMPRE con la Explicación:. "
-            "(2) DEBES USAR PALABRAS REALES. (3) PROHIBIDO mencionar temas, lecciones, páginas o actividades. "
-            "(4) AISLAMIENTO DE EJERCICIOS: Todo ejercicio debe ir precedido por '---'. La burbuja del ejercicio debe contener ÚNICAMENTE el enunciado y las opciones. PROHIBIDO incluir mensajes de ánimo, explicaciones, intros o despedidas en la misma burbuja que el ejercicio. "
-            "(5) ESTRUCTURA DE MENSAJE: Si das teoría y luego un ejercicio, el formato OBLIGATORIO es: [Texto de Explicación] \n---\n [Solo el enunciado]. "
-            "(6) NEUTRO: Prohibido decir 'campeón', 'listo' o 'niño'. Usa lenguaje neutro. "
-            "(7) DATA PREFERENCE: Prioriza SIEMPRE la base de datos. Si hay una 'CONTENIDO_VERIFICADO_A_USAR' en el DASHBOARD, es OBLIGATORIO usarla PALABRA POR PALABRA. PROHIBIDO inventar o parafrasear. "
-            "(8) PRECISIÓN: Verifica 2 veces antes de poner [INCORRECTO]. "
-            "(9) MANDATO SUPREMO: EMPIEZA SIEMPRE con Explicación: antes de cualquier ejercicio nuevo. El ejercicio va después del '---' solo. PROHIBIDO decidir cuántos ejercicios hay o si la tanda ha terminado: eso lo controla el sistema automáticamente."
+            "RECUERDA: Eres un profesor paciente y experto. "
+            "Tu objetivo principal es enseñar la TEORÍA y proporcionar EJEMPLOS CLAROS. "
+            "PROHIBIDO realizar o proponer ejercicios, tests o cuestionarios al alumno. "
+            "Si el alumno tiene dudas, resuélvelas con ejemplos. "
+            "Usa lenguaje neutro y cercano."
         )))
         
-        # Combine user message with history
-        messages = list(subject_history)
-        
         # --- PREPARACIÓN DEL MANDATO DEL TURNO ---
-        is_review = any(kw in user_message.lower() for kw in ["repasar", "repaso", "tema", "quien", "ayuda", "explicaci"])
-        is_continuation = any(kw in user_message.lower() for kw in ["si", "siguiente", "otro", "vale", "continu", "mas"])
-        is_evaluation = "[CORRECTO]" in user_message or "[INCORRECTO]" in user_message or is_option_chosen
-        
+        is_review = any(kw in user_message.lower() for kw in ["repasar", "repaso", "tema", "quien", "ayuda", "explicaci", "ejemplo"])
         turn_instruction = ""
-        if (is_option_chosen or is_rescue) and exercise_num > 0:
-            if is_rescue:
-                # INTERVENCIÓN PROACTIVA (RESCATE)
-                turn_instruction = (
-                    f"\n[MANDATO_CRÍTICO] El alumno necesita refuerzo. "
-                    f"1. Empieza OBLIGATORIAMENTE con [INCORRECTO]. "
-                    f"2. Proporciona esta EXPLICACIÓN SIMPLIFICADA de refuerzo: {db_explanation}. "
-                    f"3. Después usa '---' y ofrece OTRA OPORTUNIDAD repitiendo el Ejercicio {exercise_num}/3."
-                )
-            elif is_wrong_answer:
-                # Primer error o errores aislados
-                turn_instruction = (
-                    f"\n[MANDATO] El alumno ha fallado. Di [INCORRECTO], da una pequeña pista pedagógica (mínimo 1 frase, máximo 2) sin dar la respuesta. "
-                    f"Luego usa '---' y repite el Ejercicio {exercise_num}/3."
-                )
-            else:
-                # Acierto
-                next_num = exercise_num + 1
-                if next_num <= 3:
-                    turn_instruction = (
-                        f"\n[MANDATO] El alumno ha acertado. Di [CORRECTO] y felicítale con una curiosidad breve. "
-                        f"Luego usa '---' y presenta el Ejercicio {next_num}/3."
-                    )
-                else:
-                    turn_instruction = (
-                        f"\n[MANDATO] El alumno ha acertado el último ejercicio (3/3). Di [CORRECTO], felicítale. "
-                        f"PROHIBIDO sugerir más ejercicios o preguntar si quiere seguir: eso lo hace el sistema."
-                    )
-
-        elif is_evaluation:
-             turn_instruction = "\n[MANDATO] Verifica con extremo cuidado (Regla 34). Empieza SIEMPRE con [CORRECTO] o [INCORRECTO]."
-        elif is_review:
-             # Initial review request: Full Theory
-             turn_instruction = "\n[MANDATO] Empieza OBLIGATORIAMENTE con la lección teórica detallada (Regla 2). Luego '---' y el primer ejercicio."
+        
+        if is_review:
+             turn_instruction = "\n[MANDATO] Empieza proporcionando o completando la lección teórica detallada. Si el alumno pide ejemplos, dáselos claramente explicados."
              if db_explanation:
-                 turn_instruction += f"\nUSA ESTA TEORÍA VERIFICADA: {db_explanation}"
-        elif is_continuation:
-             # Continuous exercises: Short reminder only to avoid verbatim repetition
-             turn_instruction = "\n[MANDATO] NO repitas la misma explicación de antes palabra por palabra. Da un breve recordatorio o pista de máximo 2 frases. Luego '---' y el ejercicio."
+                 turn_instruction += f"\nUSA ESTA TEORÍA VERIFICADA COMO BASE PRINCIPAL: {db_explanation}"
         
         modified_user_message = f"{user_message}\n{turn_instruction}" if turn_instruction else user_message
         
-        # Generate model response (WITH AUTOMATIC RETRIES for 503 high demand or 403 file errors)
-
-        # Generate model response (WITH AUTOMATIC RETRIES for 503 high demand or 403 file errors)
         import asyncio
         max_retries = 3
         retry_delay = 2
         response = None
         
         for attempt in range(max_retries):
-            # RE-PREPARE prompts and parts on every attempt to ensure file URIs are fresh if cache was cleared
-            current_parts = []
+            current_parts_loop = list(current_parts)
             
             # 1. Cargar Instrucciones Universales
             dynamic_instruction = SYSTEM_INSTRUCTION
@@ -598,51 +536,30 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
             if subject_rules:
                 dynamic_instruction += f"\n\n*** AGENTE ESPECIALISTA: {subject.upper()} ***\n{subject_rules}\n"
             else:
-                dynamic_instruction += f"\n\n[AVISO] Eres un tutor de {subject}. Sigue las reglas generales de pedagogía."
+                dynamic_instruction += f"\n\n[AVISO] Eres un tutor de {subject}. Céntrate en teoría y ejemplos."
 
-            # 3. Inyectar Contexto de Clase (Oculto)
-            context_info = f"\n\n### DASHBOARD DEL TUTOR (DATOS REALES):\n- Asignatura: {subject}\n- Curso: {course_level if course_level else 'Primaria'}"
-            if mastery_stats:
-                context_info += f"\n- Debilidades del alumno: {json.dumps(mastery_stats, ensure_ascii=False)}"
+            # 3. Inyectar Contexto
+            context_info = f"\n\n### DASHBOARD DEL TUTOR:\n- Asignatura: {subject}\n- Curso: {course_level if course_level else 'Primaria'}"
             
             # --- CONTEXTO DEL LIBRO (PDF/Texto) ---
             book_context = get_pdf_parts_for_context(subject, course_level)
-            current_parts.extend(book_context)
+            current_parts_loop.extend(book_context)
 
-            if prefetched_question and "question" in prefetched_question:
-                context_info += f"\n\n### [MANDATO_SUPREMO] CONTENIDO_VERIFICADO_A_USAR:\n"
-                context_info += f"ENUNCIADO: {prefetched_question['question']}\n"
-                context_info += f"OPCIONES: {json.dumps(prefetched_question['options'], ensure_ascii=False)}\n"
-                context_info += f"RESPUESTA_CORRECTA: {prefetched_question['answer']}\n"
-                context_info += f"IDENTIFICADOR: {prefetched_question.get('identifier', 'S/N')}\n"
-                context_info += "\n[INSTRUCCIÓN] Usa este enunciado EXACTAMENTE palabra por palabra. Este contenido está VERIFICADO por un administrador y es OBLIGATORIO usarlo."
-            else:
-                context_info += f"\n\n### [BLOQUEO_TOTAL_DE_GENERACIÓN]\n"
-                context_info += "ADVERTENCIA: No se han encontrado contenidos verificados para esta consulta.\n"
-                context_info += "MANDATO: Tienes TERMINANTEMENTE PROHIBIDO inventar un ejercicio. Solo puedes mostrar contenido marcado como 'Verificado' en la base de datos."
-            
             dynamic_instruction += context_info
-
-            # Turn-specific mandate
-            mandate_text = ""
-            if is_evaluation:
-                 mandate_text = "[MANDATO_CRÍTICO] VERIFICA con extremo cuidado (Regla 34). Empieza SIEMPRE con [CORRECTO] o [INCORRECTO]."
-            elif is_review:
-                 mandate_text = "[MANDATO_CRÍTICO] Empieza SIEMPRE con la lección teórica detallada. Luego '---' y el primer ejercicio."
-                 if db_explanation:
-                      mandate_text += f"\n\n[FUENTE_DE_VERDAD_TEÓRICA] Usa esta explicación EXACTAMENTE PALABRA POR PALABRA: {db_explanation}\nPROHIBIDO parafrasear, resumir, 'corregir' o cambiar el texto. Úsalo íntegro tal cual. NO añadas ni una sola palabra de tu propia cosecha."
-
-            if mandate_text:
-                 current_parts.append(types.Part(text=f"\n\n*** {mandate_text} ***"))
             
-            current_parts.append(types.Part(text=modified_user_message))
+            current_parts_loop.append(types.Part(text=modified_user_message))
             
             # Prepare final messages list
             messages = list(subject_history)
-            messages.append(types.Content(role="user", parts=current_parts))
+            messages.append(types.Content(role="user", parts=current_parts_loop))
+
+            with open("rag_payload.txt", "w") as f:
+                f.write(f"SYSTEM INSTRUCTION: {dynamic_instruction}\\n\\n")
+                f.write(f"MESSAGES: {messages}\\n")
 
             try:
-                response = await client.aio.models.generate_content(
+                current_client = get_client()
+                response = await current_client.aio.models.generate_content(
                     model=MODEL_NAME,
                     contents=messages,
                     config=types.GenerateContentConfig(
@@ -657,18 +574,15 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
                 is_transient = "503" in err_str or "UNAVAILABLE" in err_str or "429" in err_str
                 
                 if is_file_error and attempt < max_retries - 1:
-                    print(f"[RETRY] 403 File error detected. Clearing cache and re-uploading context...")
                     if os.path.exists(CACHE_FILE):
                         try: os.remove(CACHE_FILE)
                         except: pass
                     global existing_files_cache
                     existing_files_cache = {}
                     load_pdf_files_as_parts()
-                    # The next loop iteration will naturally pick up the new files via get_pdf_parts_for_context()
                     await asyncio.sleep(1)
                     continue
                 elif is_transient and attempt < max_retries - 1:
-                    print(f"[RETRY] Servidor saturado (503/429). Reintento {attempt + 1}/{max_retries}...")
                     await asyncio.sleep(retry_delay)
                     retry_delay *= 2 
                     continue
@@ -676,39 +590,24 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
                     raise e
 
         response_text = ""
-        is_correct = False
-        if response.candidates and response.candidates[0].content.parts:
-            # Direct response (clean)
+        if response and response.candidates and response.candidates[0].content.parts:
             response_text = clean_ai_text(response.text)
-            # Only detect correctness when the user clicked an interactive button
-            # and look for the STRUCTURED TAG at the start of the raw response
-            is_button_evaluation = "[OPCION_ELEGIDA]" in user_message
-            if is_button_evaluation:
-                is_correct = bool(re.match(r'^\s*\[(?:CORRECTO|CORRECTE|CORRECT)\]', response.text, re.IGNORECASE))
-            else:
-                is_correct = False
         else:
             response_text = "⚠️ Lo siento, no he podido generar una respuesta."
 
-        # Final safety check: ensure "¿Quieres seguir?" is ALWAYS separated by ---
-        if "Ejercicio 3/3" in response_text and "¿Quieres seguir?" in response_text:
-            if "---" not in response_text:
-                response_text = response_text.replace("¿Quieres seguir?", "---\n¿Quieres seguir?")
-            elif response_text.find("---") > response_text.find("¿Quieres seguir?"):
-                response_text = response_text.replace("¿Quieres seguir?", "---\n¿Quieres seguir?")
-
-        # Keep history in subjects dictionary (Internal state)
+        # Keep history in subjects dictionary
         subject_history.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
         subject_history.append(types.Content(role="model", parts=[types.Part(text=response_text)]))
-
-        media_info = {
-            "visual_url": prefetched_question.get("visual_url") if prefetched_question else None,
-            "audio_url": prefetched_question.get("audio_url") if prefetched_question else None
-        }
         
-        return response_text, is_correct, media_info
+        return response_text, False, {}
     except Exception as e:
-        err_str = str(e).upper()
+        import traceback
+        load_dotenv(override=True)
+        key = os.environ.get("GEMINI_API_KEY", "")
+        key_masked = f"{key[:5]}...{key[-4:]}" if key else "NONE"
+        with open("rag_error.log", "w") as f:
+            f.write(f"API KEY USED BY SERVER: {key_masked}\n\n")
+            f.write(traceback.format_exc())
         print(f"Gemini API Error: {e}")
         return "¡Ups! Algo ha fallado. Por favor, vuelve a intentarlo.", False, {}
 

@@ -146,12 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSessionBloque = "";
     let activeSessionContenido = "";
 
-    // UI Elements for gamification
-    const progressBar = document.getElementById('series-progress');
-    const starsCountLabel = document.getElementById('stars-count');
-
-    // Initialize stars
-    starsCountLabel.textContent = userStars;
+    // (UI Elements for gamification removed)
 
     // Handle Subject switching
     subjectButtons.forEach(btn => {
@@ -352,44 +347,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         addMessage(generatedMessage, 'user');
 
-        // ── DB-ONLY FLOW (ALL SUBJECTS) ──────────────────────────────────
-        // 1. Get initial content (Explanation or Reading) from DB
+        // ── THEORY & RAG FLOW ──────────────────────────────────────────
         const loadingId = addLoadingIndicator();
+        let staticFound = false;
         try {
             const gradeMatch = cursoStr.match(/\d+/);
             const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
             const expParams = new URLSearchParams({ subject: currentSubject, grade, bloque: bloqueStr, contenido: contenidoStr });
             const expResp = await fetch(`/explanations/get?${expParams}`);
-            removeMessage(loadingId);
             if (expResp.ok) {
                 const expData = await expResp.json();
                 if (expData.content) {
+                    removeMessage(loadingId);
                     addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null);
+                    staticFound = true;
                 }
             }
         } catch (e) {
-            removeMessage(loadingId);
+            console.error(e);
         }
 
-        // 2. Ask student before starting exercises
-        currentDifficultyIndex = 0;
-        totalExercisesInSeries = (currentSubject === 'competencia_lectora') ? 10 : 3;
-        const inviteHtml = `<p>¿Probamos con 3 ejercicios?</p><div class="interactive-options"><button class="interactive-btn" onclick="window.handleStartSeries(true, this)">Sí</button><button class="interactive-btn" onclick="window.handleStartSeries(false, this)">No</button></div>`;
-        addMessage(inviteHtml, 'assistant', true, false, true);
+        // If no static explanation was found in DB, use Gemini RAG to generate the complete theory explanation for this topic
+        if (!staticFound) {
+            const promptMsg = (currentSubject === 'valenciano')
+                ? `Explica'm detalladament la teoria i exemples de: ${contenidoStr}`
+                : `Explícame detalladamente la teoría y ejemplos de: ${contenidoStr}`;
+            
+            const formData = new URLSearchParams();
+            formData.append('message', promptMsg);
+            formData.append('subject', currentSubject);
+            formData.append('course_level', cursoStr);
+            formData.append('bloque', bloqueStr);
+            formData.append('contenido', contenidoStr);
+            formData.append('reset_history', 'true');
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                });
+                removeMessage(loadingId);
+                const data = await response.json();
+                if (data.response) {
+                    addMessage(marked.parse(data.response), 'assistant', true, false, true, data.visual_url || null, data.audio_url || null);
+                } else if (data.error) {
+                    addMessage(`Oops: ${data.error}`, 'assistant');
+                }
+            } catch (err) {
+                removeMessage(loadingId);
+                addMessage(`Error al obtener la teoría del tema.`, 'assistant');
+            }
+        }
     });
-
-    // Handler for the initial "¿Probamos con 3 ejercicios?" prompt
-    window.handleStartSeries = function(empezar, btnElement) {
-        const allBtns = btnElement.parentElement.querySelectorAll('.interactive-btn');
-        allBtns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; b.style.pointerEvents = 'none'; });
-        btnElement.classList.add('correct');
-
-        if (empezar) {
-            fetchAndShowQuestion(currentSubject, activeSessionCurso, activeSessionBloque, activeSessionContenido, 1);
-        } else {
-            addMessage('<p>¡De acuerdo! Cuando quieras practicar, pulsa el botón de nuevo. 👋</p>', 'assistant', true, false, true);
-        }
-    };
 
     const DIF_LABELS = { basica: '🟢 Básico', normal: '🟡 Medio', avanzada: '🔴 Avanzado' };
 
@@ -872,15 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ── Visual feedback on button ─────────────────────────────────────
         if (isCorrect) {
             btnElement.classList.add('correct');
-            // Stars
-            userStars = parseInt(localStorage.getItem('aula_stars') || '0') + 1;
-            localStorage.setItem('aula_stars', userStars);
-            const starsLabel = document.getElementById('stars-count');
-            if (starsLabel) {
-                starsLabel.textContent = userStars;
-                starsLabel.parentElement.classList.add('pop');
-                setTimeout(() => starsLabel.parentElement.classList.remove('pop'), 800);
-            }
+            // Stars logic removed
             setTimeout(playSuccessAnimation, 0);
         } else {
             btnElement.classList.add('incorrect');

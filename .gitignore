@@ -43,6 +43,8 @@ Icon
 # Logs
 *.log
 server.log
+rag_error.log
+rag_payload.txt
 
 # IDEs
 .vscode/

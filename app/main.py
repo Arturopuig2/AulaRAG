@@ -1,3 +1,4 @@
+# Main FastAPI application for AulaRAG - updated syllabus theory flow
 import json
 import os
 import re
@@ -237,8 +238,7 @@ async def chat_endpoint(
             reset_history, 
             mastery_stats=mastery_stats[:10],
             bloque=bloque,
-            contenido=contenido,
-            exercise_num=exercise_num
+            contenido=contenido
         )
         return {
             "response": response_text, 
