@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Action Buttons (Más fácil, Ejemplo, Listo)
+# Main FastAPI application for AulaRAG - Guarantee Action Buttons (v=24)
 import json
 import os
 import re

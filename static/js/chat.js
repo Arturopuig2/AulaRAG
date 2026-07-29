@@ -736,12 +736,17 @@ document.addEventListener('DOMContentLoaded', () => {
         tempCheck.innerHTML = formattedText;
         const textContent = tempCheck.textContent || tempCheck.innerText || '';
 
-        // If no text AND no interactive buttons, abort rendering this bubble
-        if (textContent.trim() === '' && interactiveButtonsHtml === '') {
-            return;
+        let theoryActionButtonsHtml = '';
+        if (sender === 'assistant' && !interactiveButtonsHtml && !formattedText.includes('theory-action-buttons')) {
+            theoryActionButtonsHtml = `
+            <div class="theory-action-buttons">
+                <button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>
+                <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>
+                <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
+            </div>`;
         }
 
-        contentEl.innerHTML = formattedText + mediaHtml + interactiveButtonsHtml;
+        contentEl.innerHTML = formattedText + mediaHtml + interactiveButtonsHtml + theoryActionButtonsHtml;
         msgEl.appendChild(contentEl);
         chatMessages.appendChild(msgEl);
 
