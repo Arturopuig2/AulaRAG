@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Populated Rich Theory Contents for All 4 Subjects
+# Main FastAPI application for AulaRAG - Connected RAG Stream to Database Verified Explanations
 import json
 import os
 import re

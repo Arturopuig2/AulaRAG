@@ -718,7 +718,22 @@ async def get_gemini_response_stream(
         "Usa lenguaje neutro y cercano."
     )
 
-    if bloque or contenido:
+    # --- PRE-CARGA DE TEORÍA MAESTRA VERIFICADA DESDE LA BASE DE DATOS ---
+    grade_val = None
+    if course_level:
+        grade_match = re.search(r'\d+', str(course_level))
+        if grade_match: grade_val = int(grade_match.group())
+
+    db_explanation = None
+    if subject != "general":
+        try:
+            db_explanation = get_db_explanation(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+        except Exception as e:
+            print(f"[RAG_ERROR] Fallo en fetch de teoría maestra: {str(e)}")
+
+    if db_explanation:
+        turn_instruction += f"\n\n### TEORÍA MAESTRA VERIFICADA (UTILIZA ESTE TEXTO PARA LA EXPLICACIÓN):\n{db_explanation}"
+    elif bloque or contenido:
         filter_context = f"[Contexto de Filtrado: Bloque '{bloque}', Contenido '{contenido}']\n"
         turn_instruction = filter_context + turn_instruction
         
