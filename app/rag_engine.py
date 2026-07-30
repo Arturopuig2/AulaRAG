@@ -689,14 +689,8 @@ async def get_gemini_response_stream(
     db_session = None
 ):
     """Yields streaming SSE data chunks as Gemini generates the response in real-time, with semantic caching and multimodal image support."""
-    # Look up multimodal book image
+    # Multimodal image attachments disabled by user directive for clean text/schema focus
     visual_url = None
-    try:
-        from .multimodal_engine import get_relevant_book_image
-        grade_num = int("".join([c for c in course_level if c.isdigit()])) if any(c.isdigit() for c in course_level) else None
-        visual_url = get_relevant_book_image(subject, grade_num, f"{bloque} {contenido} {user_message}")
-    except Exception as me:
-        print("Multimodal image lookup error:", me)
 
     # --- 1. Check Semantic Cache First ---
     cached_text = get_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message)

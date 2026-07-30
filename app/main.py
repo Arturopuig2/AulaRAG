@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Enforce Strict Orthographic Rigor
+# Main FastAPI application for AulaRAG - Image attachments completely disabled
 import json
 import os
 import re
