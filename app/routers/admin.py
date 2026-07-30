@@ -835,6 +835,9 @@ async def generate_question_with_ai(
 @router.post("/api/ai/generate-section")
 async def generate_explanation_section_ai(payload: dict):
     """Generates a specific section (text, easier_version, or examples) using Gemini AI."""
+    from ..rag_engine import client, MODEL_NAME
+    from google.genai import types
+
     subject = payload.get("subject", "matematicas")
     grade = int(payload.get("grade", 1))
     bloque = payload.get("bloque", "")

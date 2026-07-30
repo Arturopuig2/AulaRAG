@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Contenido filter converted to dynamic select dropdown in Content Manager
+# Main FastAPI application for AulaRAG - Fixed missing client import in AI section generator endpoint
 import json
 import os
 import re
