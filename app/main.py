@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed subject template routing for Matemáticas explanations in Spanish
+# Main FastAPI application for AulaRAG - Rigorously overhauled all 341 Matemáticas master theory lessons by mathematical block
 import json
 import os
 import re
