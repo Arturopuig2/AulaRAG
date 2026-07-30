@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Clean [INCORRECTE] and [CORRECTE] tags
+# Main FastAPI application for AulaRAG - Purge exercise prompts in context rules
 import json
 import os
 import re

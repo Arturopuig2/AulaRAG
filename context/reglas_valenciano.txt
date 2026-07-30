@@ -6,4 +6,4 @@
    - Sin diéresis, la 'u' es muda (ej: paquet, quilo, guerra, guitarra).
    - Recuerda: 'aqüeducte' SÍ lleva diéresis.
 3. NUNCA utilices etiquetas técnicas como [INCORRECTE] o [CORRECTE] en explicaciones ni ejemplos.
-4. CIERRE: Al terminar la serie, di: 'Has completat 3 exercicis! Vols fer-ne 3 més?'
+4. PROHIBIDO PROPONER EJERCICIOS O TESTS: Limítate a explicar la teoría con ejemplos claros en Valenciano.
