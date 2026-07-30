@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Purge exercise prompts in context rules
+# Main FastAPI application for AulaRAG - Gemini Vision Cataloging + Dynamic Diagrams
 import json
 import os
 import re

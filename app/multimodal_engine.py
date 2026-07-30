@@ -146,3 +146,65 @@ def get_relevant_book_image(subject: str, grade: int = None, query_text: str = "
         return None
     finally:
         db.close()
+
+
+def audit_catalog_with_vision(limit: int = 100) -> dict:
+    """Uses Gemini Vision AI to audit cataloged book images, deleting decorative graphics and enriching educational captions."""
+    from .rag_engine import get_client, MODEL_NAME
+    client = get_client()
+    db = SessionLocal()
+    processed = 0
+    kept = 0
+    deleted = 0
+
+    try:
+        records = db.query(MultimodalImage).limit(limit).all()
+        print(f"[Vision Audit] Auditing up to {len(records)} images with Gemini Vision...")
+
+        for rec in records:
+            file_path = rec.image_url.lstrip("/")
+            if not os.path.exists(file_path):
+                db.delete(rec)
+                deleted += 1
+                continue
+
+            try:
+                img = Image.open(file_path)
+                prompt = (
+                    "Analiza esta imagen extraída de un libro de texto de primaria.\n"
+                    "Determina si es una LÁMINA DIDÁCTICA EDUCATIVA útil para explicar teoría (ej: diagramas, esquemas, figuras geométricas, tablas, mapas conceptuales) "
+                    "o si es solo un dibujo decorativo/mascota/marco/encabezado sin valor didáctico autónomo.\n"
+                    "Responde estrictamente en JSON: {\"is_educational\": true|false, \"description\": \"descripción didáctica breve\"}"
+                )
+                response = client.models.generate_content(
+                    model=MODEL_NAME,
+                    contents=[img, prompt]
+                )
+                txt = response.text or ""
+                # Parse JSON
+                json_match = re.search(r'\{.*\}', txt, re.DOTALL)
+                if json_match:
+                    res = json.loads(json_match.group(0))
+                    if not res.get("is_educational", False):
+                        # Delete non-educational decorative graphic
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                        db.delete(rec)
+                        deleted += 1
+                    else:
+                        # Enrich caption with exact visual description
+                        rec.caption = res.get("description", rec.caption)
+                        kept += 1
+                processed += 1
+            except Exception as ve:
+                print(f"Error analyzing image {rec.id}: {ve}")
+                continue
+
+        db.commit()
+        print(f"[Vision Audit] Finished audit: {processed} processed, {kept} educational images kept, {deleted} decorative graphics purged.")
+        return {"processed": processed, "kept": kept, "deleted": deleted}
+    except Exception as e:
+        print("Error during Vision catalog audit:", e)
+        return {"error": str(e)}
+    finally:
+        db.close()
