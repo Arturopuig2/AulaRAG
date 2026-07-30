@@ -563,10 +563,27 @@ async def list_image_gallery(query: Optional[str] = None):
 
 # ── JSON API for Exercises & Explanations ──────────────────────────────────────
 
+@router.get("/api/options")
+async def get_filter_options(subject: Optional[str] = None, grade: Optional[int] = None, db: Session = Depends(get_db)):
+    """Returns unique Bloques and Contenidos for dynamic dropdown filtering."""
+    q = db.query(Explanation).filter(Explanation.is_active == True)
+    if subject:
+        q = q.filter(Explanation.subject == subject)
+    if grade:
+        q = q.filter(Explanation.grade == grade)
+    
+    items = q.all()
+    bloques = sorted(list({i.bloque for i in items if i.bloque}))
+    contenidos = sorted(list({i.contenido for i in items if i.contenido}))
+    return {"bloques": bloques, "contenidos": contenidos}
+
+
 @router.get("/api/explanations")
 async def api_list_explanations(
     subject: Optional[str] = None,
     grade: Optional[int] = None,
+    bloque: Optional[str] = None,
+    contenido: Optional[str] = None,
     query: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
@@ -575,13 +592,17 @@ async def api_list_explanations(
         q = q.filter(Explanation.subject == subject)
     if grade:
         q = q.filter(Explanation.grade == grade)
+    if bloque:
+        q = q.filter(Explanation.bloque.ilike(f"%{bloque}%"))
+    if contenido:
+        q = q.filter(Explanation.contenido.ilike(f"%{contenido}%"))
     if query:
         q = q.filter(or_(
             Explanation.contenido.ilike(f"%{query}%"),
             Explanation.bloque.ilike(f"%{query}%"),
             Explanation.text.ilike(f"%{query}%")
         ))
-    items = q.order_by(Explanation.id.desc()).limit(100).all()
+    items = q.order_by(Explanation.id.desc()).limit(150).all()
     return {"explanations": [_explanation_to_dict(i) for i in items]}
 
 
@@ -809,16 +830,17 @@ async def generate_question_with_ai(
         raise HTTPException(500, f"Error generando con IA: {e}")
 
 
-@router.post("/api/ai/generate-explanation")
-async def generate_explanation_ai(payload: dict):
-    """Generates full explanation text, easier version, and examples using Gemini AI."""
+@router.post("/api/ai/generate-section")
+async def generate_explanation_section_ai(payload: dict):
+    """Generates a specific section (text, easier_version, or examples) using Gemini AI."""
     subject = payload.get("subject", "matematicas")
     grade = int(payload.get("grade", 1))
     bloque = payload.get("bloque", "")
     contenido = payload.get("contenido", "")
+    section = payload.get("section", "text")
 
     if not contenido:
-        raise HTTPException(400, "Debes proporcionar un contenido/tema para generar con IA.")
+        raise HTTPException(400, "Debes indicar el contenido/tema antes de generar.")
 
     lang_instr = "español"
     if subject == "valenciano":
@@ -826,21 +848,29 @@ async def generate_explanation_ai(payload: dict):
     elif subject == "ingles":
         lang_instr = "inglés escolar (English for Primary Education)"
 
-    prompt = (
-        f"Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} el contenido teóricamente perfecto para el tema '{contenido}' "
-        f"del curso {grade}º de Primaria" + (f" (Bloque: {bloque})" if bloque else "") + ".\n\n"
-        "Requisitos obligatorios:\n"
-        "1. 'text': Explicación teórica completa, clara, estructurada con títulos en Markdown (Concepto, Reglas y Explicación, Ejemplos, Resumen). PROHIBIDO proponer ejercicios o cuestionarios al alumno.\n"
-        "2. 'easier_version': Versión simplificada y fácil de entender para alumnos con necesidades de apoyo o dificultades de comprensión.\n"
-        "3. 'examples': Una lista de 3 ejemplos prácticos claros y cotidianos aplicados a este concepto.\n\n"
-        "Responde EXCLUSIVAMENTE con un JSON válido con esta estructura exacta:\n"
-        "{\n"
-        '  "text": "Contenido completo en markdown...",\n'
-        '  "easier_version": "Versión fácil y breve...",\n'
-        '  "examples": ["Ejemplo 1...", "Ejemplo 2...", "Ejemplo 3..."]\n'
-        "}\n"
-        "No añadas texto antes ni después del JSON."
-    )
+    if section == "text":
+        prompt = (
+            f"Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} la EXPLICACIÓN TEÓRICA perfecta para el tema '{contenido}' "
+            f"del curso {grade}º de Primaria" + (f" (Bloque: {bloque})" if bloque else "") + ".\n"
+            "Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen). "
+            "PROHIBIDO proponer ejercicios, cuestionarios o tests al alumno.\n"
+            "Responde EXCLUSIVAMENTE con el texto completo en markdown, sin envolver en JSON ni bloques de código."
+        )
+    elif section == "easier_version":
+        prompt = (
+            f"Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} una VERSIÓN FÁCIL Y ADAPTADA del tema '{contenido}' "
+            f"para {grade}º de Primaria, enfocada a alumnos con necesidades educativas o dificultades de comprensión.\n"
+            "Usa frases muy sencillas, explicaciones intuitivas y lenguaje cercano.\n"
+            "Responde EXCLUSIVAMENTE con el texto adaptado en markdown, sin envolver en JSON ni bloques de código."
+        )
+    elif section == "examples":
+        prompt = (
+            f"Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} 3 EJEMPLOS PRÁCTICOS DE LA VIDA REAL para el tema '{contenido}' "
+            f"de {grade}º de Primaria.\n"
+            "Responde EXCLUSIVAMENTE con un JSON válido que contenga un array de strings: [\"Ejemplo 1...\", \"Ejemplo 2...\", \"Ejemplo 3...\"]. No añadas texto antes ni después."
+        )
+    else:
+        raise HTTPException(400, "Sección no válida")
 
     try:
         response = await client.aio.models.generate_content(
@@ -849,18 +879,16 @@ async def generate_explanation_ai(payload: dict):
         )
 
         raw = response.text.strip()
-        raw = re.sub(r'^```(?:json)?\s*', '', raw)
-        raw = re.sub(r'\s*```$', '', raw)
-        data = json.loads(raw)
-
-        return {
-            "text":           data.get("text", ""),
-            "easier_version": data.get("easier_version", ""),
-            "examples":       data.get("examples", []),
-        }
+        if section == "examples":
+            raw = re.sub(r'^```(?:json)?\s*', '', raw)
+            raw = re.sub(r'\s*```$', '', raw)
+            ex_list = json.loads(raw)
+            return {"result": ex_list}
+        else:
+            return {"result": raw}
 
     except Exception as e:
-        raise HTTPException(500, f"Error al generar la explicación con IA: {e}")
+        raise HTTPException(500, f"Error generando la sección {section} con IA: {e}")
 
 
 # ── Serializers ───────────────────────────────────────────────────────────────

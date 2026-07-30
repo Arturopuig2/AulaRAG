@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Unified /admin routes to render admin_exercises.html with AI Generator
+# Main FastAPI application for AulaRAG - Section-by-section AI generator and complete 4-level filters in Content Manager
 import json
 import os
 import re
