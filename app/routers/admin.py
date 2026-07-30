@@ -563,6 +563,72 @@ async def list_image_gallery(query: Optional[str] = None):
 
 # ── JSON API for Exercises & Explanations ──────────────────────────────────────
 
+@router.post("/api/upload-image")
+async def api_upload_image(file: UploadFile = File(...)):
+    """Uploads a local image file and returns its static URL."""
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(400, "El archivo debe ser una imagen (JPG, PNG, GIF, WEBP).")
+
+    ext = os.path.splitext(file.filename)[1].lower() or ".png"
+    filename = f"{uuid.uuid4()}{ext}"
+    uploads_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "static", "uploads")
+    os.makedirs(uploads_dir, exist_ok=True)
+    file_path = os.path.join(uploads_dir, filename)
+
+    with open(file_path, "wb") as buffer:
+        buffer.write(await file.read())
+
+    return {"url": f"/static/uploads/{filename}", "filename": filename}
+
+
+@router.get("/api/search-web-images")
+async def api_search_web_images(query: str):
+    """Searches educational web images using Wikimedia Commons API & Unsplash Educational API."""
+    if not query or len(query.strip()) < 2:
+        return {"images": []}
+
+    results = []
+
+    # 1. Wikimedia Commons API Search
+    try:
+        import urllib.request, json as json_mod, urllib.parse
+        encoded_q = urllib.parse.quote(query)
+        wiki_url = f"https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch={encoded_q}&gsrlimit=12&prop=imageinfo&iiprop=url|mime|size&format=json"
+        
+        req = urllib.request.Request(wiki_url, headers={'User-Agent': 'AulaRAG-Educational-App/1.0'})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json_mod.loads(resp.read().decode('utf-8'))
+            pages = data.get('query', {}).get('pages', {})
+            for page_id, page in pages.items():
+                imageinfo = page.get('imageinfo', [])
+                if imageinfo:
+                    img_url = imageinfo[0].get('url')
+                    title = page.get('title', 'Imagen Web').replace('File:', '')
+                    if img_url and any(img_url.lower().endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.svg', '.webp']):
+                        results.append({
+                            "title": title,
+                            "url": img_url,
+                            "source": "Wikimedia"
+                        })
+    except Exception as e:
+        print("[WEB_IMAGE_SEARCH_ERROR] Wikimedia:", e)
+
+    # 2. Open Educational Unsplash Direct Search Fallback
+    try:
+        encoded_q = urllib.parse.quote(query)
+        # Unsplash Source / Public Direct Query
+        unsplash_urls = [
+            {"title": f"{query.capitalize()} 1", "url": f"https://source.unsplash.com/400x300/?{encoded_q}", "source": "Unsplash"},
+            {"title": f"{query.capitalize()} 2", "url": f"https://source.unsplash.com/400x300/?{encoded_q},education", "source": "Unsplash"},
+            {"title": f"{query.capitalize()} 3", "url": f"https://source.unsplash.com/400x300/?{encoded_q},school", "source": "Unsplash"}
+        ]
+        results.extend(unsplash_urls)
+    except Exception as e:
+        print("[WEB_IMAGE_SEARCH_ERROR] Unsplash:", e)
+
+    return {"images": results}
+
+
 @router.get("/api/options")
 async def get_filter_options(subject: Optional[str] = None, grade: Optional[int] = None, bloque: Optional[str] = None, db: Session = Depends(get_db)):
     """Returns unique Bloques and Contenidos for dynamic dropdown filtering."""

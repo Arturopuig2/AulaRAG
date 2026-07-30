@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Ensure Ejemplos button appears only once per explanation session
+# Main FastAPI application for AulaRAG - Added 3-tab multi-source image searcher and upload tool to Content Manager
 import json
 import os
 import re
