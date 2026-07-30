@@ -4,40 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador de Aula - Gestión de Ejercicios</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Aula - Administrador de Contenidos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #22c55e;
+            --bg-main: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #4FA8FF;
+            --primary-hover: #3a8ee0;
+            --primary-light: #e0efff;
+            --success: #10b981;
             --danger: #ef4444;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            --radius-lg: 20px;
+            --radius-md: 14px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Nunito', sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% -20%, #312e81, transparent);
-            color: var(--text);
+            background-color: var(--bg-main);
+            background-image: radial-gradient(circle at 50% -20%, #e0efff, transparent);
+            color: var(--text-main);
             min-height: 100vh;
             padding-bottom: 4rem;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -46,191 +48,249 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
-            animation: fadeInDown 0.8s ease-out;
+            margin-bottom: 2.5rem;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            height: 48px;
+            width: auto;
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            background: linear-gradient(to right, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
+            padding: 0.75rem 1.4rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             border: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 0.95rem;
+            text-decoration: none;
         }
 
         .btn-primary {
             background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+            box-shadow: 0 4px 14px 0 rgba(79, 168, 255, 0.4);
         }
 
         .btn-primary:hover {
             background-color: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+            box-shadow: 0 6px 20px rgba(79, 168, 255, 0.5);
         }
 
         .btn-outline {
-            background: transparent;
+            background: #ffffff;
             border: 1px solid var(--border);
-            color: var(--text);
+            color: var(--text-main);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
 
         .btn-outline:hover {
-            background: var(--border);
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
         }
 
         .tabs {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
+            background: #ffffff;
+            padding: 6px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            width: fit-content;
         }
 
-        .tab {
-            padding: 0.75rem 1.5rem;
+        .tab-btn {
+            padding: 0.65rem 1.4rem;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
+            border: none;
+            background: transparent;
             color: var(--text-muted);
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
         }
 
-        .tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
+        .tab-btn.active {
+            background: var(--primary-light);
+            color: #0284c7;
         }
 
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+        .tab-btn:hover:not(.active) {
+            color: var(--text-main);
+            background: #f1f5f9;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
             margin-bottom: 2rem;
-            animation: fadeIn 1s ease-out;
+        }
+
+        .filter-bar {
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            flex: 1;
+            min-width: 180px;
         }
 
         .filter-group label {
             font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text-muted);
-            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
         }
 
-        select,
-        input,
-        textarea {
-            background: var(--card-bg);
+        select, input[type="text"], textarea {
+            background: #f8fafc;
             border: 1px solid var(--border);
-            color: var(--text);
-            padding: 0.75rem;
-            border-radius: 0.75rem;
+            padding: 0.7rem 1rem;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-weight: 600;
             outline: none;
-            transition: border-color 0.2s;
-            width: 100%;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
         }
 
-        select:focus,
-        input:focus,
-        textarea:focus {
+        select:focus, input:focus, textarea:focus {
             border-color: var(--primary);
-        }
-
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            animation: scaleUp 0.5s ease-out;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(79, 168, 255, 0.2);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            text-align: left;
         }
 
         th {
-            text-align: left;
-            padding: 1.25rem 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
+            background: #f8fafc;
+            padding: 1rem 1.5rem;
+            font-size: 0.82rem;
+            font-weight: 800;
             color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
         }
 
         td {
-            padding: 1.25rem 1.5rem;
+            padding: 1.2rem 1.5rem;
             border-bottom: 1px solid var(--border);
-            vertical-align: top;
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
         }
 
         .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-block;
         }
 
-        .actions {
+        .badge-subject {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-grade {
+            background: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .actions-cell {
             display: flex;
             gap: 0.5rem;
         }
 
         .btn-icon {
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--border);
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
         }
 
         .btn-icon:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-edit:hover {
-            background: rgba(99, 102, 241, 0.2);
+            background: var(--primary-light);
             color: var(--primary);
-            border-color: var(--primary);
+            border-color: #bfdbfe;
         }
 
-        .btn-delete:hover {
-            background: rgba(239, 68, 68, 0.2);
+        .btn-icon.delete:hover {
+            background: #fee2e2;
             color: var(--danger);
-            border-color: var(--danger);
+            border-color: #fecaca;
         }
 
         /* Modal Styles */
@@ -240,142 +300,130 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(4px);
-            display: none;
-            justify-content: center;
+            display: flex;
             align-items: center;
+            justify-content: center;
             z-index: 1000;
-            padding: 2rem;
-            animation: fadeIn 0.3s ease-out;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .modal {
-            background: var(--bg-dark);
+            background: #ffffff;
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             width: 100%;
-            max-width: 700px;
+            max-width: 680px;
             max-height: 90vh;
             overflow-y: auto;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
         }
 
         .modal-header {
-            padding: 2rem;
+            padding: 1.5rem;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .modal-body {
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        .modal-header h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0f172a;
         }
 
-        .modal-footer {
-            padding: 1.5rem 2rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
+        .modal-body {
+            padding: 1.5rem;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
         .full-width {
             grid-column: span 2;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+        .modal-footer {
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            background: #f8fafc;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #0f172a;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 14px;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2000;
         }
 
-        @keyframes scaleUp {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+        .toast.active {
+            transform: translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
         <header>
-            <div>
-                <h1>Aula Administrator</h1>
-                <p style="color: var(--text-muted); margin-top: 0.5rem;">Gestión profesional del banco de contenidos</p>
+            <div class="brand-container">
+                <img src="/static/img/logo.png" alt="Aula Logo" class="brand-logo">
+                <div>
+                    <h1>Gestor de Contenidos</h1>
+                    <div class="subtitle">Pizarra Digital - Banco de Ejercicios y Teoría Maestra</div>
+                </div>
             </div>
-            <div style="display: flex; gap: 1rem;">
-                <a href="/" class="btn btn-outline" style="text-decoration: none; color: white;">Volver al Chat</a>
-                <button class="btn btn-primary" onclick="openModal('exercise')">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Nuevo Ejercicio
-                </button>
+            <div class="header-actions">
+                <a href="/" class="btn btn-outline">⬅️ Volver a Pizarra</a>
+                <button class="btn btn-primary" onclick="openCreateModal()">✨ Nuevo Ejercicio</button>
             </div>
         </header>
 
+        <!-- Navigation Tabs -->
         <div class="tabs">
-            <div class="tab active" id="tab-exercises" onclick="switchTab('exercises')">Ejercicios</div>
-            <div class="tab" id="tab-explanations" onclick="switchTab('explanations')">Explicaciones (Teoría)</div>
+            <button class="tab-btn active" id="tab-exercises" onclick="switchTab('exercises')">
+                <span>📝 Ejercicios Verificados</span>
+            </button>
+            <button class="tab-btn" id="tab-explanations" onclick="switchTab('explanations')">
+                <span>📚 Teoría Maestra RAG</span>
+            </button>
         </div>
 
-        <div class="filters">
+        <!-- Filter Bar -->
+        <div class="card filter-bar">
             <div class="filter-group">
                 <label>Asignatura</label>
                 <select id="filter-subject" onchange="loadData()">
@@ -400,49 +448,47 @@
             </div>
             <div class="filter-group">
                 <label>Buscar tema</label>
-                <input type="text" id="filter-tema" placeholder="Ej: Diptongos..." oninput="debounceLoad()">
+                <input type="text" id="filter-tema" placeholder="Ej: Las fracciones..." oninput="debounceLoad()">
             </div>
         </div>
 
-        <!-- Exercises View -->
+        <!-- Exercises Table View -->
         <div id="view-exercises" class="card">
             <table id="table-exercises">
                 <thead>
                     <tr>
-                        <th style="width: 15%">Tema</th>
-                        <th style="width: 50%">Pregunta</th>
+                        <th style="width: 20%">Tema / Asignatura</th>
+                        <th style="width: 45%">Pregunta</th>
                         <th style="width: 25%">Respuesta Correcta</th>
                         <th style="width: 10%">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Loaded via JS -->
+                    <!-- JS Injected -->
                 </tbody>
             </table>
-            <div id="empty-exercises"
-                style="padding: 4rem; text-align: center; color: var(--text-muted); display: none;">
-                No se han encontrado ejercicios.
+            <div id="empty-exercises" style="padding: 4rem; text-align: center; color: var(--text-muted); display: none;">
+                No se han encontrado ejercicios verificados.
             </div>
         </div>
 
-        <!-- Explanations View -->
+        <!-- Explanations Table View -->
         <div id="view-explanations" class="card" style="display: none;">
             <table id="table-explanations">
                 <thead>
                     <tr>
-                        <th style="width: 15%">Tema</th>
+                        <th style="width: 20%">Tema / Asignatura</th>
                         <th style="width: 30%">Contenido Principal</th>
-                        <th style="width: 45%">Vista Previa Teoría</th>
+                        <th style="width: 40%">Vista Previa Teoría</th>
                         <th style="width: 10%">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Loaded via JS -->
+                    <!-- JS Injected -->
                 </tbody>
             </table>
-            <div id="empty-explanations"
-                style="padding: 4rem; text-align: center; color: var(--text-muted); display: none;">
-                No se han encontrado explicaciones.
+            <div id="empty-explanations" style="padding: 4rem; text-align: center; color: var(--text-muted); display: none;">
+                No se han encontrado lecciones explicativas.
             </div>
         </div>
     </div>
@@ -451,13 +497,8 @@
     <div id="modal-exercise" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="exercise-modal-title">Añadir Nuevo Ejercicio</h2>
-                <button class="btn-icon" onclick="closeModal('exercise')">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
+                <h2 id="exercise-modal-title">Nuevo Ejercicio Verificado</h2>
+                <button class="btn-icon" onclick="closeModal('exercise')">✕</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="q-id">
@@ -493,16 +534,14 @@
                     </div>
                     <div class="filter-group full-width">
                         <label>Pregunta para el alumno</label>
-                        <textarea id="q-question" rows="3" placeholder="Escribe el enunciado exacto..."
-                            required></textarea>
+                        <textarea id="q-question" rows="3" placeholder="Escribe el enunciado exacto..." required></textarea>
                     </div>
                     <div class="filter-group full-width">
                         <label>Opciones (Una por línea)</label>
-                        <textarea id="q-options" rows="4" placeholder="Opción A&#10;Opción B&#10;Opción C"
-                            required></textarea>
+                        <textarea id="q-options" rows="4" placeholder="Opción A&#10;Opción B&#10;Opción C" required></textarea>
                     </div>
                     <div class="filter-group full-width">
-                        <label>Respuesta Correcta (Debe ser idéntica a una opción)</label>
+                        <label>Respuesta Correcta (Debe coincidir con una opción)</label>
                         <input type="text" id="q-answer" placeholder="Pega aquí la opción correcta" required>
                     </div>
                 </div>
@@ -514,319 +553,266 @@
         </div>
     </div>
 
-    <!-- Modal Explicación -->
-    <div id="modal-explanation" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="explanation-modal-title">Configurar Teoría Verificada</h2>
-                <button class="btn-icon" onclick="closeModal('explanation')">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="e-id">
-                <div class="form-grid">
-                    <div class="filter-group">
-                        <label>Asignatura</label>
-                        <select id="e-subject" required>
-                            <option value="matematicas">Matemáticas</option>
-                            <option value="lengua">Lengua</option>
-                            <option value="valenciano">Valencià</option>
-                            <option value="ingles">Inglés</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Nivel (Curso)</label>
-                        <select id="e-grade">
-                            <option value="">Todos</option>
-                            <option value="1">1º Primaria</option>
-                            <option value="2">2º Primaria</option>
-                            <option value="3">3º Primaria</option>
-                            <option value="4">4º Primaria</option>
-                            <option value="5">5º Primaria</option>
-                            <option value="6">6º Primaria</option>
-                        </select>
-                    </div>
-                    <div class="filter-group full-width">
-                        <label>Contenido (Tema exacto)</label>
-                        <input type="text" id="e-contenido" placeholder="Ej: El Sustantivo" required>
-                    </div>
-                    <div class="filter-group full-width">
-                        <label>Teoría Maestra (Fuente de Verdad)</label>
-                        <textarea id="e-text" rows="10"
-                            placeholder="Escribe aquí la explicación técnica y completa del tema. El AI la usará para adaptarla al alumno."
-                            required></textarea>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
-                            💡 <strong>Nota:</strong> Esta es la "Verdad Absoluta". El AI la simplificará para el niño,
-                            pero no se inventará datos que no pongas aquí.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('explanation')">Cancelar</button>
-                <button class="btn btn-primary" onclick="saveExplanation()">Guardar Teoría</button>
-            </div>
-        </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toast-msg">Operación completada con éxito</span>
     </div>
 
     <script>
         let currentTab = 'exercises';
-        let exercises = [];
-        let explanations = [];
         let debounceTimer;
 
-        // Load initial data
-        loadData();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+        });
 
-        async function loadData() {
-            const subject = document.getElementById('filter-subject').value;
-            const query = subject ? `?subject=${subject}` : '';
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
 
-            try {
-                const [exResp, explResp] = await Promise.all([
-                    fetch(`/api/admin/questions${query}`),
-                    fetch(`/api/admin/explanations${query}`)
-                ]);
-
-                exercises = await exResp.json();
-                explanations = await explResp.json();
-
-                render();
-            } catch (e) {
-                console.error("Error loading data", e);
-            }
-        }
-
-        function render() {
-            const temaFilter = document.getElementById('filter-tema').value.toLowerCase();
-
-            // Render Exercises
-            const exBody = document.querySelector('#table-exercises tbody');
-            exBody.innerHTML = '';
-            const filteredEx = exercises.filter(x =>
-                (x.contenido || '').toLowerCase().includes(temaFilter) ||
-                (x.question || '').toLowerCase().includes(temaFilter)
-            );
-
-            if (filteredEx.length === 0) {
-                document.getElementById('empty-exercises').style.display = 'block';
-                document.getElementById('table-exercises').style.display = 'none';
+            if (tab === 'exercises') {
+                document.getElementById('view-exercises').style.display = 'block';
+                document.getElementById('view-explanations').style.display = 'none';
             } else {
-                document.getElementById('empty-exercises').style.display = 'none';
-                document.getElementById('table-exercises').style.display = 'table';
-                filteredEx.forEach(q => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                    <td>
-                        <span class="badge" style="margin-bottom: 0.5rem; display: block; width: fit-content;">${q.subject}</span>
-                        <div style="font-weight: 600; font-size: 0.9rem;">${q.contenido || '-'}</div>
-                    </td>
-                    <td style="font-size: 0.95rem; line-height: 1.5;">${q.question}</td>
-                    <td><div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.9rem;">${q.answer}</div></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn-icon btn-edit" title="Editar" onclick='editQuestion(${JSON.stringify(q).replace(/'/g, "&apos;")})'>
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </button>
-                            <button class="btn-icon btn-delete" title="Eliminar" onclick="deleteQuestion(${q.id})">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                    exBody.appendChild(tr);
-                });
+                document.getElementById('view-exercises').style.display = 'none';
+                document.getElementById('view-explanations').style.display = 'block';
             }
-
-            // Render Explanations
-            const explBody = document.querySelector('#table-explanations tbody');
-            explBody.innerHTML = '';
-            const filteredExpl = explanations.filter(x =>
-                (x.contenido || '').toLowerCase().includes(temaFilter) ||
-                (x.explanation || '').toLowerCase().includes(temaFilter)
-            );
-
-            if (filteredExpl.length === 0) {
-                document.getElementById('empty-explanations').style.display = 'block';
-                document.getElementById('table-explanations').style.display = 'none';
-            } else {
-                document.getElementById('empty-explanations').style.display = 'none';
-                document.getElementById('table-explanations').style.display = 'table';
-                filteredExpl.forEach(e => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                    <td>
-                        <span class="badge" style="margin-bottom: 0.5rem; display: block; width: fit-content;">${e.subject}</span>
-                        <div style="font-weight: 600; font-size: 0.9rem;">${e.contenido || '-'}</div>
-                    </td>
-                    <td style="font-size: 0.9rem; color: var(--text-muted);">${e.bloque || '-'} (${e.grade || 'Todos'}º)</td>
-                    <td style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-                        ${e.explanation.substring(0, 150)}...
-                    </td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn-icon btn-edit" title="Editar" onclick='editExplanation(${JSON.stringify(e).replace(/'/g, "&apos;")})'>
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </button>
-                            <button class="btn-icon btn-delete" title="Eliminar" onclick="deleteExplanation(${e.id})">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                    explBody.appendChild(tr);
-                });
-            }
-        }
-
-        function switchTab(t) {
-            currentTab = t;
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(`tab-${t}`).classList.add('active');
-
-            document.getElementById('view-exercises').style.display = t === 'exercises' ? 'block' : 'none';
-            document.getElementById('view-explanations').style.display = t === 'explanations' ? 'block' : 'none';
-
-            // Update Add Button action
-            const addBtn = document.querySelector('header .btn-primary');
-            if (t === 'exercises') {
-                addBtn.innerHTML = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Nuevo Ejercicio`;
-                addBtn.onclick = () => openModal('exercise');
-            } else {
-                addBtn.innerHTML = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Nueva Teoría`;
-                addBtn.onclick = () => openModal('explanation');
-            }
+            loadData();
         }
 
         function debounceLoad() {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(render, 300);
+            debounceTimer = setTimeout(loadData, 300);
         }
 
-        // Modal helpers
-        function openModal(type) {
-            document.getElementById(`modal-${type}`).style.display = 'flex';
-            if (type === 'exercise') resetExerciseForm();
-            else resetExplanationForm();
+        async function loadData() {
+            const subject = document.getElementById('filter-subject').value;
+            const grade = document.getElementById('filter-grade').value;
+            const tema = document.getElementById('filter-tema').value;
+
+            if (currentTab === 'exercises') {
+                let url = `/admin/api/questions?`;
+                if (subject) url += `subject=${subject}&`;
+                if (grade) url += `grade=${grade}&`;
+                if (tema) url += `query=${encodeURIComponent(tema)}&`;
+
+                try {
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    renderExercises(data.questions || []);
+                } catch (e) {
+                    showToast("Error al cargar ejercicios", true);
+                }
+            } else {
+                let url = `/admin/api/explanations?`;
+                if (subject) url += `subject=${subject}&`;
+                if (grade) url += `grade=${grade}&`;
+                if (tema) url += `query=${encodeURIComponent(tema)}&`;
+
+                try {
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    renderExplanations(data.explanations || []);
+                } catch (e) {
+                    showToast("Error al cargar teoría", true);
+                }
+            }
         }
 
-        function closeModal(type) {
-            document.getElementById(`modal-${type}`).style.display = 'none';
-        }
+        function renderExercises(items) {
+            const tbody = document.querySelector('#table-exercises tbody');
+            const empty = document.getElementById('empty-exercises');
+            tbody.innerHTML = '';
 
-        function resetExerciseForm() {
-            document.getElementById('q-id').value = '';
-            document.getElementById('q-question').value = '';
-            document.getElementById('q-options').value = '';
-            document.getElementById('q-answer').value = '';
-            document.getElementById('exercise-modal-title').innerText = 'Añadir Nuevo Ejercicio';
-        }
-
-        function resetExplanationForm() {
-            document.getElementById('e-id').value = '';
-            document.getElementById('e-text').value = '';
-            document.getElementById('explanation-modal-title').innerText = 'Configurar Teoría Verificada';
-        }
-
-        async function saveQuestion() {
-            const data = {
-                id: document.getElementById('q-id').value,
-                subject: document.getElementById('q-subject').value,
-                grade: document.getElementById('q-grade').value ? parseInt(document.getElementById('q-grade').value) : null,
-                bloque: document.getElementById('q-bloque').value,
-                contenido: document.getElementById('q-contenido').value,
-                question: document.getElementById('q-question').value,
-                options: document.getElementById('q-options').value.split('\n').map(s => s.trim()).filter(s => s),
-                answer: document.getElementById('q-answer').value
-            };
-
-            if (!data.subject || !data.contenido || !data.question || data.options.length === 0 || !data.answer) {
-                alert("Por favor, completa todos los campos obligatorios");
+            if (!items || items.length === 0) {
+                empty.style.display = 'block';
                 return;
             }
+            empty.style.display = 'none';
 
-            const resp = await fetch('/admin/questions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+            items.forEach(q => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <span class="badge badge-subject">${q.subject.toUpperCase()}</span>
+                        <span class="badge badge-grade">${q.grade ? q.grade + 'º Primaria' : 'General'}</span>
+                        <div style="font-size:0.85rem; margin-top:4px; font-weight:700; color:var(--text-main);">${q.contenido || q.bloque || ''}</div>
+                    </td>
+                    <td style="font-weight:600;">${escapeHtml(q.question)}</td>
+                    <td><strong style="color:var(--success);">${escapeHtml(q.answer)}</strong></td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="btn-icon" title="Editar" onclick='editQuestion(${JSON.stringify(q)})'>✏️</button>
+                            <button class="btn-icon delete" title="Eliminar" onclick="deleteQuestion(${q.id})">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
-
-            if (resp.ok) {
-                closeModal('exercise');
-                loadData();
-            } else {
-                alert("Error al guardar el ejercicio");
-            }
         }
 
-        async function saveExplanation() {
-            const data = {
-                id: document.getElementById('e-id').value,
-                subject: document.getElementById('e-subject').value,
-                grade: document.getElementById('e-grade').value ? parseInt(document.getElementById('e-grade').value) : null,
-                bloque: '', // Optional/Legacy
-                contenido: document.getElementById('e-contenido').value,
-                explanation: document.getElementById('e-text').value
-            };
+        function renderExplanations(items) {
+            const tbody = document.querySelector('#table-explanations tbody');
+            const empty = document.getElementById('empty-explanations');
+            tbody.innerHTML = '';
 
-            if (!data.subject || !data.contenido || !data.explanation) {
-                alert("Por favor, completa todos los campos");
+            if (!items || items.length === 0) {
+                empty.style.display = 'block';
                 return;
             }
+            empty.style.display = 'none';
 
-            const resp = await fetch('/api/admin/explanations', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+            items.forEach(e => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <span class="badge badge-subject">${e.subject.toUpperCase()}</span>
+                        <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
+                    </td>
+                    <td style="font-weight:700;">${escapeHtml(e.contenido || '')}</td>
+                    <td style="font-size:0.9rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 100))}...</td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="btn-icon delete" title="Eliminar" onclick="deleteExplanation(${e.id})">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
+        }
 
-            if (resp.ok) {
-                closeModal('explanation');
-                loadData();
-            } else {
-                alert("Error al guardar la teoría");
-            }
+        function openCreateModal() {
+            document.getElementById('exercise-modal-title').textContent = "Nuevo Ejercicio Verificado";
+            document.getElementById('q-id').value = "";
+            document.getElementById('q-subject').value = "matematicas";
+            document.getElementById('q-grade').value = "1";
+            document.getElementById('q-bloque').value = "";
+            document.getElementById('q-contenido').value = "";
+            document.getElementById('q-question').value = "";
+            document.getElementById('q-options').value = "";
+            document.getElementById('q-answer').value = "";
+
+            document.getElementById('modal-exercise').classList.add('active');
         }
 
         function editQuestion(q) {
+            document.getElementById('exercise-modal-title').textContent = "Editar Ejercicio Verificado";
             document.getElementById('q-id').value = q.id;
             document.getElementById('q-subject').value = q.subject;
-            document.getElementById('q-grade').value = q.grade || '';
-            document.getElementById('q-bloque').value = q.bloque || '';
-            document.getElementById('q-contenido').value = q.contenido || '';
-            document.getElementById('q-question').value = q.question;
-            document.getElementById('q-options').value = q.options.join('\n');
-            document.getElementById('q-answer').value = q.answer;
+            document.getElementById('q-grade').value = q.grade || "1";
+            document.getElementById('q-bloque').value = q.bloque || "";
+            document.getElementById('q-contenido').value = q.contenido || "";
+            document.getElementById('q-question').value = q.question || "";
+            
+            let opts = [];
+            try { opts = JSON.parse(q.options); } catch(e) {}
+            document.getElementById('q-options').value = Array.isArray(opts) ? opts.join('\n') : "";
+            document.getElementById('q-answer').value = q.answer || "";
 
-            document.getElementById('exercise-modal-title').innerText = 'Editar Ejercicio';
-            document.getElementById('modal-exercise').style.display = 'flex';
+            document.getElementById('modal-exercise').classList.add('active');
         }
 
-        function editExplanation(e) {
-            document.getElementById('e-id').value = e.id;
-            document.getElementById('e-subject').value = e.subject;
-            document.getElementById('e-grade').value = e.grade || '';
-            document.getElementById('e-contenido').value = e.contenido || '';
-            document.getElementById('e-text').value = e.explanation;
+        function closeModal(type) {
+            document.getElementById(`modal-${type}`).classList.remove('active');
+        }
 
-            document.getElementById('explanation-modal-title').innerText = 'Editar Teoría Verificada';
-            document.getElementById('modal-explanation').style.display = 'flex';
+        async function saveQuestion() {
+            const id = document.getElementById('q-id').value;
+            const subject = document.getElementById('q-subject').value;
+            const grade = parseInt(document.getElementById('q-grade').value) || 1;
+            const bloque = document.getElementById('q-bloque').value;
+            const contenido = document.getElementById('q-contenido').value;
+            const question = document.getElementById('q-question').value;
+            const rawOptions = document.getElementById('q-options').value;
+            const answer = document.getElementById('q-answer').value;
+
+            if (!contenido || !question || !rawOptions || !answer) {
+                showToast("Por favor, completa todos los campos requeridos", true);
+                return;
+            }
+
+            const options = rawOptions.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+
+            const payload = {
+                subject, grade, bloque, contenido, question, options, answer
+            };
+
+            try {
+                let res;
+                if (id) {
+                    res = await fetch(`/admin/api/questions/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                } else {
+                    res = await fetch(`/admin/api/questions`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                }
+
+                if (res.ok) {
+                    showToast(id ? "Ejercicio actualizado correctamente" : "Ejercicio guardado correctamente");
+                    closeModal('exercise');
+                    loadData();
+                } else {
+                    showToast("Error al guardar el ejercicio", true);
+                }
+            } catch (e) {
+                showToast("Error de conexión al servidor", true);
+            }
         }
 
         async function deleteQuestion(id) {
-            if (!confirm('¿Seguro que quieres eliminar este ejercicio?')) return;
-            const resp = await fetch(`/api/admin/questions/${id}`, { method: 'DELETE' });
-            if (resp.ok) loadData();
+            if (!confirm("¿Estás seguro de que deseas eliminar este ejercicio?")) return;
+
+            try {
+                const res = await fetch(`/admin/api/questions/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast("Ejercicio eliminado");
+                    loadData();
+                } else {
+                    showToast("Error al eliminar el ejercicio", true);
+                }
+            } catch (e) {
+                showToast("Error de conexión al servidor", true);
+            }
         }
 
         async function deleteExplanation(id) {
-            if (!confirm('¿Seguro que quieres eliminar esta explicación?')) return;
-            const resp = await fetch(`/api/admin/explanations/${id}`, { method: 'DELETE' });
-            if (resp.ok) loadData();
+            if (!confirm("¿Estás seguro de que deseas eliminar esta teoría?")) return;
+
+            try {
+                const res = await fetch(`/admin/api/explanations/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast("Teoría eliminada");
+                    loadData();
+                } else {
+                    showToast("Error al eliminar", true);
+                }
+            } catch (e) {
+                showToast("Error de conexión", true);
+            }
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.textContent = msg;
+            toast.style.background = isError ? 'var(--danger)' : '#0f172a';
+            toast.classList.add('active');
+
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     </script>
 </body>
