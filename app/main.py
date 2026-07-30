@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Purged C. Lectora subject
+# Main FastAPI application for AulaRAG - Content Manager Admin Review
 import json
 import os
 import re
