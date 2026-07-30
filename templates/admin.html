@@ -788,13 +788,12 @@
 const TEMARIO = {};
 
 async function loadTemarios() {
-    const subjects = ['matematicas', 'lengua', 'valenciano', 'ingles', 'competencia_lectora'];
+    const subjects = ['matematicas', 'lengua', 'valenciano', 'ingles'];
     const endpoints = {
         matematicas: '/api/temario/matematicas',
         lengua: '/api/temario/lengua',
         valenciano: '/api/temario/valenciano',
         ingles: '/api/temario/ingles',
-        competencia_lectora: '/api/temario/competencia_lectora',
     };
     for (const s of subjects) {
         try {

@@ -51,8 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     temarioDataValenciano = data.temario || [];
                 } else if (subject === 'ingles') {
                     temarioDataIngles = data.temario || [];
-                } else if (subject === 'competencia_lectora') {
-                    temarioDataCompetenciaLectora = data.temario || [];
                 }
 
                 // If current active subject was just loaded, refresh filters
@@ -61,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (subject === 'matematicas') currentTemarioData = temarioDataMatematicas;
                     else if (subject === 'valenciano') currentTemarioData = temarioDataValenciano;
                     else if (subject === 'ingles') currentTemarioData = temarioDataIngles;
-                    else if (subject === 'competencia_lectora') currentTemarioData = temarioDataCompetenciaLectora;
 
                     if (currentTemarioData.length > 0) {
                         syllabusFilters.style.display = 'block';
@@ -78,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTemario('matematicas', '/api/temario/matematicas');
     loadTemario('valenciano', '/api/temario/valenciano');
     loadTemario('ingles', '/api/temario/ingles');
-    loadTemario('competencia_lectora', '/api/temario/competencia_lectora');
 
     let audioEnabled = false;
 
@@ -114,8 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'matematicas': { title: 'Pizarra Digital - Matemáticas', color: 'var(--color-blue)', name: 'Mates' },
         'lengua': { title: 'Pizarra Digital - Lengua', color: 'var(--color-green)', name: 'Lengua' },
         'valenciano': { title: 'Pizarra Digital - Valencià', color: 'var(--color-orange)', name: 'Valencià' },
-        'ingles': { title: 'Pizarra Digital - Inglés', color: 'var(--color-yellow)', name: 'Inglés' },
-        'competencia_lectora': { title: 'Pizarra Digital - Lectura', color: 'var(--color-red)', name: 'Lectura' }
+        'ingles': { title: 'Pizarra Digital - Inglés', color: 'var(--color-yellow)', name: 'Inglés' }
     };
 
     let currentSubject = 'matematicas';
@@ -169,8 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentTemarioData = temarioDataValenciano;
             } else if (currentSubject === 'ingles') {
                 currentTemarioData = temarioDataIngles;
-            } else if (currentSubject === 'competencia_lectora') {
-                currentTemarioData = temarioDataCompetenciaLectora;
             }
 
             if (currentTemarioData && currentTemarioData.length > 0) {
@@ -188,8 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 let welcomeText = "¡Hola! Soy tu chat de aprendizaje. ¿Qué quieres repasar hoy? 😊";
                 if (currentSubject === 'valenciano') {
                     welcomeText = "Hola! Què repassem hui? 😊";
-                } else if (currentSubject === 'competencia_lectora') {
-                    welcomeText = "¡Hola! ¿Qué leemos hoy? 😊";
                 }
 
                 chatMessages.innerHTML = `
@@ -204,9 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentSubject === 'valenciano') {
                 userInput.placeholder = "Pregunta el que vulgues...";
                 btnEstudiar.textContent = "Anem a repassar!";
-            } else if (currentSubject === 'competencia_lectora') {
-                userInput.placeholder = "Pregunta lo que quieras...";
-                btnEstudiar.textContent = "¡Vamos a leer!";
             } else if (currentSubject === 'ingles') {
                 userInput.placeholder = "Pregunta lo que quieras...";
                 btnEstudiar.textContent = "Let's go!";

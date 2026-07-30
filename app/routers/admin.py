@@ -31,7 +31,6 @@ SUBJECT_PREFIXES = {
     "lengua":            "LEN",
     "valenciano":        "VAL",
     "ingles":            "ING",
-    "competencia_lectora": "CLE",
 }
 
 DIFICULTAD_CODES = {
@@ -618,8 +617,7 @@ async def generate_question_with_ai(
 
         subject_names = {
             "matematicas": "Matemáticas", "lengua": "Lengua Española",
-            "valenciano": "Valenciano", "ingles": "Inglés",
-            "competencia_lectora": "Competencia Lectora",
+            "valenciano": "Valenciano", "ingles": "Inglés"
         }
 
         type_instructions = {

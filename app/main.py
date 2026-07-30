@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Multi-Agent System (Lengua, Valenciano, Mates, Inglés)
+# Main FastAPI application for AulaRAG - Purged C. Lectora subject
 import json
 import os
 import re
@@ -159,7 +159,6 @@ async def get_temario(subject: str):
         "matematicas":         "matematicas/temario_matematicas.txt",
         "valenciano":          "valenciano/temario_valenciano.json",
         "ingles":              "ingles/temario_ingles.json",
-        "competencia_lectora": "competencia_lectora/temario_competencia_lectora.json",
     }
 
     relative_path = SUBJECT_FILES.get(subject.lower())

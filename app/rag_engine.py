@@ -309,8 +309,6 @@ def get_pdf_parts_for_context(subject: str, course_level: str, query_text: str =
         expected_patterns.append(f"Aula_english_{grade_num_padded}.pdf")
         expected_patterns.append(f"Aula_english_{grade_num_padded}_Part1.pdf")
         expected_patterns.append(f"Aula_english_{grade_num_padded}_Part2.pdf")
-    elif subject.lower() == "competencia_lectora":
-        expected_patterns.append(f"CL_{grade_match}_corregido.pdf")
     else:
         expected_patterns.append(f"Aula_{subject.capitalize()}_{grade_num_padded}_INTERIOR.pdf")
         
