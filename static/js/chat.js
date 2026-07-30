@@ -35,51 +35,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     temarioDataLengua = data.temario || [];
                 } else if (subject === 'matematicas') {
                     temarioDataMatematicas = data.temario || [];
-                    // If math is default on load
-                    if (currentSubject === 'matematicas') {
-                        currentTemarioData = temarioDataMatematicas;
-                        syllabusFilters.style.display = 'block';
-                        populateCursos();
-
-                        // ── Default selection: 1º Primaria > Probabilidad > Lenguaje de azar ──
-                        const defaultCurso    = '1º de primaria';
-                        const defaultBloque   = 'probabilidad';
-                        const defaultContenido = 'lenguaje de azar: nunca, a veces, siempre';
-
-                        const cursoIdx = currentTemarioData.findIndex(c =>
-                            c.curso.toLowerCase() === defaultCurso.toLowerCase());
-                        if (cursoIdx !== -1) {
-                            filterCurso.value = cursoIdx;
-                            filterCurso.dispatchEvent(new Event('change'));
-
-                            // Wait a tick for bloque options to render
-                            setTimeout(() => {
-                                // Select bloque
-                                const bloqueOpt = [...filterBloque.options].find(o =>
-                                    o.value.toLowerCase() === defaultBloque.toLowerCase());
-                                if (bloqueOpt) {
-                                    filterBloque.value = bloqueOpt.value;
-                                    filterBloque.dispatchEvent(new Event('change'));
-
-                                    setTimeout(() => {
-                                        // Select contenido
-                                        const contenidoOpt = [...filterContenido.options].find(o =>
-                                            o.text.toLowerCase() === defaultContenido.toLowerCase());
-                                        if (contenidoOpt) {
-                                            filterContenido.value = contenidoOpt.value;
-                                            filterContenido.dispatchEvent(new Event('change'));
-                                        }
-                                    }, 50);
-                                }
-                            }, 50);
-                        }
-                    }
                 } else if (subject === 'valenciano') {
                     temarioDataValenciano = data.temario || [];
                 } else if (subject === 'ingles') {
                     temarioDataIngles = data.temario || [];
                 } else if (subject === 'competencia_lectora') {
                     temarioDataCompetenciaLectora = data.temario || [];
+                }
+
+                // If current active subject was just loaded, refresh filters
+                if (currentSubject === subject) {
+                    if (subject === 'lengua') currentTemarioData = temarioDataLengua;
+                    else if (subject === 'matematicas') currentTemarioData = temarioDataMatematicas;
+                    else if (subject === 'valenciano') currentTemarioData = temarioDataValenciano;
+                    else if (subject === 'ingles') currentTemarioData = temarioDataIngles;
+                    else if (subject === 'competencia_lectora') currentTemarioData = temarioDataCompetenciaLectora;
+
+                    if (currentTemarioData.length > 0) {
+                        syllabusFilters.style.display = 'block';
+                        populateCursos();
+                    }
                 }
             }
         } catch (e) {
@@ -146,17 +121,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSessionBloque = "";
     let activeSessionContenido = "";
 
-    // (UI Elements for gamification removed)
-
     // Handle Subject switching
     subjectButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (currentSubject === btn.dataset.subject) return;
+        btn.addEventListener('click', (e) => {
+            const btnTarget = e.currentTarget || btn;
+            const nextSubject = btnTarget.dataset.subject;
+            if (!nextSubject || currentSubject === nextSubject) return;
 
             subjectButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            btnTarget.classList.add('active');
 
-            const nextSubject = btn.dataset.subject;
+            // Reset active session topic filters
+            activeSessionCurso = "";
+            activeSessionBloque = "";
+            activeSessionContenido = "";
 
             // Save current subject's chat history
             chatHistoriesHTML[currentSubject] = chatMessages.innerHTML;
@@ -165,31 +143,30 @@ document.addEventListener('DOMContentLoaded', () => {
             currentSubject = nextSubject;
 
             // Update UI
-            subjectTitle.textContent = themes[currentSubject].title;
-            subjectTitle.style.color = themes[currentSubject].color;
+            if (themes[currentSubject]) {
+                subjectTitle.textContent = themes[currentSubject].title;
+                subjectTitle.style.color = themes[currentSubject].color;
+            }
 
-            // Toggle Syllabus Filters visibility
-            if (currentSubject === 'lengua' || currentSubject === 'matematicas' || currentSubject === 'valenciano' || currentSubject === 'ingles' || currentSubject === 'competencia_lectora') {
+            // Set current temario data
+            if (currentSubject === 'lengua') {
+                currentTemarioData = temarioDataLengua;
+            } else if (currentSubject === 'matematicas') {
+                currentTemarioData = temarioDataMatematicas;
+            } else if (currentSubject === 'valenciano') {
+                currentTemarioData = temarioDataValenciano;
+            } else if (currentSubject === 'ingles') {
+                currentTemarioData = temarioDataIngles;
+            } else if (currentSubject === 'competencia_lectora') {
+                currentTemarioData = temarioDataCompetenciaLectora;
+            }
+
+            if (currentTemarioData && currentTemarioData.length > 0) {
                 syllabusFilters.style.display = 'block';
-                // Always reset block group to visible when switching subject
                 if (groupBloque) groupBloque.style.display = 'block';
-
-                if (currentSubject === 'lengua') {
-                    currentTemarioData = temarioDataLengua;
-                } else if (currentSubject === 'matematicas') {
-                    currentTemarioData = temarioDataMatematicas;
-                } else if (currentSubject === 'valenciano') {
-                    currentTemarioData = temarioDataValenciano;
-                } else if (currentSubject === 'ingles') {
-                    currentTemarioData = temarioDataIngles;
-                } else if (currentSubject === 'competencia_lectora') {
-                    currentTemarioData = temarioDataCompetenciaLectora;
-                }
-
-                if (currentTemarioData.length > 0) populateCursos();
+                populateCursos();
             } else {
                 syllabusFilters.style.display = 'none';
-                currentTemarioData = [];
             }
 
             // Restore or initialize chat history for the new subject

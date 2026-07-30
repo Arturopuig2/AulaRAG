@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Action Buttons Auto-hide on Listo (v=25)
+# Main FastAPI application for AulaRAG - Fix Subject Tab Switching (v=26)
 import json
 import os
 import re
