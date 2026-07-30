@@ -22,6 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let temarioDataCompetenciaLectora = [];
     let currentTemarioData = [];
 
+    // Helper to sanitize markdown text before rendering
+    function cleanMarkdownText(str) {
+        if (!str) return str;
+        // Strip residual brackets
+        str = str.replace(/\[\s*(?:INCORRECTE|CORRECTE|INCORRECTO|CORRECTO)\s*\]/gi, '');
+        // Convert ---### or --- ### into double newline headers
+        str = str.replace(/---+\s*(#{1,6}\s*)/g, '\n\n$1');
+        // Ensure headings are properly isolated on new lines
+        str = str.replace(/([^\n])\s*(#{1,6}\s*)/g, '$1\n\n$2');
+        return str;
+    }
+
     // Store chat history HTML per subject
     const chatHistoriesHTML = {};
 
@@ -546,10 +558,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     window._currentStreamVisualUrl = vUrl;
                                     mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
                                 }
-                                contentEl.innerHTML = marked.parse(accumulatedText) + mediaHtml;
+                                const safeText = cleanMarkdownText(accumulatedText);
+                                contentEl.innerHTML = marked.parse(safeText) + mediaHtml;
                                 chatMessages.scrollTop = chatMessages.scrollHeight;
                             } else if (payload.done) {
-                                const finalMarkdown = payload.full_text || accumulatedText;
+                                const rawFinal = payload.full_text || accumulatedText;
+                                const finalMarkdown = cleanMarkdownText(rawFinal);
                                 let mediaHtml = '';
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;

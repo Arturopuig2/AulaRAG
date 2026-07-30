@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Clean Section Header Formatting (No ---### Collisions)
+# Main FastAPI application for AulaRAG - Frontend Markdown Header Sanitization v27
 import json
 import os
 import re
