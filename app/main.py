@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed default tab to Explicaciones across all admin templates
+# Main FastAPI application for AulaRAG - Replaced all generic template explanations with authentic educational theory definitions
 import json
 import os
 import re
