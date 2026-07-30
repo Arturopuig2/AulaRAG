@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Content Manager Admin Review
+# Main FastAPI application for AulaRAG - Added Home direct access to Content Manager
 import json
 import os
 import re
