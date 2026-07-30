@@ -455,61 +455,44 @@ def get_db_question(subject: str, grade: int = None, bloque: str = None, conteni
 
 def get_db_explanation(subject: str, grade: int = None, bloque: str = None, contenido: str = None, force_easier: bool = False) -> Optional[str]:
     """Busca una explicación verificada en la base de datos de Aula con normalización."""
+    exp = get_db_explanation_obj(subject=subject, grade=grade, bloque=bloque, contenido=contenido)
+    if exp:
+        return (exp.easier_version or exp.text) if force_easier else exp.text
+    return None
 
+def get_db_explanation_obj(subject: str, grade: int = None, bloque: str = None, contenido: str = None):
+    """Fetch Explanation model object directly with robust python-side accent-insensitive matching."""
     db = SessionLocal()
     try:
         norm_subject = normalize_text(subject)
-        # Only verified explanations (Rule 1)
         q = db.query(models.Explanation).filter(
             func.lower(models.Explanation.subject) == norm_subject,
             models.Explanation.is_active == True,
             models.Explanation.is_verified == True
         )
-        
         if grade:
             q = q.filter((models.Explanation.grade == grade) | (models.Explanation.grade == None))
             
-        # Prioridad 1: Búsqueda por Contenido exacto (normalizado)
+        candidates = q.order_by(models.Explanation.id.desc()).all()
+        if not candidates:
+            return None
+
+        # Prioridad 1: Búsqueda por Contenido exacto/parcial (normalizado)
         if contenido:
             norm_cont = normalize_text(contenido)
-            q_cont = q.filter(func.lower(models.Explanation.contenido).contains(norm_cont))
-            exp = q_cont.order_by(models.Explanation.id.desc()).first()
-            if exp: return (exp.easier_version or exp.text) if force_easier else exp.text
+            for exp in candidates:
+                if exp.contenido and norm_cont in normalize_text(exp.contenido):
+                    return exp
 
         # Prioridad 2: Búsqueda por Bloque (normalizado)
         if bloque:
             norm_bloque = normalize_text(bloque)
-            q_bloque = q.filter(func.lower(models.Explanation.bloque).contains(norm_bloque))
-            exp = q_bloque.order_by(models.Explanation.id.desc()).first()
-            if exp: return (exp.easier_version or exp.text) if force_easier else exp.text
+            for exp in candidates:
+                if exp.bloque and norm_bloque in normalize_text(exp.bloque):
+                    return exp
 
-        # Prioridad 3: Búsqueda genérica por asignatura (normalizada)
-        exp = q.order_by(models.Explanation.id.desc()).first()
-        return ((exp.easier_version or exp.text) if force_easier else exp.text) if exp else None
-    finally:
-        db.close()
-
-def get_db_explanation_obj(subject: str, grade: int = None, bloque: str = None, contenido: str = None):
-    """Fetch Explanation model object directly."""
-    db = SessionLocal()
-    try:
-        norm_subject = normalize_text(subject)
-        q = db.query(models.Explanation).filter(
-            func.lower(models.Explanation.subject) == norm_subject,
-            models.Explanation.is_active == True,
-            models.Explanation.is_verified == True
-        )
-        if grade:
-            q = q.filter((models.Explanation.grade == grade) | (models.Explanation.grade == None))
-        if contenido:
-            norm_cont = normalize_text(contenido)
-            exp = q.filter(func.lower(models.Explanation.contenido).contains(norm_cont)).order_by(models.Explanation.id.desc()).first()
-            if exp: return exp
-        if bloque:
-            norm_bloque = normalize_text(bloque)
-            exp = q.filter(func.lower(models.Explanation.bloque).contains(norm_bloque)).order_by(models.Explanation.id.desc()).first()
-            if exp: return exp
-        return q.order_by(models.Explanation.id.desc()).first()
+        # Prioridad 3: Búsqueda genérica por asignatura
+        return candidates[0]
     finally:
         db.close()
 

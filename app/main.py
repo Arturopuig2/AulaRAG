@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Ensure Más fácil button appears only once per explanation session
+# Main FastAPI application for AulaRAG - Fixed SQLite tilde matching bug in DB explanation retrieval
 import json
 import os
 import re
