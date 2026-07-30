@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed visual_url UnboundLocalError and implemented direct streaming for saved Ejemplos
+# Main FastAPI application for AulaRAG - Ensure Ejemplos button appears only once per explanation session
 import json
 import os
 import re

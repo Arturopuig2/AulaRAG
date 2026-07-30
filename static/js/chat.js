@@ -314,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentExerciseIndex = 0;
         window._lastQuestionId = 0;
         window._isEasierActive = false;
+        window._isExampleActive = false;
 
         // Show user message
         let generatedMessage = (currentSubject === 'valenciano')
@@ -561,11 +562,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const easierBtnHtml = !window._isEasierActive 
                                     ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>`
                                     : '';
+                                const exampleBtnHtml = !window._isExampleActive 
+                                    ? `<button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>`
+                                    : '';
 
                                 const actionButtonsHtml = `
                                 <div class="theory-action-buttons">
                                     ${easierBtnHtml}
-                                    <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>
+                                    ${exampleBtnHtml}
                                     <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
                                 </div>`;
 
@@ -723,11 +727,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const easierBtnHtml = !window._isEasierActive 
                 ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier', this)">💡 Más fácil</button>`
                 : '';
+            const exampleBtnHtml = !window._isExampleActive 
+                ? `<button class="theory-btn btn-example" onclick="window.handleTheoryAction('example', this)">📝 Ejemplo</button>`
+                : '';
 
             theoryActionButtonsHtml = `
             <div class="theory-action-buttons">
                 ${easierBtnHtml}
-                <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example', this)">📝 Ejemplo</button>
+                ${exampleBtnHtml}
                 <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done', this)">✅ Listo</button>
             </div>`;
         }
@@ -998,6 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             streamChatResponse(formData);
         } else if (action === 'example') {
+            window._isExampleActive = true;
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Dona'm un altre exemple pràctic." 
                 : "Dame otro ejemplo práctico sobre esto.";
