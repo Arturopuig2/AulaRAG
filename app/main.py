@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Gemini Vision Cataloging + Dynamic Diagrams
+# Main FastAPI application for AulaRAG - Enforce Strict Orthographic Rigor
 import json
 import os
 import re
