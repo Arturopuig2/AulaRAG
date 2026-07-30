@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed missing client import in AI section generator endpoint
+# Main FastAPI application for AulaRAG - Added image tagging for Versión Fácil and Ejemplos in Content Manager
 import json
 import os
 import re

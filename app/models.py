@@ -78,6 +78,8 @@ class Explanation(Base):
     audio_url   = Column(String, nullable=True)
     video_url   = Column(String, nullable=True)
     visual_url  = Column(String, nullable=True)
+    easier_visual_url  = Column(String, nullable=True)
+    examples_visual_url = Column(String, nullable=True)
 
     # --- Metadata ---
     source      = Column(String, nullable=True, default="manual")          # manual | ia_pdf | ia_csv

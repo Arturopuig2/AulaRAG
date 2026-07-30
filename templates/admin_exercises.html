@@ -359,7 +359,7 @@
             border: 1px solid var(--border);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             width: 100%;
-            max-width: 820px;
+            max-width: 840px;
             max-height: 90vh;
             overflow-y: auto;
             transform: translateY(20px);
@@ -416,11 +416,12 @@
             padding: 0.8rem;
             border-radius: 12px;
             border: 1px solid var(--border);
+            margin-top: 0.4rem;
         }
 
         .image-preview-thumb {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             object-fit: cover;
             border-radius: 10px;
             border: 1px solid var(--border);
@@ -662,7 +663,7 @@
         </div>
     </div>
 
-    <!-- Modal Explicación: Generación IA y Guardado Independiente por Sección -->
+    <!-- Modal Explicación: Generación IA, Ilustraciones e Imágenes por Sección -->
     <div id="modal-explanation" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -701,32 +702,29 @@
                         <input type="text" id="e-contenido" placeholder="Ej: Los neologismos" required>
                     </div>
 
-                    <!-- Sección de Etiquetado e Ilustración -->
-                    <div class="filter-group full-width">
-                        <label>🖼️ Ilustración Asociada a la Lección</label>
-                        <div class="image-preview-container">
-                            <img id="e-image-preview" src="/static/img/logo.png" class="image-preview-thumb" alt="Vista previa">
-                            <div style="flex:1;">
-                                <input type="text" id="e-visual-url" placeholder="URL o ruta de la imagen (ej: /static/assets/...)" oninput="updateImagePreview(this.value)">
-                                <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">Asocia una ilustración de tu catálogo para acompañar la lección en la Pizarra Digital.</div>
-                            </div>
-                            <button type="button" class="btn btn-outline" onclick="openGalleryModal()" style="padding:0.5rem 0.9rem; font-size:0.85rem;">🖼️ Explorar Banco</button>
-                        </div>
-                    </div>
-
-                    <!-- Apartado 1: Texto Teórico -->
+                    <!-- Apartado 1: Texto Teórico & Imagen Principal -->
                     <div class="filter-group full-width" style="border-top:1px dashed var(--border); padding-top:1rem;">
                         <div class="section-label-header">
-                            <label>📖 1. Texto de la Explicación Teórica</label>
+                            <label>📖 1. Texto de la Explicación Teórica Principal</label>
                             <div class="section-actions">
                                 <button type="button" class="btn btn-ai-sm" id="btn-gen-text" onclick="generateSectionAI('text')">✨ Generar Texto con IA</button>
                                 <button type="button" class="btn btn-save-sm" onclick="saveSectionOnly('text')">💾 Guardar Texto</button>
                             </div>
                         </div>
                         <textarea id="e-text" rows="7" placeholder="Escribe o genera con IA el texto teórico completo..." required></textarea>
+                        
+                        <!-- Ilustración Explicación Principal -->
+                        <div class="image-preview-container">
+                            <img id="e-image-preview-main" src="/static/img/logo.png" class="image-preview-thumb" alt="Vista previa">
+                            <div style="flex:1;">
+                                <input type="text" id="e-visual-url" placeholder="Imagen para la Teoría Principal (URL)..." oninput="updateImagePreview('main', this.value)">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Ilustración principal para la lección teórica.</div>
+                            </div>
+                            <button type="button" class="btn btn-outline" onclick="openGalleryModal('main')" style="padding:0.4rem 0.8rem; font-size:0.8rem;">🖼️ Explorar Banco</button>
+                        </div>
                     </div>
 
-                    <!-- Apartado 2: Versión Fácil -->
+                    <!-- Apartado 2: Versión Fácil & Imagen Adaptada -->
                     <div class="filter-group full-width" style="border-top:1px dashed var(--border); padding-top:1rem;">
                         <div class="section-label-header">
                             <label>🌱 2. Versión Fácil / Adaptada</label>
@@ -736,9 +734,19 @@
                             </div>
                         </div>
                         <textarea id="e-easier-version" rows="3" placeholder="Explicación simplificada adaptada..."></textarea>
+                        
+                        <!-- Ilustración Versión Fácil -->
+                        <div class="image-preview-container">
+                            <img id="e-image-preview-easier" src="/static/img/logo.png" class="image-preview-thumb" alt="Vista previa">
+                            <div style="flex:1;">
+                                <input type="text" id="e-easier-visual-url" placeholder="Imagen para la Versión Fácil (URL)..." oninput="updateImagePreview('easier', this.value)">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Ilustración adaptada para la versión fácil.</div>
+                            </div>
+                            <button type="button" class="btn btn-outline" onclick="openGalleryModal('easier')" style="padding:0.4rem 0.8rem; font-size:0.8rem;">🖼️ Explorar Banco</button>
+                        </div>
                     </div>
 
-                    <!-- Apartado 3: Ejemplos Prácticos -->
+                    <!-- Apartado 3: Ejemplos Prácticos & Imagen de Ejemplos -->
                     <div class="filter-group full-width" style="border-top:1px dashed var(--border); padding-top:1rem;">
                         <div class="section-label-header">
                             <label>💡 3. Ejemplos Prácticos (Uno por línea)</label>
@@ -748,6 +756,16 @@
                             </div>
                         </div>
                         <textarea id="e-examples" rows="3" placeholder="Ejemplo 1&#10;Ejemplo 2&#10;Ejemplo 3"></textarea>
+
+                        <!-- Ilustración Ejemplos Prácticos -->
+                        <div class="image-preview-container">
+                            <img id="e-image-preview-examples" src="/static/img/logo.png" class="image-preview-thumb" alt="Vista previa">
+                            <div style="flex:1;">
+                                <input type="text" id="e-examples-visual-url" placeholder="Imagen para Ejemplos Prácticos (URL)..." oninput="updateImagePreview('examples', this.value)">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Ilustración gráfica para acompañar los ejemplos.</div>
+                            </div>
+                            <button type="button" class="btn btn-outline" onclick="openGalleryModal('examples')" style="padding:0.4rem 0.8rem; font-size:0.8rem;">🖼️ Explorar Banco</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -786,6 +804,7 @@
 
     <script>
         let currentTab = 'explanations';
+        let activeImageTarget = 'main'; // 'main' | 'easier' | 'examples'
         let debounceTimer;
         let galleryDebounce;
 
@@ -968,8 +987,8 @@
 
             items.forEach(e => {
                 const tr = document.createElement('tr');
-                const imgTag = e.visual_url 
-                    ? `<img src="${e.visual_url}" style="width:48px; height:48px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" alt="Ilustración">`
+                const imgTag = (e.visual_url || e.easier_visual_url || e.examples_visual_url) 
+                    ? `<img src="${e.visual_url || e.easier_visual_url || e.examples_visual_url}" style="width:48px; height:48px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" alt="Ilustración">`
                     : `<span style="font-size:0.75rem; color:var(--text-muted);">Sin imagen</span>`;
 
                 tr.innerHTML = `
@@ -1014,10 +1033,14 @@
             document.getElementById('e-bloque').value = "";
             document.getElementById('e-contenido').value = "";
             document.getElementById('e-visual-url').value = "";
+            document.getElementById('e-easier-visual-url').value = "";
+            document.getElementById('e-examples-visual-url').value = "";
             document.getElementById('e-text').value = "";
             document.getElementById('e-easier-version').value = "";
             document.getElementById('e-examples').value = "";
-            updateImagePreview("");
+            updateImagePreview('main', "");
+            updateImagePreview('easier', "");
+            updateImagePreview('examples', "");
 
             document.getElementById('modal-explanation').classList.add('active');
         }
@@ -1030,6 +1053,8 @@
             document.getElementById('e-bloque').value = e.bloque || "";
             document.getElementById('e-contenido').value = e.contenido || "";
             document.getElementById('e-visual-url').value = e.visual_url || "";
+            document.getElementById('e-easier-visual-url').value = e.easier_visual_url || "";
+            document.getElementById('e-examples-visual-url').value = e.examples_visual_url || "";
             document.getElementById('e-text').value = e.text || "";
             document.getElementById('e-easier-version').value = e.easier_version || "";
             
@@ -1041,7 +1066,9 @@
             }
             document.getElementById('e-examples').value = exStr;
 
-            updateImagePreview(e.visual_url || "");
+            updateImagePreview('main', e.visual_url || "");
+            updateImagePreview('easier', e.easier_visual_url || "");
+            updateImagePreview('examples', e.examples_visual_url || "");
 
             document.getElementById('modal-explanation').classList.add('active');
         }
@@ -1111,11 +1138,18 @@
             }
 
             const payload = {};
-            if (sectionName === 'text') payload.text = document.getElementById('e-text').value;
-            if (sectionName === 'easier_version') payload.easier_version = document.getElementById('e-easier-version').value;
+            if (sectionName === 'text') {
+                payload.text = document.getElementById('e-text').value;
+                payload.visual_url = document.getElementById('e-visual-url').value;
+            }
+            if (sectionName === 'easier_version') {
+                payload.easier_version = document.getElementById('e-easier-version').value;
+                payload.easier_visual_url = document.getElementById('e-easier-visual-url').value;
+            }
             if (sectionName === 'examples') {
                 const raw = document.getElementById('e-examples').value;
                 payload.examples = raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+                payload.examples_visual_url = document.getElementById('e-examples-visual-url').value;
             }
 
             try {
@@ -1125,7 +1159,7 @@
                     body: JSON.stringify(payload)
                 });
                 if (res.ok) {
-                    showToast(`💾 Apartado guardado con éxito`);
+                    showToast(`💾 Apartado e imagen guardados con éxito`);
                     loadData();
                 } else {
                     showToast("Error al guardar apartado", true);
@@ -1135,8 +1169,12 @@
             }
         }
 
-        function updateImagePreview(url) {
-            const img = document.getElementById('e-image-preview');
+        function updateImagePreview(target, url) {
+            let imgId = 'e-image-preview-main';
+            if (target === 'easier') imgId = 'e-image-preview-easier';
+            if (target === 'examples') imgId = 'e-image-preview-examples';
+
+            const img = document.getElementById(imgId);
             if (url && url.trim().length > 0) {
                 img.src = url;
             } else {
@@ -1144,7 +1182,8 @@
             }
         }
 
-        function openGalleryModal() {
+        function openGalleryModal(target) {
+            activeImageTarget = target;
             document.getElementById('modal-gallery').classList.add('active');
             loadGalleryImages();
         }
@@ -1185,10 +1224,14 @@
         }
 
         function selectGalleryImage(url) {
-            document.getElementById('e-visual-url').value = url;
-            updateImagePreview(url);
+            let inputId = 'e-visual-url';
+            if (activeImageTarget === 'easier') inputId = 'e-easier-visual-url';
+            if (activeImageTarget === 'examples') inputId = 'e-examples-visual-url';
+
+            document.getElementById(inputId).value = url;
+            updateImagePreview(activeImageTarget, url);
             closeModal('gallery');
-            showToast("Imagen vinculada a la lección");
+            showToast(`Imagen vinculada a ${activeImageTarget === 'main' ? 'Teoría Principal' : activeImageTarget === 'easier' ? 'Versión Fácil' : 'Ejemplos'}`);
         }
 
         function closeModal(type) {
@@ -1202,6 +1245,8 @@
             const bloque = document.getElementById('e-bloque').value;
             const contenido = document.getElementById('e-contenido').value;
             const visual_url = document.getElementById('e-visual-url').value;
+            const easier_visual_url = document.getElementById('e-easier-visual-url').value;
+            const examples_visual_url = document.getElementById('e-examples-visual-url').value;
             const text = document.getElementById('e-text').value;
             const easier_version = document.getElementById('e-easier-version').value;
             const examplesRaw = document.getElementById('e-examples').value;
@@ -1212,7 +1257,7 @@
                 return;
             }
 
-            const payload = { subject, grade, bloque, contenido, visual_url, text, easier_version, examples };
+            const payload = { subject, grade, bloque, contenido, visual_url, easier_visual_url, examples_visual_url, text, easier_version, examples };
 
             try {
                 let res;
