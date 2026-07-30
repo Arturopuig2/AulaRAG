@@ -414,11 +414,11 @@
 
         <!-- Navigation Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" id="tab-exercises" onclick="switchTab('exercises')">
-                <span>📝 Ejercicios Verificados</span>
-            </button>
-            <button class="tab-btn" id="tab-explanations" onclick="switchTab('explanations')">
+            <button class="tab-btn active" id="tab-explanations" onclick="switchTab('explanations')">
                 <span>📚 Teoría Maestra RAG</span>
+            </button>
+            <button class="tab-btn" id="tab-exercises" onclick="switchTab('exercises')">
+                <span>📝 Ejercicios Verificados</span>
             </button>
         </div>
 
@@ -453,7 +453,7 @@
         </div>
 
         <!-- Exercises Table View -->
-        <div id="view-exercises" class="card">
+        <div id="view-exercises" class="card" style="display: none;">
             <table id="table-exercises">
                 <thead>
                     <tr>
@@ -473,7 +473,7 @@
         </div>
 
         <!-- Explanations Table View -->
-        <div id="view-explanations" class="card" style="display: none;">
+        <div id="view-explanations" class="card">
             <table id="table-explanations">
                 <thead>
                     <tr>
@@ -559,7 +559,7 @@
     </div>
 
     <script>
-        let currentTab = 'exercises';
+        let currentTab = 'explanations';
         let debounceTimer;
 
         document.addEventListener('DOMContentLoaded', () => {

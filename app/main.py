@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Connected RAG Stream to Database Verified Explanations
+# Main FastAPI application for AulaRAG - Explicaciones set as default tab in Content Manager
 import json
 import os
 import re
