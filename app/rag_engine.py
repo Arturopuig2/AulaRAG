@@ -563,15 +563,11 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
         for attempt in range(max_retries):
             current_parts_loop = list(current_parts)
             
-            # 1. Cargar Instrucciones Universales
-            dynamic_instruction = SYSTEM_INSTRUCTION
-
-            # 2. Cargar Agente Especialista
+            # 1. Cargar Agente Especialista desde el Multi-Agent System
+            from .multi_agent_system import router, AgenteAuditor
+            specialist_agent = router.get_agent(subject)
             subject_rules = load_context_rules(subject)
-            if subject_rules:
-                dynamic_instruction += f"\n\n*** AGENTE ESPECIALISTA: {subject.upper()} ***\n{subject_rules}\n"
-            else:
-                dynamic_instruction += f"\n\n[AVISO] Eres un tutor de {subject}. Céntrate en teoría y ejemplos."
+            dynamic_instruction = specialist_agent.get_system_prompt(SYSTEM_INSTRUCTION, subject_rules or "")
 
             # 3. Inyectar Contexto
             context_info = f"\n\n### DASHBOARD DEL TUTOR:\n- Asignatura: {subject}\n- Curso: {course_level if course_level else 'Primaria'}"
@@ -771,7 +767,8 @@ async def get_gemini_response_stream(
                 full_response_text += chunk.text
                 yield f"data: {json.dumps({'text': chunk.text, 'visual_url': visual_url})}\n\n"
         
-        cleaned_text = clean_ai_text(full_response_text)
+        from .multi_agent_system import AgenteAuditor
+        cleaned_text = AgenteAuditor.audit_and_clean(clean_ai_text(full_response_text), subject)
         subject_history.append(types.Content(role="user", parts=[types.Part(text=modified_user_message)]))
         subject_history.append(types.Content(role="model", parts=[types.Part(text=cleaned_text)]))
         

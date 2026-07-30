@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Frontend Markdown Header Sanitization v27
+# Main FastAPI application for AulaRAG - Multi-Agent System (Lengua, Valenciano, Mates, Inglés, Lectura + Auditor)
 import json
 import os
 import re
