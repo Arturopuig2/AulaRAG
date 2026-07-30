@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Replaced all generic template explanations with authentic educational theory definitions
+# Main FastAPI application for AulaRAG - Fixed ID 558 interjecciones and purged TOC index page matches
 import json
 import os
 import re
