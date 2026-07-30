@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Cleared stale cached explanations and prioritized DB easier_version over cache
+# Main FastAPI application for AulaRAG - Fixed visual_url UnboundLocalError and implemented direct streaming for saved Ejemplos
 import json
 import os
 import re

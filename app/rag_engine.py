@@ -705,7 +705,9 @@ async def get_gemini_response_stream(
     is_easier_req = any(kw in user_message.lower() for kw in ["más fácil", "mas facil", "més fàcil", "versión fácil", "version facil", "adaptad"])
     is_example_req = any(kw in user_message.lower() for kw in ["ejemplo", "exemples", "otro ejemplo"])
 
+    visual_url = None
     exp_obj = None
+
     if subject != "general":
         try:
             exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
@@ -716,8 +718,27 @@ async def get_gemini_response_stream(
                 yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url})}\n\n"
                 yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url})}\n\n"
                 return
+
+            # Prioridad 2: Si pide Ejemplos y EXISTEN en BD -> Responder INMEDIATAMENTE con ellos
+            if exp_obj and is_example_req and exp_obj.examples and exp_obj.examples.strip():
+                ex_raw = exp_obj.examples.strip()
+                try:
+                    ex_list = json.loads(ex_raw)
+                    if isinstance(ex_list, list):
+                        formatted_ex = "### 💡 Ejemplos Prácticos:\n\n" + "\n\n".join([f"• {ex}" for ex in ex_list])
+                    else:
+                        formatted_ex = f"### 💡 Ejemplos Prácticos:\n\n{ex_raw}"
+                except Exception:
+                    formatted_ex = f"### 💡 Ejemplos Prácticos:\n\n{ex_raw}"
+                v_url = exp_obj.examples_visual_url or exp_obj.visual_url
+                yield f"data: {json.dumps({'text': formatted_ex, 'visual_url': v_url})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'full_text': formatted_ex, 'visual_url': v_url})}\n\n"
+                return
+
+            if exp_obj:
+                visual_url = exp_obj.visual_url
         except Exception as e:
-            print(f"[RAG_ERROR] Fallo en pre-fetch de versión fácil: {str(e)}")
+            print(f"[RAG_ERROR] Fallo en pre-fetch de lección: {str(e)}")
 
     # --- Check Semantic Cache Next ---
     cached_text = get_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message)
@@ -748,13 +769,10 @@ async def get_gemini_response_stream(
     db_explanation = None
     if exp_obj:
         if is_easier_req:
-            # Si no tiene versión fácil guardada, instruir a Gemini a generar una simplificada basada en el texto principal
             db_explanation = f"[INSTRUCCIÓN: El alumno pide la versión adaptada/más fácil. Simplifica y explica de forma súper sencilla la lección]:\n{exp_obj.text}"
             visual_url = exp_obj.easier_visual_url or exp_obj.visual_url
         elif is_example_req:
-            db_explanation = exp_obj.text
-            if exp_obj.examples:
-                db_explanation += f"\n\n### EJEMPLOS GUARDADOS:\n{exp_obj.examples}"
+            db_explanation = f"[INSTRUCCIÓN: El alumno pide ejemplos prácticos de la vida cotidiana para esta lección]:\n{exp_obj.text}"
             visual_url = exp_obj.examples_visual_url or exp_obj.visual_url
         else:
             db_explanation = exp_obj.text
