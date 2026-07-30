@@ -35,6 +35,11 @@ def clean_ai_text(text: str) -> str:
     if not text:
         return text
     
+    # Fix markdown header collisions like ---### 1. Title into clean double newlines
+    text = re.sub(r'---+\s*(#{1,6}\s*)', r'\n\n\1', text)
+    text = re.sub(r'(#{1,6}\s*[^\n]+)', r'\n\1\n', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+
     # Remove bracket tags like [INCORRECTE], [CORRECTE], [INCORRECTO], [CORRECTO]
     text = re.sub(r'\[\s*(?:INCORRECTE|CORRECTE|INCORRECTO|CORRECTO)\s*\]', '', text, flags=re.IGNORECASE)
 
@@ -137,6 +142,7 @@ Eres 'Aula', un tutor experto de primaria. Tu misión es enseñar TEORÍA y dar 
 - **PUNTOS Y APARTE FRECUENTES**: Es OBLIGATORIO usar párrafos muy cortos. Separa cada idea, concepto o grupo de ejemplos con un **punto y aparte** e introduce un salto de línea doble (\n\n) entre ellos. Evita bloques de texto largos o densos.
 - **RIGOR ORTOGRÁFICO ABSOLUTO EN EJEMPLOS**: Revisa con total precisión cada ejemplo. La sílaba o letra en negrita (**) DEBE COINCIDIR EXACTAMENTE con la categoría (ej: en la categoría GE resalta la sílaba **ge** como en pro-te-**ge**r, NUNCA resaltes la sílaba equivocada ni clasifiques palabras con J o GI en la regla de GE).
 - **ESQUEMAS Y DIAGRAMAS VISUALES**: Para temas con conceptos clasificables o geométricos (ej: tipos de ángulos, partes de la oración, reglas de acentuación, fracciones), genera cuadros o diagramas visuales en Markdown con esquemas claros para reforzar la visión del alumno.
+- **FORMATO DE SECCIONES LIMPIO**: Escribe los títulos de cada sección de forma clara y limpia (ej: **1. La regla de la GE** o `### 1. La regla de la GE`). NUNCA pegues guiones con títulos como `---###`. Deja siempre una línea en blanco antes de cada título.
 - **FORMATO CLARO**: Usa listas, viñetas y **negrita** para conceptos clave.
 - **TONO**: Sé paciente, claro y motivador, pero neutro (no uses 'campeón' o 'niño').
 

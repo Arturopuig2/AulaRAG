@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Official RAE Spelling Rules for G and J
+# Main FastAPI application for AulaRAG - Clean Section Header Formatting (No ---### Collisions)
 import json
 import os
 import re
