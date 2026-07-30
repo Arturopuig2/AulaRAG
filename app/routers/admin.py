@@ -591,6 +591,8 @@ async def api_create_explanation(payload: dict, db: Session = Depends(get_db)):
     bloque = payload.get("bloque", "")
     contenido = payload.get("contenido", "")
     text = payload.get("text", "")
+    easier_version = payload.get("easier_version", "")
+    examples = payload.get("examples", [])
     visual_url = payload.get("visual_url", "")
     
     if not contenido or not text:
@@ -602,6 +604,8 @@ async def api_create_explanation(payload: dict, db: Session = Depends(get_db)):
         bloque=bloque or None,
         contenido=contenido or None,
         text=text,
+        easier_version=easier_version or None,
+        examples=json.dumps(examples, ensure_ascii=False) if isinstance(examples, list) else (examples or None),
         visual_url=visual_url or None,
         is_active=True,
         is_verified=True
@@ -623,6 +627,10 @@ async def api_update_explanation(eid: int, payload: dict, db: Session = Depends(
     if "bloque" in payload: e.bloque = payload["bloque"] or None
     if "contenido" in payload: e.contenido = payload["contenido"] or None
     if "text" in payload: e.text = payload["text"]
+    if "easier_version" in payload: e.easier_version = payload["easier_version"] or None
+    if "examples" in payload: 
+        ex_val = payload["examples"]
+        e.examples = json.dumps(ex_val, ensure_ascii=False) if isinstance(ex_val, list) else (ex_val or None)
     if "visual_url" in payload: e.visual_url = payload["visual_url"] or None
     
     e.updated_at = datetime.utcnow()
@@ -798,6 +806,60 @@ async def generate_question_with_ai(
 
     except Exception as e:
         raise HTTPException(500, f"Error generando con IA: {e}")
+
+
+@router.post("/api/ai/generate-explanation")
+async def generate_explanation_ai(payload: dict):
+    """Generates full explanation text, easier version, and examples using Gemini AI."""
+    subject = payload.get("subject", "matematicas")
+    grade = int(payload.get("grade", 1))
+    bloque = payload.get("bloque", "")
+    contenido = payload.get("contenido", "")
+
+    if not contenido:
+        raise HTTPException(400, "Debes proporcionar un contenido/tema para generar con IA.")
+
+    lang_instr = "español"
+    if subject == "valenciano":
+        lang_instr = "valencià normatiu (AVL)"
+    elif subject == "ingles":
+        lang_instr = "inglés escolar (English for Primary Education)"
+
+    prompt = (
+        f"Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} el contenido teóricamente perfecto para el tema '{contenido}' "
+        f"del curso {grade}º de Primaria" + (f" (Bloque: {bloque})" if bloque else "") + ".\n\n"
+        "Requisitos obligatorios:\n"
+        "1. 'text': Explicación teórica completa, clara, estructurada con títulos en Markdown (Concepto, Reglas y Explicación, Ejemplos, Resumen). PROHIBIDO proponer ejercicios o cuestionarios al alumno.\n"
+        "2. 'easier_version': Versión simplificada y fácil de entender para alumnos con necesidades de apoyo o dificultades de comprensión.\n"
+        "3. 'examples': Una lista de 3 ejemplos prácticos claros y cotidianos aplicados a este concepto.\n\n"
+        "Responde EXCLUSIVAMENTE con un JSON válido con esta estructura exacta:\n"
+        "{\n"
+        '  "text": "Contenido completo en markdown...",\n'
+        '  "easier_version": "Versión fácil y breve...",\n'
+        '  "examples": ["Ejemplo 1...", "Ejemplo 2...", "Ejemplo 3..."]\n'
+        "}\n"
+        "No añadas texto antes ni después del JSON."
+    )
+
+    try:
+        response = await client.aio.models.generate_content(
+            model=MODEL_NAME,
+            contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
+        )
+
+        raw = response.text.strip()
+        raw = re.sub(r'^```(?:json)?\s*', '', raw)
+        raw = re.sub(r'\s*```$', '', raw)
+        data = json.loads(raw)
+
+        return {
+            "text":           data.get("text", ""),
+            "easier_version": data.get("easier_version", ""),
+            "examples":       data.get("examples", []),
+        }
+
+    except Exception as e:
+        raise HTTPException(500, f"Error al generar la explicación con IA: {e}")
 
 
 # ── Serializers ───────────────────────────────────────────────────────────────

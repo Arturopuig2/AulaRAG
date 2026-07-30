@@ -107,6 +107,18 @@
             box-shadow: 0 6px 20px rgba(79, 168, 255, 0.5);
         }
 
+        .btn-ai {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(168, 85, 247, 0.35);
+        }
+
+        .btn-ai:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
+        }
+
         .btn-outline {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -322,7 +334,7 @@
             border: 1px solid var(--border);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             width: 100%;
-            max-width: 720px;
+            max-width: 780px;
             max-height: 90vh;
             overflow-y: auto;
             transform: translateY(20px);
@@ -365,8 +377,8 @@
             padding: 1.2rem 1.5rem;
             border-top: 1px solid var(--border);
             display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
+            justify-content: space-between;
+            align-items: center;
             background: #f8fafc;
         }
 
@@ -615,7 +627,7 @@
         </div>
     </div>
 
-    <!-- Modal Explicación & Etiquetado de Imágenes -->
+    <!-- Modal Explicación, IA Generator & Etiquetado de Imágenes -->
     <div id="modal-explanation" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -654,6 +666,13 @@
                         <input type="text" id="e-contenido" placeholder="Ej: Los neologismos" required>
                     </div>
 
+                    <!-- Botón Generador de IA -->
+                    <div class="filter-group full-width" style="margin-top: 0.2rem;">
+                        <button type="button" class="btn btn-ai" id="btn-generate-ai" onclick="generateExplanationAI()" style="width: 100%; justify-content: center; padding: 0.85rem;">
+                            ✨ Generar con IA (Texto, Versión Fácil y Ejemplos)
+                        </button>
+                    </div>
+
                     <!-- Sección de Etiquetado e Ilustración -->
                     <div class="filter-group full-width">
                         <label>🖼️ Ilustración Asociada a la Lección</label>
@@ -668,8 +687,18 @@
                     </div>
 
                     <div class="filter-group full-width">
-                        <label>Texto de la Explicación Teórica (Fuente de Verdad)</label>
-                        <textarea id="e-text" rows="8" placeholder="Escribe o pega aquí la lección completa..." required></textarea>
+                        <label>📖 Texto de la Explicación Teórica (Fuente de Verdad)</label>
+                        <textarea id="e-text" rows="7" placeholder="Escribe o genera con IA la lección completa..." required></textarea>
+                    </div>
+
+                    <div class="filter-group full-width">
+                        <label>🌱 Versión Fácil / Adaptada (Para apoyo pedagógico)</label>
+                        <textarea id="e-easier-version" rows="3" placeholder="Explicación simplificada para fácil comprensión..."></textarea>
+                    </div>
+
+                    <div class="filter-group full-width">
+                        <label>💡 Ejemplos Prácticos (Uno por línea)</label>
+                        <textarea id="e-examples" rows="3" placeholder="Ejemplo 1&#10;Ejemplo 2&#10;Ejemplo 3"></textarea>
                     </div>
                 </div>
             </div>
@@ -841,7 +870,7 @@
                     <td style="font-size:0.88rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 90))}...</td>
                     <td>
                         <div class="actions-cell">
-                            <button class="btn-icon" title="Editar / Etiquetar Imagen" onclick='editExplanation(${JSON.stringify(e)})'>✏️</button>
+                            <button class="btn-icon" title="Editar / Generar IA" onclick='editExplanation(${JSON.stringify(e)})'>✏️</button>
                             <button class="btn-icon delete" title="Eliminar" onclick="deleteExplanation(${e.id})">🗑️</button>
                         </div>
                     </td>
@@ -873,13 +902,15 @@
             document.getElementById('e-contenido').value = "";
             document.getElementById('e-visual-url').value = "";
             document.getElementById('e-text').value = "";
+            document.getElementById('e-easier-version').value = "";
+            document.getElementById('e-examples').value = "";
             updateImagePreview("");
 
             document.getElementById('modal-explanation').classList.add('active');
         }
 
         function editExplanation(e) {
-            document.getElementById('explanation-modal-title').textContent = "Editar / Etiquetar Lección Teórica";
+            document.getElementById('explanation-modal-title').textContent = "Editar / Generar IA Lección Teórica";
             document.getElementById('e-id').value = e.id;
             document.getElementById('e-subject').value = e.subject;
             document.getElementById('e-grade').value = e.grade || "1";
@@ -887,9 +918,68 @@
             document.getElementById('e-contenido').value = e.contenido || "";
             document.getElementById('e-visual-url').value = e.visual_url || "";
             document.getElementById('e-text').value = e.text || "";
+            document.getElementById('e-easier-version').value = e.easier_version || "";
+            
+            let exStr = "";
+            if (Array.isArray(e.examples)) {
+                exStr = e.examples.join('\n');
+            } else if (typeof e.examples === 'string') {
+                exStr = e.examples;
+            }
+            document.getElementById('e-examples').value = exStr;
+
             updateImagePreview(e.visual_url || "");
 
             document.getElementById('modal-explanation').classList.add('active');
+        }
+
+        async function generateExplanationAI() {
+            const subject = document.getElementById('e-subject').value;
+            const grade = parseInt(document.getElementById('e-grade').value) || 1;
+            const bloque = document.getElementById('e-bloque').value;
+            const contenido = document.getElementById('e-contenido').value;
+
+            if (!contenido) {
+                showToast("Por favor escribe el Contenido (Tema) antes de generar con IA", true);
+                return;
+            }
+
+            const btn = document.getElementById('btn-generate-ai');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Generando con IA...';
+
+            try {
+                const res = await fetch('/admin/api/ai/generate-explanation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subject, grade, bloque, contenido })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('e-text').value = data.text || "";
+                    document.getElementById('e-easier-version').value = data.easier_version || "";
+                    
+                    let exText = "";
+                    if (Array.isArray(data.examples)) {
+                        exText = data.examples.join('\n');
+                    } else if (typeof data.examples === 'string') {
+                        exText = data.examples;
+                    }
+                    document.getElementById('e-examples').value = exText;
+
+                    showToast("✨ Texto, Versión Fácil y Ejemplos generados con éxito");
+                } else {
+                    const err = await res.json();
+                    showToast(err.detail || "Error al generar con IA", true);
+                }
+            } catch (e) {
+                showToast("Error de conexión al servidor", true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
         }
 
         function updateImagePreview(url) {
@@ -960,13 +1050,16 @@
             const contenido = document.getElementById('e-contenido').value;
             const visual_url = document.getElementById('e-visual-url').value;
             const text = document.getElementById('e-text').value;
+            const easier_version = document.getElementById('e-easier-version').value;
+            const examplesRaw = document.getElementById('e-examples').value;
+            const examples = examplesRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
 
             if (!contenido || !text) {
                 showToast("Completa los campos obligatorios", true);
                 return;
             }
 
-            const payload = { subject, grade, bloque, contenido, visual_url, text };
+            const payload = { subject, grade, bloque, contenido, visual_url, text, easier_version, examples };
 
             try {
                 let res;
@@ -985,7 +1078,7 @@
                 }
 
                 if (res.ok) {
-                    showToast(id ? "Lección teórica e ilustración guardadas" : "Lección creada correctamente");
+                    showToast(id ? "Lección teórica guardada correctamente" : "Lección creada correctamente");
                     closeModal('explanation');
                     loadData();
                 } else {

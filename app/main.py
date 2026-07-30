@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Rigorously overhauled all 341 Matemáticas master theory lessons by mathematical block
+# Main FastAPI application for AulaRAG - Added AI generator for master theory text, easy version, and examples in Content Manager
 import json
 import os
 import re
