@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Cleaned 100% C. Lectora references across all templates
+# Main FastAPI application for AulaRAG - Populated Rich Theory Contents for All 4 Subjects
 import json
 import os
 import re
