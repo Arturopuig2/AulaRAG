@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed ID 558 interjecciones and purged TOC index page matches
+# Main FastAPI application for AulaRAG - Removed left sidebar Admin button as requested
 import json
 import os
 import re
