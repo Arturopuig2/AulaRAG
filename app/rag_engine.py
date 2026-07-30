@@ -35,6 +35,9 @@ def clean_ai_text(text: str) -> str:
     if not text:
         return text
     
+    # Remove bracket tags like [INCORRECTE], [CORRECTE], [INCORRECTO], [CORRECTO]
+    text = re.sub(r'\[\s*(?:INCORRECTE|CORRECTE|INCORRECTO|CORRECTO)\s*\]', '', text, flags=re.IGNORECASE)
+
     # Remove specific nonsensical combinations (junk artifacts)
     text = re.sub(r'¡!', '', text)
     text = re.sub(r'!¡', '', text)

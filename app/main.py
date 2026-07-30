@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fix Subject Tab Switching (v=26)
+# Main FastAPI application for AulaRAG - Clean [INCORRECTE] and [CORRECTE] tags
 import json
 import os
 import re
