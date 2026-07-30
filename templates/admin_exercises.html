@@ -190,7 +190,7 @@
         .filter-bar {
             padding: 1.5rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1.2rem;
             background: #ffffff;
             border-bottom: 1px solid var(--border);
@@ -520,7 +520,7 @@
             </button>
         </div>
 
-        <!-- Filter Bar con 4 Filtros Completos -->
+        <!-- Filter Bar con Selectores para Asignatura, Curso, Bloque y Contenido -->
         <div class="card filter-bar">
             <div class="filter-group">
                 <label>1. Asignatura</label>
@@ -546,14 +546,17 @@
             </div>
             <div class="filter-group">
                 <label>3. Bloque</label>
-                <select id="filter-bloque" onchange="loadData()">
+                <select id="filter-bloque" onchange="onFilterBloqueChange()">
                     <option value="">Todos los Bloques</option>
                     <!-- Inyectado dinámicamente -->
                 </select>
             </div>
             <div class="filter-group">
-                <label>4. Contenido / Buscar tema</label>
-                <input type="text" id="filter-tema" placeholder="Ej: Las fracciones, neologismos..." oninput="debounceLoad()">
+                <label>4. Selector de Contenido (Tema)</label>
+                <select id="filter-contenido" onchange="loadData()">
+                    <option value="">Todos los Contenidos</option>
+                    <!-- Inyectado dinámicamente -->
+                </select>
             </div>
         </div>
 
@@ -794,33 +797,59 @@
         async function loadFilterOptions() {
             const subject = document.getElementById('filter-subject').value;
             const grade = document.getElementById('filter-grade').value;
+            const bloque = document.getElementById('filter-bloque').value;
 
             try {
-                const res = await fetch(`/admin/api/options?subject=${subject}&grade=${grade}`);
+                const res = await fetch(`/admin/api/options?subject=${subject}&grade=${grade}&bloque=${encodeURIComponent(bloque)}`);
                 const data = await res.json();
                 
                 const bloqueSelect = document.getElementById('filter-bloque');
+                const contenidoSelect = document.getElementById('filter-contenido');
+                
                 const currentBloque = bloqueSelect.value;
-                bloqueSelect.innerHTML = '<option value="">Todos los Bloques</option>';
+                const currentContenido = contenidoSelect.value;
 
-                (data.bloques || []).forEach(b => {
+                if (!bloque) {
+                    bloqueSelect.innerHTML = '<option value="">Todos los Bloques</option>';
+                    (data.bloques || []).forEach(b => {
+                        const opt = document.createElement('option');
+                        opt.value = b;
+                        opt.textContent = b;
+                        if (b === currentBloque) opt.selected = true;
+                        bloqueSelect.appendChild(opt);
+                    });
+                }
+
+                contenidoSelect.innerHTML = '<option value="">Todos los Contenidos</option>';
+                (data.contenidos || []).forEach(c => {
                     const opt = document.createElement('option');
-                    opt.value = b;
-                    opt.textContent = b;
-                    if (b === currentBloque) opt.selected = true;
-                    bloqueSelect.appendChild(opt);
+                    opt.value = c;
+                    opt.textContent = c;
+                    if (c === currentContenido) opt.selected = true;
+                    contenidoSelect.appendChild(opt);
                 });
+
             } catch (e) {
                 console.error("Error al cargar opciones de filtro", e);
             }
         }
 
         function onFilterSubjectChange() {
+            document.getElementById('filter-bloque').value = "";
+            document.getElementById('filter-contenido').value = "";
             loadFilterOptions();
             loadData();
         }
 
         function onFilterGradeChange() {
+            document.getElementById('filter-bloque').value = "";
+            document.getElementById('filter-contenido').value = "";
+            loadFilterOptions();
+            loadData();
+        }
+
+        function onFilterBloqueChange() {
+            document.getElementById('filter-contenido').value = "";
             loadFilterOptions();
             loadData();
         }
@@ -861,14 +890,14 @@
             const subject = document.getElementById('filter-subject').value;
             const grade = document.getElementById('filter-grade').value;
             const bloque = document.getElementById('filter-bloque').value;
-            const tema = document.getElementById('filter-tema').value;
+            const contenido = document.getElementById('filter-contenido').value;
 
             if (currentTab === 'exercises') {
                 let url = `/admin/api/questions?`;
                 if (subject) url += `subject=${subject}&`;
                 if (grade) url += `grade=${grade}&`;
                 if (bloque) url += `bloque=${encodeURIComponent(bloque)}&`;
-                if (tema) url += `query=${encodeURIComponent(tema)}&`;
+                if (contenido) url += `query=${encodeURIComponent(contenido)}&`;
 
                 try {
                     const res = await fetch(url);
@@ -882,7 +911,7 @@
                 if (subject) url += `subject=${subject}&`;
                 if (grade) url += `grade=${grade}&`;
                 if (bloque) url += `bloque=${encodeURIComponent(bloque)}&`;
-                if (tema) url += `query=${encodeURIComponent(tema)}&`;
+                if (contenido) url += `contenido=${encodeURIComponent(contenido)}&`;
 
                 try {
                     const res = await fetch(url);

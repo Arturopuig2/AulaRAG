@@ -564,13 +564,15 @@ async def list_image_gallery(query: Optional[str] = None):
 # ── JSON API for Exercises & Explanations ──────────────────────────────────────
 
 @router.get("/api/options")
-async def get_filter_options(subject: Optional[str] = None, grade: Optional[int] = None, db: Session = Depends(get_db)):
+async def get_filter_options(subject: Optional[str] = None, grade: Optional[int] = None, bloque: Optional[str] = None, db: Session = Depends(get_db)):
     """Returns unique Bloques and Contenidos for dynamic dropdown filtering."""
     q = db.query(Explanation).filter(Explanation.is_active == True)
     if subject:
         q = q.filter(Explanation.subject == subject)
     if grade:
         q = q.filter(Explanation.grade == grade)
+    if bloque:
+        q = q.filter(Explanation.bloque == bloque)
     
     items = q.all()
     bloques = sorted(list({i.bloque for i in items if i.bloque}))
