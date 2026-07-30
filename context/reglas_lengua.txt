@@ -3,10 +3,20 @@
 # - Las líneas que empiezan con # son comentarios y se ignoran.
 # - Escribe cada regla en una línea nueva comenzando con un guión (-).
 
-# --- REGLAS DE ORTOGRAFÍA Y EJEMPLOS ---
-- RIGOR ORTOGRÁFICO ABSOLUTO: Verifica minuciosamente cada palabra de ejemplo antes de escribirla.
-- La sílaba destacada en negrita (**) DEBE COINCIDIR EXACTAMENTE con la categoría expuesta:
-  * En la categoría GE: resalta únicamente la sílaba **ge** (ej: **ge**nial, pro-te-**ge**r). NUNCA resaltes la sílaba equivocada (como prote**te**ger) ni metas palabras con J (como lejía) o con GI (como energía).
-  * En la categoría GI: resalta únicamente la sílaba **gi** (ej: **gi**gante, má**gi**co, reli**gi**ón). NUNCA metas palabras con J.
-  * En la categoría JE: resalta únicamente la sílaba **je** (ej: **je**fe, con-ser-**je**). NUNCA metas palabras con JI (como perejil) ni resaltes otras letras.
+# --- REGLAS OFICIALES DE ORTOGRAFÍA DE LA G Y LA J ---
+- REGLA DE LA G (GE, GI):
+  * Verbos terminados en -ger y -gir: pro-te-**ge**r, es-co-**ge**r, di-ri-**gi**r (excepciones: tejer y crujir).
+  * Palabras que empiezan por geo-, gest-, gen-: **ge**ografía, **ges**tión, **gen**te (excepciones: jinete y jengibre).
+  * Palabras con -gía, -gio, -gión: ma-**gi**a, co-le-**gi**o, re-li-**gi**ón, e-ner-**gí**a (excepciones: lejía y bujía).
+
+- REGLA DE LA J (JE, JI):
+  * Palabras que empiezan o terminan en -aje y -eje: **je**fe, vi-a-**je**, ga-ra-**je**, e-**je** (excepciones: agenda y agente).
+  * Palabras terminadas en -jero, -jera, -jería: con-ser-**je**ría, pa-sa-**je**ro, re-lo-**je**ro (excepción: ligero).
+  * Verbos sin G ni J en su infinitivo: decir -> di-**je**, traer -> tra-**je**, conducir -> con-du-**je**.
+  * Excepciones fijas con J: cru-**ji**r, te-**je**r, per-e-**ji**l, **ji**nete, le-**jí**a.
+
+- RIGOR DE RESALTADO EN NEGRITA:
+  * En la categoría GE: resalta únicamente la sílaba **ge** (ej: **ge**nial, pro-te-**ge**r). NUNCA resaltes sílabas distintas ni metas palabras con J o GI.
+  * En la categoría GI: resalta únicamente la sílaba **gi** (ej: **gi**gante, má-**gi**-co, re-li-**gi**ón, e-ner-**gí**-a). NUNCA metas palabras con J.
+  * En la categoría JE: resalta únicamente la sílaba **je** (ej: **je**fe, vi-a-**je**, con-ser-**je**). NUNCA metas palabras con JI (como perejil).
   * En la categoría JI: resalta únicamente la sílaba **ji** (ej: **ji**nete, cru-**ji**-r, per-e-**ji**l). NUNCA metas palabras escritas con G (como ligero).

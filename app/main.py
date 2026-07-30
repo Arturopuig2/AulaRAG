@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Image attachments completely disabled
+# Main FastAPI application for AulaRAG - Official RAE Spelling Rules for G and J
 import json
 import os
 import re
