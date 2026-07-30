@@ -140,6 +140,7 @@ async def require_admin(request: Request, db: Session = Depends(get_db)) -> User
 # ── Pages ─────────────────────────────────────────────────────────────────────
 
 @router.get("", response_class=HTMLResponse)
+@router.get("/exercises", response_class=HTMLResponse)
 async def admin_panel(request: Request, db: Session = Depends(get_db)):
     # Check auth manually so we can return a proper redirect response
     try:
@@ -148,7 +149,7 @@ async def admin_panel(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse(url="/login?next=/admin", status_code=302)
     if not user.is_admin:
         return HTMLResponse("<h1>403 — Sin permiso de administrador</h1>", status_code=403)
-    return templates.TemplateResponse("admin.html", {"request": request, "user": user})
+    return templates.TemplateResponse("admin_exercises.html", {"request": request, "user": user})
 
 
 # ── Questions API ─────────────────────────────────────────────────────────────

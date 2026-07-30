@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added AI generator for master theory text, easy version, and examples in Content Manager
+# Main FastAPI application for AulaRAG - Unified /admin routes to render admin_exercises.html with AI Generator
 import json
 import os
 import re
