@@ -63,14 +63,6 @@ class AgenteIngles(BaseAgent):
             subject_code="ingles"
         )
 
-class AgenteCompetenciaLectora(BaseAgent):
-    def __init__(self):
-        super().__init__(
-            name="Comprensión Lectora",
-            role_description="Experto en análisis de textos escolares, lectura guiada y vocabulario.",
-            subject_code="competencia_lectora"
-        )
-
 class AgenteAuditor:
     """Audits generated explanations to ensure 100% orthographic accuracy and format compliance."""
     @staticmethod
@@ -100,22 +92,19 @@ class RouterAgent:
             "lengua": AgenteLengua(),
             "valenciano": AgenteValenciano(),
             "matematicas": AgenteMatematicas(),
-            "ingles": AgenteIngles(),
-            "competencia_lectora": AgenteCompetenciaLectora()
+            "ingles": AgenteIngles()
         }
 
     def get_agent(self, subject: str) -> BaseAgent:
         norm_subj = subject.lower().strip()
         if "valenc" in norm_subj:
             return self.agents["valenciano"]
-        elif "lengua" in norm_subj or "castellano" in norm_subj:
+        elif "lengua" in norm_subj or "castellano" in norm_subj or "lect" in norm_subj:
             return self.agents["lengua"]
         elif "mate" in norm_subj:
             return self.agents["matematicas"]
         elif "ingl" in norm_subj or "english" in norm_subj:
             return self.agents["ingles"]
-        elif "lect" in norm_subj:
-            return self.agents["competencia_lectora"]
         return self.agents["lengua"]
 
 # Global router instance

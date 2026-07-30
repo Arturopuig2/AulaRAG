@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Multi-Agent System (Lengua, Valenciano, Mates, Inglés, Lectura + Auditor)
+# Main FastAPI application for AulaRAG - Multi-Agent System (Lengua, Valenciano, Mates, Inglés)
 import json
 import os
 import re
