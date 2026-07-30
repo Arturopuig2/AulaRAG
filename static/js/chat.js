@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let temarioDataMatematicas = [];
     let temarioDataValenciano = [];
     let temarioDataIngles = [];
-    let temarioDataCompetenciaLectora = [];
     let currentTemarioData = [];
 
     // Helper to sanitize markdown text before rendering

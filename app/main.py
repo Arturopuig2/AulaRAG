@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Content Manager UI redesign matching home theme
+# Main FastAPI application for AulaRAG - Cleaned 100% C. Lectora references across all templates
 import json
 import os
 import re

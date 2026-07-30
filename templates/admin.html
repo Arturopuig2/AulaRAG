@@ -406,7 +406,6 @@
                                 <option value="lengua">Lengua</option>
                                 <option value="valenciano">Valencià</option>
                                 <option value="ingles">Inglés</option>
-                                <option value="competencia_lectora">C. Lectora</option>
                             </select>
                         </div>
 
@@ -545,7 +544,6 @@
                         <option value="lengua">Lengua</option>
                         <option value="valenciano">Valencià</option>
                         <option value="ingles">Inglés</option>
-                        <option value="competencia_lectora">Lectura</option>
                     </select>
                     <select id="q-filter-grade" onchange="loadBloques('q-filter'); loadQuestions()">
                         <option value="">Curso</option>
@@ -606,7 +604,6 @@
                                 <option value="lengua">Lengua</option>
                                 <option value="valenciano">Valencià</option>
                                 <option value="ingles">Inglés</option>
-                                <option value="competencia_lectora">C. Lectora</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -706,7 +703,6 @@
                         <option value="lengua">Lengua</option>
                         <option value="valenciano">Valencià</option>
                         <option value="ingles">Inglés</option>
-                        <option value="competencia_lectora">Lectura</option>
                     </select>
                     <select id="e-filter-grade" onchange="loadBloques('e-filter'); loadExplanations()">
                         <option value="">Curso</option>
@@ -1393,10 +1389,10 @@ function clearMedia(inputId, fileId) {
 
 // ── Utils ─────────────────────────────────────────────────────────────────────
 function subjectLabel(s) {
-    return {matematicas:'Mates',lengua:'Lengua',valenciano:'Val.',ingles:'Inglés',competencia_lectora:'C.L.'}[s] || s;
+    return {matematicas:'Mates',lengua:'Lengua',valenciano:'Val.',ingles:'Inglés'}[s] || s;
 }
 function subjectSuffix(s) {
-    return {matematicas:'mat',lengua:'len',valenciano:'val',ingles:'ing',competencia_lectora:'cle'}[s] || 'mat';
+    return {matematicas:'mat',lengua:'len',valenciano:'val',ingles:'ing'}[s] || 'mat';
 }
 function typeLabel(t) {
     return {seleccion:'Selección',verdadero_falso:'V/F',pasos:'Pasos'}[t] || t;
