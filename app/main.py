@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed SQLite tilde matching bug in DB explanation retrieval
+# Main FastAPI application for AulaRAG - Cleared stale cached explanations and prioritized DB easier_version over cache
 import json
 import os
 import re

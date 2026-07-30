@@ -697,9 +697,29 @@ async def get_gemini_response_stream(
 ):
     """Yields streaming SSE data chunks as Gemini generates the response in real-time, with semantic caching and multimodal image support."""
     # Multimodal image attachments disabled by user directive for clean text/schema focus
-    visual_url = None
+    grade_val = None
+    if course_level:
+        grade_match = re.search(r'\d+', str(course_level))
+        if grade_match: grade_val = int(grade_match.group())
 
-    # --- 1. Check Semantic Cache First ---
+    is_easier_req = any(kw in user_message.lower() for kw in ["más fácil", "mas facil", "més fàcil", "versión fácil", "version facil", "adaptad"])
+    is_example_req = any(kw in user_message.lower() for kw in ["ejemplo", "exemples", "otro ejemplo"])
+
+    exp_obj = None
+    if subject != "general":
+        try:
+            exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+            # Prioridad 1: Si pide Versión Fácil y EXISTE en BD -> Responder INMEDIATAMENTE con ella
+            if exp_obj and is_easier_req and exp_obj.easier_version and exp_obj.easier_version.strip():
+                saved_easier = exp_obj.easier_version.strip()
+                v_url = exp_obj.easier_visual_url or exp_obj.visual_url
+                yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url})}\n\n"
+                return
+        except Exception as e:
+            print(f"[RAG_ERROR] Fallo en pre-fetch de versión fácil: {str(e)}")
+
+    # --- Check Semantic Cache Next ---
     cached_text = get_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message)
     if cached_text:
         print(f"CACHE HIT [0 ms, 0 tokens]: {subject}/{course_level}/{bloque}/{contenido}")
@@ -725,44 +745,20 @@ async def get_gemini_response_stream(
         "Usa lenguaje neutro y cercano."
     )
 
-    # --- PRE-CARGA DE TEORÍA MAESTRA VERIFICADA DESDE LA BASE DE DATOS ---
-    grade_val = None
-    if course_level:
-        grade_match = re.search(r'\d+', str(course_level))
-        if grade_match: grade_val = int(grade_match.group())
-
-    is_easier_req = any(kw in user_message.lower() for kw in ["más fácil", "mas facil", "més fàcil", "versión fácil", "version facil", "adaptad"])
-    is_example_req = any(kw in user_message.lower() for kw in ["ejemplo", "exemples", "otro ejemplo"])
-
     db_explanation = None
-    exp_obj = None
-
-    if subject != "general":
-        try:
-            exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
-            if exp_obj:
-                if is_easier_req:
-                    if exp_obj.easier_version and exp_obj.easier_version.strip():
-                        # Usar directamente la versión fácil guardada en BD
-                        saved_easier = exp_obj.easier_version.strip()
-                        v_url = exp_obj.easier_visual_url or exp_obj.visual_url
-                        yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url})}\n\n"
-                        yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url})}\n\n"
-                        return
-                    else:
-                        # Si no tiene versión fácil guardada, instruir a Gemini a generar una simplificada basada en el texto principal
-                        db_explanation = f"[INSTRUCCIÓN: El alumno pide la versión adaptada/más fácil. Simplifica y explica de forma súper sencilla la lección]:\n{exp_obj.text}"
-                        visual_url = exp_obj.easier_visual_url or exp_obj.visual_url
-                elif is_example_req:
-                    db_explanation = exp_obj.text
-                    if exp_obj.examples:
-                        db_explanation += f"\n\n### EJEMPLOS GUARDADOS:\n{exp_obj.examples}"
-                    visual_url = exp_obj.examples_visual_url or exp_obj.visual_url
-                else:
-                    db_explanation = exp_obj.text
-                    visual_url = exp_obj.visual_url
-        except Exception as e:
-            print(f"[RAG_ERROR] Fallo en fetch de teoría maestra: {str(e)}")
+    if exp_obj:
+        if is_easier_req:
+            # Si no tiene versión fácil guardada, instruir a Gemini a generar una simplificada basada en el texto principal
+            db_explanation = f"[INSTRUCCIÓN: El alumno pide la versión adaptada/más fácil. Simplifica y explica de forma súper sencilla la lección]:\n{exp_obj.text}"
+            visual_url = exp_obj.easier_visual_url or exp_obj.visual_url
+        elif is_example_req:
+            db_explanation = exp_obj.text
+            if exp_obj.examples:
+                db_explanation += f"\n\n### EJEMPLOS GUARDADOS:\n{exp_obj.examples}"
+            visual_url = exp_obj.examples_visual_url or exp_obj.visual_url
+        else:
+            db_explanation = exp_obj.text
+            visual_url = exp_obj.visual_url
 
     if db_explanation:
         turn_instruction += f"\n\n### TEORÍA MAESTRA VERIFICADA (UTILIZA ESTE TEXTO PARA LA EXPLICACIÓN):\n{db_explanation}"
