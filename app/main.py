@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Implemented Image Tagger Gallery and visual_url linking in Content Manager & RAG
+# Main FastAPI application for AulaRAG - Fixed subject template routing for Matemáticas explanations in Spanish
 import json
 import os
 import re
