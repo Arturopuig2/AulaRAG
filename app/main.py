@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Explicaciones set as default tab in Content Manager
+# Main FastAPI application for AulaRAG - Fixed default tab to Explicaciones across all admin templates
 import json
 import os
 import re

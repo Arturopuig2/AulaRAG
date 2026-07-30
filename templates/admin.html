@@ -367,11 +367,11 @@
     <div class="sidebar">
         <div class="sidebar-section">
             <div class="sidebar-label">Contenido</div>
-            <div class="sidebar-item active" data-tab="questions" onclick="switchTab('questions')">
-                <span class="icon">❓</span> Preguntas
-            </div>
-            <div class="sidebar-item" data-tab="explanations" onclick="switchTab('explanations')">
+            <div class="sidebar-item active" data-tab="explanations" onclick="switchTab('explanations')">
                 <span class="icon">📖</span> Explicaciones
+            </div>
+            <div class="sidebar-item" data-tab="questions" onclick="switchTab('questions')">
+                <span class="icon">❓</span> Preguntas
             </div>
             <div class="sidebar-item" data-tab="import" onclick="switchTab('import')">
                 <span class="icon">📥</span> Importar
@@ -383,7 +383,7 @@
     <div class="main">
 
         <!-- ══ TAB: PREGUNTAS ══ -->
-        <div class="tab-panel active" id="tab-questions">
+        <div class="tab-panel" id="tab-questions">
 
             <!-- Form -->
             <div class="card">
@@ -583,7 +583,7 @@
         </div>
 
         <!-- ══ TAB: EXPLICACIONES ══ -->
-        <div class="tab-panel" id="tab-explanations">
+        <div class="tab-panel active" id="tab-explanations">
 
             <div class="card">
                 <div class="card-title">
@@ -1413,7 +1413,7 @@ function toast(msg, type = 'success') {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 loadTemarios().then(() => {
-    loadQuestions();
+    switchTab('explanations');
 });
 updateOptionsUI();
 renderOptions();
