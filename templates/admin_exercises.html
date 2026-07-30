@@ -322,7 +322,7 @@
             border: 1px solid var(--border);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             width: 100%;
-            max-width: 680px;
+            max-width: 720px;
             max-height: 90vh;
             overflow-y: auto;
             transform: translateY(20px);
@@ -370,6 +370,67 @@
             background: #f8fafc;
         }
 
+        /* Image Tagger Gallery Styles */
+        .image-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f8fafc;
+            padding: 0.8rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .image-preview-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .gallery-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #ffffff;
+            text-align: center;
+        }
+
+        .gallery-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 168, 255, 0.2);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .gallery-card-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.4rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -408,7 +469,7 @@
             </div>
             <div class="header-actions">
                 <a href="/" class="btn btn-outline">⬅️ Volver a Pizarra</a>
-                <button class="btn btn-primary" onclick="openCreateModal()">✨ Nuevo Ejercicio</button>
+                <button class="btn btn-primary" id="btn-create-action" onclick="handleCreateAction()">✨ Nueva Explicación</button>
             </div>
         </header>
 
@@ -477,9 +538,10 @@
             <table id="table-explanations">
                 <thead>
                     <tr>
+                        <th style="width: 15%">Ilustración</th>
                         <th style="width: 20%">Tema / Asignatura</th>
-                        <th style="width: 30%">Contenido Principal</th>
-                        <th style="width: 40%">Vista Previa Teoría</th>
+                        <th style="width: 25%">Contenido Principal</th>
+                        <th style="width: 30%">Vista Previa Teoría</th>
                         <th style="width: 10%">Acciones</th>
                     </tr>
                 </thead>
@@ -553,6 +615,92 @@
         </div>
     </div>
 
+    <!-- Modal Explicación & Etiquetado de Imágenes -->
+    <div id="modal-explanation" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="explanation-modal-title">Configurar Teoría Maestra RAG</h2>
+                <button class="btn-icon" onclick="closeModal('explanation')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="e-id">
+                <div class="form-grid">
+                    <div class="filter-group">
+                        <label>Asignatura</label>
+                        <select id="e-subject" required>
+                            <option value="matematicas">Matemáticas</option>
+                            <option value="lengua">Lengua</option>
+                            <option value="valenciano">Valencià</option>
+                            <option value="ingles">Inglés</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Nivel (Curso)</label>
+                        <select id="e-grade">
+                            <option value="1">1º Primaria</option>
+                            <option value="2">2º Primaria</option>
+                            <option value="3">3º Primaria</option>
+                            <option value="4">4º Primaria</option>
+                            <option value="5">5º Primaria</option>
+                            <option value="6">6º Primaria</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Bloque (Ej: Gramática)</label>
+                        <input type="text" id="e-bloque" placeholder="Ej: Ortografía">
+                    </div>
+                    <div class="filter-group">
+                        <label>Contenido (Tema exacto)</label>
+                        <input type="text" id="e-contenido" placeholder="Ej: Los neologismos" required>
+                    </div>
+
+                    <!-- Sección de Etiquetado e Ilustración -->
+                    <div class="filter-group full-width">
+                        <label>🖼️ Ilustración Asociada a la Lección</label>
+                        <div class="image-preview-container">
+                            <img id="e-image-preview" src="/static/img/logo.png" class="image-preview-thumb" alt="Vista previa">
+                            <div style="flex:1;">
+                                <input type="text" id="e-visual-url" placeholder="URL o ruta de la imagen (ej: /static/assets/...)" oninput="updateImagePreview(this.value)">
+                                <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">Asocia una ilustración de tu catálogo para acompañar la lección en la Pizarra Digital.</div>
+                            </div>
+                            <button type="button" class="btn btn-outline" onclick="openGalleryModal()" style="padding:0.5rem 0.9rem; font-size:0.85rem;">🖼️ Explorar Banco</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group full-width">
+                        <label>Texto de la Explicación Teórica (Fuente de Verdad)</label>
+                        <textarea id="e-text" rows="8" placeholder="Escribe o pega aquí la lección completa..." required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('explanation')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveExplanation()">Guardar Teoría</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Banco de Imágenes (Gallery Tagger) -->
+    <div id="modal-gallery" class="modal-overlay">
+        <div class="modal" style="max-width: 840px;">
+            <div class="modal-header">
+                <h2>🖼️ Banco de Ilustraciones - Etiquetador de Imágenes</h2>
+                <button class="btn-icon" onclick="closeModal('gallery')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 1rem;">
+                    <input type="text" id="gallery-search" placeholder="🔍 Buscar imagen por nombre o carpeta..." oninput="debounceGallerySearch()" style="width: 100%;">
+                </div>
+                <div id="gallery-grid" class="gallery-grid">
+                    <!-- Images loaded dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('gallery')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast">
         <span id="toast-msg">Operación completada con éxito</span>
@@ -561,6 +709,7 @@
     <script>
         let currentTab = 'explanations';
         let debounceTimer;
+        let galleryDebounce;
 
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
@@ -571,14 +720,26 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
 
+            const createBtn = document.getElementById('btn-create-action');
+
             if (tab === 'exercises') {
                 document.getElementById('view-exercises').style.display = 'block';
                 document.getElementById('view-explanations').style.display = 'none';
+                createBtn.textContent = "✨ Nuevo Ejercicio";
             } else {
                 document.getElementById('view-exercises').style.display = 'none';
                 document.getElementById('view-explanations').style.display = 'block';
+                createBtn.textContent = "✨ Nueva Explicación";
             }
             loadData();
+        }
+
+        function handleCreateAction() {
+            if (currentTab === 'exercises') {
+                openCreateModal();
+            } else {
+                openCreateExplanationModal();
+            }
         }
 
         function debounceLoad() {
@@ -665,15 +826,22 @@
 
             items.forEach(e => {
                 const tr = document.createElement('tr');
+                const imgTag = e.visual_url 
+                    ? `<img src="${e.visual_url}" style="width:48px; height:48px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" alt="Ilustración">`
+                    : `<span style="font-size:0.75rem; color:var(--text-muted);">Sin imagen</span>`;
+
                 tr.innerHTML = `
+                    <td>${imgTag}</td>
                     <td>
                         <span class="badge badge-subject">${e.subject.toUpperCase()}</span>
                         <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
+                        <div style="font-size:0.8rem; margin-top:4px; color:var(--text-muted);">${escapeHtml(e.bloque || '')}</div>
                     </td>
                     <td style="font-weight:700;">${escapeHtml(e.contenido || '')}</td>
-                    <td style="font-size:0.9rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 100))}...</td>
+                    <td style="font-size:0.88rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 90))}...</td>
                     <td>
                         <div class="actions-cell">
+                            <button class="btn-icon" title="Editar / Etiquetar Imagen" onclick='editExplanation(${JSON.stringify(e)})'>✏️</button>
                             <button class="btn-icon delete" title="Eliminar" onclick="deleteExplanation(${e.id})">🗑️</button>
                         </div>
                     </td>
@@ -696,58 +864,120 @@
             document.getElementById('modal-exercise').classList.add('active');
         }
 
-        function editQuestion(q) {
-            document.getElementById('exercise-modal-title').textContent = "Editar Ejercicio Verificado";
-            document.getElementById('q-id').value = q.id;
-            document.getElementById('q-subject').value = q.subject;
-            document.getElementById('q-grade').value = q.grade || "1";
-            document.getElementById('q-bloque').value = q.bloque || "";
-            document.getElementById('q-contenido').value = q.contenido || "";
-            document.getElementById('q-question').value = q.question || "";
-            
-            let opts = [];
-            try { opts = JSON.parse(q.options); } catch(e) {}
-            document.getElementById('q-options').value = Array.isArray(opts) ? opts.join('\n') : "";
-            document.getElementById('q-answer').value = q.answer || "";
+        function openCreateExplanationModal() {
+            document.getElementById('explanation-modal-title').textContent = "Nueva Lección Teórica";
+            document.getElementById('e-id').value = "";
+            document.getElementById('e-subject').value = "matematicas";
+            document.getElementById('e-grade').value = "1";
+            document.getElementById('e-bloque').value = "";
+            document.getElementById('e-contenido').value = "";
+            document.getElementById('e-visual-url').value = "";
+            document.getElementById('e-text').value = "";
+            updateImagePreview("");
 
-            document.getElementById('modal-exercise').classList.add('active');
+            document.getElementById('modal-explanation').classList.add('active');
+        }
+
+        function editExplanation(e) {
+            document.getElementById('explanation-modal-title').textContent = "Editar / Etiquetar Lección Teórica";
+            document.getElementById('e-id').value = e.id;
+            document.getElementById('e-subject').value = e.subject;
+            document.getElementById('e-grade').value = e.grade || "1";
+            document.getElementById('e-bloque').value = e.bloque || "";
+            document.getElementById('e-contenido').value = e.contenido || "";
+            document.getElementById('e-visual-url').value = e.visual_url || "";
+            document.getElementById('e-text').value = e.text || "";
+            updateImagePreview(e.visual_url || "");
+
+            document.getElementById('modal-explanation').classList.add('active');
+        }
+
+        function updateImagePreview(url) {
+            const img = document.getElementById('e-image-preview');
+            if (url && url.trim().length > 0) {
+                img.src = url;
+            } else {
+                img.src = "/static/img/logo.png";
+            }
+        }
+
+        function openGalleryModal() {
+            document.getElementById('modal-gallery').classList.add('active');
+            loadGalleryImages();
+        }
+
+        function debounceGallerySearch() {
+            clearTimeout(galleryDebounce);
+            galleryDebounce = setTimeout(loadGalleryImages, 300);
+        }
+
+        async function loadGalleryImages() {
+            const query = document.getElementById('gallery-search').value;
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--text-muted);">Cargando ilustraciones...</div>';
+
+            try {
+                const res = await fetch(`/admin/api/gallery?query=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                grid.innerHTML = '';
+
+                if (!data.images || data.images.length === 0) {
+                    grid.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--text-muted);">No se encontraron imágenes en el catálogo.</div>';
+                    return;
+                }
+
+                data.images.forEach(img => {
+                    const card = document.createElement('div');
+                    card.className = 'gallery-card';
+                    card.onclick = () => selectGalleryImage(img.url);
+                    card.innerHTML = `
+                        <img src="${img.url}" alt="${escapeHtml(img.name)}" loading="lazy">
+                        <div class="gallery-card-title">${escapeHtml(img.name)}</div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--danger);">Error al cargar galería.</div>';
+            }
+        }
+
+        function selectGalleryImage(url) {
+            document.getElementById('e-visual-url').value = url;
+            updateImagePreview(url);
+            closeModal('gallery');
+            showToast("Imagen vinculada a la lección");
         }
 
         function closeModal(type) {
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
-        async function saveQuestion() {
-            const id = document.getElementById('q-id').value;
-            const subject = document.getElementById('q-subject').value;
-            const grade = parseInt(document.getElementById('q-grade').value) || 1;
-            const bloque = document.getElementById('q-bloque').value;
-            const contenido = document.getElementById('q-contenido').value;
-            const question = document.getElementById('q-question').value;
-            const rawOptions = document.getElementById('q-options').value;
-            const answer = document.getElementById('q-answer').value;
+        async function saveExplanation() {
+            const id = document.getElementById('e-id').value;
+            const subject = document.getElementById('e-subject').value;
+            const grade = parseInt(document.getElementById('e-grade').value) || 1;
+            const bloque = document.getElementById('e-bloque').value;
+            const contenido = document.getElementById('e-contenido').value;
+            const visual_url = document.getElementById('e-visual-url').value;
+            const text = document.getElementById('e-text').value;
 
-            if (!contenido || !question || !rawOptions || !answer) {
-                showToast("Por favor, completa todos los campos requeridos", true);
+            if (!contenido || !text) {
+                showToast("Completa los campos obligatorios", true);
                 return;
             }
 
-            const options = rawOptions.split('\n').map(o => o.trim()).filter(o => o.length > 0);
-
-            const payload = {
-                subject, grade, bloque, contenido, question, options, answer
-            };
+            const payload = { subject, grade, bloque, contenido, visual_url, text };
 
             try {
                 let res;
                 if (id) {
-                    res = await fetch(`/admin/api/questions/${id}`, {
+                    res = await fetch(`/admin/api/explanations/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
                 } else {
-                    res = await fetch(`/admin/api/questions`, {
+                    res = await fetch(`/admin/api/explanations`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -755,27 +985,11 @@
                 }
 
                 if (res.ok) {
-                    showToast(id ? "Ejercicio actualizado correctamente" : "Ejercicio guardado correctamente");
-                    closeModal('exercise');
+                    showToast(id ? "Lección teórica e ilustración guardadas" : "Lección creada correctamente");
+                    closeModal('explanation');
                     loadData();
                 } else {
-                    showToast("Error al guardar el ejercicio", true);
-                }
-            } catch (e) {
-                showToast("Error de conexión al servidor", true);
-            }
-        }
-
-        async function deleteQuestion(id) {
-            if (!confirm("¿Estás seguro de que deseas eliminar este ejercicio?")) return;
-
-            try {
-                const res = await fetch(`/admin/api/questions/${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    showToast("Ejercicio eliminado");
-                    loadData();
-                } else {
-                    showToast("Error al eliminar el ejercicio", true);
+                    showToast("Error al guardar la lección", true);
                 }
             } catch (e) {
                 showToast("Error de conexión al servidor", true);
@@ -783,12 +997,12 @@
         }
 
         async function deleteExplanation(id) {
-            if (!confirm("¿Estás seguro de que deseas eliminar esta teoría?")) return;
+            if (!confirm("¿Estás seguro de que deseas eliminar esta lección?")) return;
 
             try {
                 const res = await fetch(`/admin/api/explanations/${id}`, { method: 'DELETE' });
                 if (res.ok) {
-                    showToast("Teoría eliminada");
+                    showToast("Lección eliminada");
                     loadData();
                 } else {
                     showToast("Error al eliminar", true);

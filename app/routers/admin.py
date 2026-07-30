@@ -515,6 +515,132 @@ async def delete_explanation(eid: int, request: Request, db: Session = Depends(g
     return {"ok": True}
 
 
+# ── Image Gallery & Tagging API ───────────────────────────────────────────────
+
+@router.get("/api/gallery")
+async def list_image_gallery(query: Optional[str] = None):
+    """Scans and returns all available image assets for image tagging."""
+    images = []
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    
+    scan_folders = [
+        os.path.join(base_dir, "static", "assets", "extracted"),
+        os.path.join(base_dir, "static", "assets", "extracted2"),
+        os.path.join(base_dir, "static", "uploads", "extracted_images"),
+    ]
+    
+    valid_exts = {".png", ".jpg", ".jpeg", ".webp", ".svg"}
+    
+    for folder in scan_folders:
+        if not os.path.exists(folder):
+            continue
+        rel_base = os.path.relpath(folder, base_dir)
+        for root, _, files in os.walk(folder):
+            for file in files:
+                ext = os.path.splitext(file)[1].lower()
+                if ext in valid_exts:
+                    full_path = os.path.join(root, file)
+                    rel_url = "/" + os.path.relpath(full_path, base_dir).replace("\\", "/")
+                    
+                    if query:
+                        q_lower = query.lower()
+                        if q_lower not in file.lower() and q_lower not in rel_url.lower():
+                            continue
+                    
+                    images.append({
+                        "url": rel_url,
+                        "name": file,
+                        "folder": os.path.basename(os.path.dirname(full_path))
+                    })
+                    if len(images) >= 150: # Cap for UI performance
+                        break
+            if len(images) >= 150:
+                break
+                
+    return {"total": len(images), "images": images}
+
+
+# ── JSON API for Exercises & Explanations ──────────────────────────────────────
+
+@router.get("/api/explanations")
+async def api_list_explanations(
+    subject: Optional[str] = None,
+    grade: Optional[int] = None,
+    query: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    q = db.query(Explanation).filter(Explanation.is_active == True)
+    if subject:
+        q = q.filter(Explanation.subject == subject)
+    if grade:
+        q = q.filter(Explanation.grade == grade)
+    if query:
+        q = q.filter(or_(
+            Explanation.contenido.ilike(f"%{query}%"),
+            Explanation.bloque.ilike(f"%{query}%"),
+            Explanation.text.ilike(f"%{query}%")
+        ))
+    items = q.order_by(Explanation.id.desc()).limit(100).all()
+    return {"explanations": [_explanation_to_dict(i) for i in items]}
+
+
+@router.post("/api/explanations")
+async def api_create_explanation(payload: dict, db: Session = Depends(get_db)):
+    subject = payload.get("subject", "matematicas")
+    grade = int(payload.get("grade", 1))
+    bloque = payload.get("bloque", "")
+    contenido = payload.get("contenido", "")
+    text = payload.get("text", "")
+    visual_url = payload.get("visual_url", "")
+    
+    if not contenido or not text:
+        raise HTTPException(400, "Contenido y texto son requeridos")
+        
+    e = Explanation(
+        subject=subject,
+        grade=grade,
+        bloque=bloque or None,
+        contenido=contenido or None,
+        text=text,
+        visual_url=visual_url or None,
+        is_active=True,
+        is_verified=True
+    )
+    db.add(e)
+    db.commit()
+    db.refresh(e)
+    return _explanation_to_dict(e)
+
+
+@router.put("/api/explanations/{eid}")
+async def api_update_explanation(eid: int, payload: dict, db: Session = Depends(get_db)):
+    e = db.query(Explanation).filter(Explanation.id == eid).first()
+    if not e:
+        raise HTTPException(404, "Explicación no encontrada")
+        
+    if "subject" in payload: e.subject = payload["subject"]
+    if "grade" in payload: e.grade = int(payload["grade"])
+    if "bloque" in payload: e.bloque = payload["bloque"] or None
+    if "contenido" in payload: e.contenido = payload["contenido"] or None
+    if "text" in payload: e.text = payload["text"]
+    if "visual_url" in payload: e.visual_url = payload["visual_url"] or None
+    
+    e.updated_at = datetime.utcnow()
+    db.commit()
+    db.refresh(e)
+    return _explanation_to_dict(e)
+
+
+@router.delete("/api/explanations/{eid}")
+async def api_delete_explanation(eid: int, db: Session = Depends(get_db)):
+    e = db.query(Explanation).filter(Explanation.id == eid).first()
+    if not e:
+        raise HTTPException(404, "Explicación no encontrada")
+    e.is_active = False
+    db.commit()
+    return {"ok": True}
+
+
 # ── Import JSON / CSV ─────────────────────────────────────────────────────────
 
 @router.post("/import/questions")

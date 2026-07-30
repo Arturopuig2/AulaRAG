@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed left sidebar Admin button as requested
+# Main FastAPI application for AulaRAG - Implemented Image Tagger Gallery and visual_url linking in Content Manager & RAG
 import json
 import os
 import re

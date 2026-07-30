@@ -489,6 +489,30 @@ def get_db_explanation(subject: str, grade: int = None, bloque: str = None, cont
     finally:
         db.close()
 
+def get_db_explanation_obj(subject: str, grade: int = None, bloque: str = None, contenido: str = None):
+    """Fetch Explanation model object directly."""
+    db = SessionLocal()
+    try:
+        norm_subject = normalize_text(subject)
+        q = db.query(models.Explanation).filter(
+            func.lower(models.Explanation.subject) == norm_subject,
+            models.Explanation.is_active == True,
+            models.Explanation.is_verified == True
+        )
+        if grade:
+            q = q.filter((models.Explanation.grade == grade) | (models.Explanation.grade == None))
+        if contenido:
+            norm_cont = normalize_text(contenido)
+            exp = q.filter(func.lower(models.Explanation.contenido).contains(norm_cont)).order_by(models.Explanation.id.desc()).first()
+            if exp: return exp
+        if bloque:
+            norm_bloque = normalize_text(bloque)
+            exp = q.filter(func.lower(models.Explanation.bloque).contains(norm_bloque)).order_by(models.Explanation.id.desc()).first()
+            if exp: return exp
+        return q.order_by(models.Explanation.id.desc()).first()
+    finally:
+        db.close()
+
 # Limit for chat history to prevent slowness and context confusion
 MAX_HISTORY_LENGTH = 6 
 
@@ -727,7 +751,11 @@ async def get_gemini_response_stream(
     db_explanation = None
     if subject != "general":
         try:
-            db_explanation = get_db_explanation(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+            exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+            if exp_obj:
+                db_explanation = exp_obj.text
+                if exp_obj.visual_url:
+                    visual_url = exp_obj.visual_url
         except Exception as e:
             print(f"[RAG_ERROR] Fallo en fetch de teoría maestra: {str(e)}")
 
