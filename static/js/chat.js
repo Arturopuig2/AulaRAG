@@ -313,6 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeSessionContenido = contenidoStr;
         currentExerciseIndex = 0;
         window._lastQuestionId = 0;
+        window._isEasierActive = false;
 
         // Show user message
         let generatedMessage = (currentSubject === 'valenciano')
@@ -557,9 +558,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                     mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
                                 }
 
+                                const easierBtnHtml = !window._isEasierActive 
+                                    ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>`
+                                    : '';
+
                                 const actionButtonsHtml = `
                                 <div class="theory-action-buttons">
-                                    <button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>
+                                    ${easierBtnHtml}
                                     <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>
                                     <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
                                 </div>`;
@@ -715,9 +720,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let theoryActionButtonsHtml = '';
         if (sender === 'assistant' && !interactiveButtonsHtml && !preventTheoryButtons && !formattedText.includes('theory-action-buttons')) {
+            const easierBtnHtml = !window._isEasierActive 
+                ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier', this)">💡 Más fácil</button>`
+                : '';
+
             theoryActionButtonsHtml = `
             <div class="theory-action-buttons">
-                <button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier', this)">💡 Más fácil</button>
+                ${easierBtnHtml}
                 <button class="theory-btn btn-example" onclick="window.handleTheoryAction('example', this)">📝 Ejemplo</button>
                 <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done', this)">✅ Listo</button>
             </div>`;
@@ -973,6 +982,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (action === 'easier') {
+            window._isEasierActive = true;
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Pots explicar-ho de forma més fàcil?" 
                 : "¿Me lo puedes explicar de forma más fácil y sencilla?";

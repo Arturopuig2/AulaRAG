@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Served saved easier_version when requested or generate on-the-fly if missing
+# Main FastAPI application for AulaRAG - Ensure Más fácil button appears only once per explanation session
 import json
 import os
 import re
