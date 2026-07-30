@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added image tagging for Versión Fácil and Ejemplos in Content Manager
+# Main FastAPI application for AulaRAG - Served saved easier_version when requested or generate on-the-fly if missing
 import json
 import os
 import re
