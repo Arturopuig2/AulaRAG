@@ -15,13 +15,44 @@ import json
 import re
 import os
 
+def get_didactic_course_rules(grade: int = None) -> str:
+    """Retorna las reglas didácticas de adaptación pedagógica según el curso (1º a 6º de Primaria)."""
+    if not grade:
+        return ""
+    
+    if grade in [1, 2]:
+        return (
+            f"\n### REGLAS DIDÁCTICAS OBLIGATORIAS ({grade}º DE PRIMARIA - NIVEL INICIAL):\n"
+            "- Usa frases muy cortas y sencillas (máximo 10-12 palabras por frase).\n"
+            "- Explica siempre con analogías muy visuales usando objetos cercanos (juguetes, frutas, animales o cosas de casa).\n"
+            "- Estrictamente PROHIBIDO utilizar jerga técnica, palabras abstractas o explicaciones complejas.\n"
+            "- Tono súper cercano, claro, directo y motivador."
+        )
+    elif grade in [3, 4]:
+        return (
+            f"\n### REGLAS DIDÁCTICAS OBLIGATORIAS ({grade}º DE PRIMARIA - NIVEL INTERMEDIO):\n"
+            "- Organiza siempre la información mediante esquemas claros, viñetas y estructuras paso a paso.\n"
+            "- Usa explicaciones visuales, metáforas cotidianas y ejemplos del colegio o del día a día.\n"
+            "- Presenta los conceptos clave de forma estructurada sin sobrecargar con teoría innecesaria."
+        )
+    elif grade in [5, 6]:
+        return (
+            f"\n### REGLAS DIDÁCTICAS OBLIGATORIAS ({grade}º DE PRIMARIA - NIVEL AVANZADO / PREPARACIÓN SECUNDARIA):\n"
+            "- Fomenta el pensamiento crítico y la capacidad de deducción planteando preguntas reflexivas.\n"
+            "- Presenta fórmulas, reglas gramaticales y procedimientos totalmente desglosados paso a paso.\n"
+            "- Introduce el vocabulario técnico y formal de la asignatura de forma gradual, explicando siempre su significado."
+        )
+    return ""
+
+
 class BaseAgent:
     def __init__(self, name: str, role_description: str, subject_code: str):
         self.name = name
         self.role_description = role_description
         self.subject_code = subject_code
 
-    def get_system_prompt(self, base_rules: str, subject_rules: str) -> str:
+    def get_system_prompt(self, base_rules: str, subject_rules: str, grade: int = None) -> str:
+        course_rules = get_didactic_course_rules(grade)
         return f"""*** AGENTE ESPECIALISTA: {self.name.upper()} ***
 Rol: {self.role_description}
 
@@ -29,6 +60,7 @@ Rol: {self.role_description}
 
 ### REGLAS ESPECÍFICAS DE {self.name.upper()}:
 {subject_rules}
+{course_rules}
 """
 
 class AgenteLengua(BaseAgent):

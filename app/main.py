@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added 3-tab multi-source image searcher and upload tool to Content Manager
+# Main FastAPI application for AulaRAG - Integrated Didactic Rules per Course (1º to 6º Primary) into Multi-Agent System & RAG Engine
 import json
 import os
 import re

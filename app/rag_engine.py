@@ -778,6 +778,11 @@ async def get_gemini_response_stream(
             db_explanation = exp_obj.text
             visual_url = exp_obj.visual_url
 
+    from app.multi_agent_system import get_didactic_course_rules
+    course_didactic_rules = get_didactic_course_rules(grade_val)
+    if course_didactic_rules:
+        turn_instruction += course_didactic_rules
+
     if db_explanation:
         turn_instruction += f"\n\n### TEORÍA MAESTRA VERIFICADA (UTILIZA ESTE TEXTO PARA LA EXPLICACIÓN):\n{db_explanation}"
     elif bloque or contenido:
