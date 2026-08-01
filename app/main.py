@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Positioned video media container at the top before text explanation
+# Main FastAPI application for AulaRAG - Video placed before illustrations, omitted on easier/example requests
 import json
 import os
 import re

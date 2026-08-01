@@ -712,14 +712,15 @@ async def get_gemini_response_stream(
     if subject != "general":
         try:
             exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
-            if exp_obj:
+            if exp_obj and not is_easier_req and not is_example_req:
                 video_url = exp_obj.video_url
+
             # Prioridad 1: Si pide Versión Fácil y EXISTE en BD -> Responder INMEDIATAMENTE con ella
             if exp_obj and is_easier_req and exp_obj.easier_version and exp_obj.easier_version.strip():
                 saved_easier = exp_obj.easier_version.strip()
                 v_url = exp_obj.easier_visual_url or exp_obj.visual_url
-                yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url, 'video_url': video_url})}\n\n"
-                yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url, 'video_url': video_url})}\n\n"
+                yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url, 'video_url': None})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url, 'video_url': None})}\n\n"
                 return
 
             # Prioridad 2: Si pide Ejemplos y EXISTEN en BD -> Responder INMEDIATAMENTE con ellos
@@ -734,8 +735,8 @@ async def get_gemini_response_stream(
                 except Exception:
                     formatted_ex = f"### 💡 Ejemplos Prácticos:\n\n{ex_raw}"
                 v_url = exp_obj.examples_visual_url or exp_obj.visual_url
-                yield f"data: {json.dumps({'text': formatted_ex, 'visual_url': v_url, 'video_url': video_url})}\n\n"
-                yield f"data: {json.dumps({'done': True, 'full_text': formatted_ex, 'visual_url': v_url, 'video_url': video_url})}\n\n"
+                yield f"data: {json.dumps({'text': formatted_ex, 'visual_url': v_url, 'video_url': None})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'full_text': formatted_ex, 'visual_url': v_url, 'video_url': None})}\n\n"
                 return
 
             if exp_obj:

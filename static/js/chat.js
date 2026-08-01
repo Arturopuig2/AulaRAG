@@ -542,15 +542,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (payload.text) {
                                 accumulatedText += payload.text;
                                 let mediaHtml = '';
+                                // 1. VÍDEO EN PRIMER LUGAR (solo en la explicación inicial)
+                                if ((payload.video_url || window._currentStreamVideoUrl) && !window._isEasierActive && !window._isExampleActive) {
+                                    const vVidUrl = payload.video_url || window._currentStreamVideoUrl;
+                                    window._currentStreamVideoUrl = vVidUrl;
+                                    mediaHtml += renderVideoMediaHtml(vVidUrl);
+                                }
+                                // 2. ILUSTRACIÓN DESPUÉS DEL VÍDEO
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
                                     window._currentStreamVisualUrl = vUrl;
                                     mediaHtml += `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
-                                }
-                                if (payload.video_url || window._currentStreamVideoUrl) {
-                                    const vVidUrl = payload.video_url || window._currentStreamVideoUrl;
-                                    window._currentStreamVideoUrl = vVidUrl;
-                                    mediaHtml += renderVideoMediaHtml(vVidUrl);
                                 }
                                 const safeText = cleanMarkdownText(accumulatedText);
                                 contentEl.innerHTML = mediaHtml + marked.parse(safeText);
@@ -559,13 +561,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const rawFinal = payload.full_text || accumulatedText;
                                 const finalMarkdown = cleanMarkdownText(rawFinal);
                                 let mediaHtml = '';
+                                // 1. VÍDEO EN PRIMER LUGAR (solo en la explicación inicial)
+                                if ((payload.video_url || window._currentStreamVideoUrl) && !window._isEasierActive && !window._isExampleActive) {
+                                    const vidUrl = payload.video_url || window._currentStreamVideoUrl;
+                                    mediaHtml += renderVideoMediaHtml(vidUrl);
+                                }
+                                // 2. ILUSTRACIÓN DESPUÉS DEL VÍDEO
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
                                     mediaHtml += `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
-                                }
-                                if (payload.video_url || window._currentStreamVideoUrl) {
-                                    const vidUrl = payload.video_url || window._currentStreamVideoUrl;
-                                    mediaHtml += renderVideoMediaHtml(vidUrl);
                                 }
 
                                 const easierBtnHtml = !window._isEasierActive 
@@ -669,22 +673,22 @@ function renderVideoMediaHtml(videoUrl) {
         const contentEl = document.createElement('div');
         contentEl.className = 'bubble';
 
-        // Add Media if present
+        // Add Media if present (Video FIRST, Illustration SECOND)
         let mediaHtml = '';
-        if (visualUrl) {
-            mediaHtml += `<div class="message-media"><img src="${visualUrl}" alt="Ejercicio visual" class="chat-img" onclick="window.open('${visualUrl}')"></div>`;
-        }
-        if (audioUrl) {
-            mediaHtml += `<div class="message-audio"><audio controls src="${audioUrl}" class="chat-audio"></audio></div>`;
-        }
-        if (!videoUrl && text) {
+        if (!videoUrl && text && !window._isEasierActive && !window._isExampleActive) {
             const ytMatch = text.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
             if (ytMatch) {
                 videoUrl = ytMatch[0];
             }
         }
-        if (videoUrl) {
+        if (videoUrl && !window._isEasierActive && !window._isExampleActive) {
             mediaHtml += renderVideoMediaHtml(videoUrl);
+        }
+        if (visualUrl) {
+            mediaHtml += `<div class="message-media"><img src="${visualUrl}" alt="Ejercicio visual" class="chat-img" onclick="window.open('${visualUrl}')"></div>`;
+        }
+        if (audioUrl) {
+            mediaHtml += `<div class="message-audio"><audio controls src="${audioUrl}" class="chat-audio"></audio></div>`;
         }
 
         // Parse custom interactive buttons: [BOTON: text]
