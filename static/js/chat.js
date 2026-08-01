@@ -348,11 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(e);
         }
 
-        const initPrompt = (currentSubject === 'valenciano')
-            ? `Has seleccionat **${contenidoStr}**. Què vols repassar?`
-            : `Has seleccionado **${contenidoStr}**. ¿Qué deseas repassar?`;
-
-        addMessage(initPrompt, 'assistant', true, false, true, visualUrl, null, false, videoUrl);
+        addMessage('', 'assistant', true, false, true, visualUrl, null, false, videoUrl);
     });
 
     const DIF_LABELS = { basica: '🟢 Básico', normal: '🟡 Medio', avanzada: '🔴 Avanzado' };

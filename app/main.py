@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Made explanation text optional via "📖 Teoría" button
+# Main FastAPI application for AulaRAG - Removed unnecessary introductory selection text from assistant response
 import json
 import os
 import re
