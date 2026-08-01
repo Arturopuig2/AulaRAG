@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Video placed before illustrations, omitted on easier/example requests
+# Main FastAPI application for AulaRAG - Removed repetitive lesson title headers (### LECCIÓN TEÓRICA...) from DB and chat outputs
 import json
 import os
 import re

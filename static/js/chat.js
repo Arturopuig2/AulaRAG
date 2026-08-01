@@ -24,13 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Helper to sanitize markdown text before rendering
     function cleanMarkdownText(str) {
         if (!str) return str;
+        // Strip lesson header titles (e.g. ### LECCIÓN TEÓRICA DE MATEMÁTICAS...)
+        str = str.replace(/^#{1,6}\s*(?:LECCI[ÓO]N|LECCI[ÒO]|TEOR[ÍI]A)\s*(?:TE[ÓO]RICA|TE[ÒO]RICA)?\s*(?:DE\s+[^\n:]+)?:?[^\n]*\n*/gmi, '');
         // Strip residual brackets
         str = str.replace(/\[\s*(?:INCORRECTE|CORRECTE|INCORRECTO|CORRECTO)\s*\]/gi, '');
         // Convert ---### or --- ### into double newline headers
         str = str.replace(/---+\s*(#{1,6}\s*)/g, '\n\n$1');
         // Ensure headings are properly isolated on new lines
         str = str.replace(/([^\n])\s*(#{1,6}\s*)/g, '$1\n\n$2');
-        return str;
+        return str.trim();
     }
 
     // Store chat history HTML per subject

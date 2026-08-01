@@ -764,6 +764,7 @@ async def get_gemini_response_stream(
     turn_instruction = (
         "RECUERDA: Eres un profesor paciente y experto. "
         "Tu objetivo principal es enseñar la TEORÍA y proporcionar EJEMPLOS CLAROS. "
+        "NO incluyas títulos iniciales como 'LECCIÓN TEÓRICA DE...' o encabezados con el nombre de la asignatura. Empieza explicando directamente la lección. "
         "USA PÁRRAFOS CORTOS Y ABUNDANTES PUNTOS Y APARTE (\n\n) entre ideas para facilitar la lectura. "
         "PROHIBIDO realizar o proponer ejercicios, tests o cuestionarios al alumno. "
         "Si el alumno tiene dudas, resuélvelas con ejemplos. "
