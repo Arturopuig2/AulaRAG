@@ -626,10 +626,17 @@ function renderVideoMediaHtml(videoUrl) {
     
     // YouTube detect & convert to embed
     const ytReg = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+    const vimeoReg = /(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)(\d+)/i;
+
     const ytMatch = url.match(ytReg);
+    const vimeoMatch = url.match(vimeoReg);
+
     if (ytMatch && ytMatch[1]) {
         const embedUrl = `https://www.youtube-nocookie.com/embed/${ytMatch[1]}`;
         embedHtml = `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo explicativo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+    } else if (vimeoMatch && vimeoMatch[1]) {
+        const embedUrl = `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+        embedHtml = `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo explicativo Vimeo" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
     } else if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/static/')) {
         embedHtml = `<div class="message-media video-container"><video controls width="100%" preload="metadata"><source src="${url}">Tu navegador no soporta reproducción de vídeo.</video></div>`;
     }

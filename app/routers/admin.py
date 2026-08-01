@@ -581,6 +581,25 @@ async def api_upload_image(file: UploadFile = File(...)):
     return {"url": f"/static/uploads/{filename}", "filename": filename}
 
 
+@router.post("/api/upload-video")
+async def api_upload_video(file: UploadFile = File(...)):
+    """Uploads a local video file (MP4, WEBM, MOV, AVI) and returns its static URL."""
+    valid_exts = {".mp4", ".webm", ".mov", ".avi", ".mkv", ".ogv"}
+    ext = os.path.splitext(file.filename)[1].lower()
+    if ext not in valid_exts and not file.content_type.startswith("video/"):
+        raise HTTPException(400, "El archivo debe ser un vídeo (MP4, WEBM, MOV, AVI).")
+
+    filename = f"{uuid.uuid4()}{ext or '.mp4'}"
+    uploads_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "static", "uploads")
+    os.makedirs(uploads_dir, exist_ok=True)
+    file_path = os.path.join(uploads_dir, filename)
+
+    with open(file_path, "wb") as buffer:
+        buffer.write(await file.read())
+
+    return {"url": f"/static/uploads/{filename}", "filename": filename}
+
+
 @router.get("/api/search-web-images")
 async def api_search_web_images(query: str):
     """Searches educational web images using Wikimedia Commons API & Unsplash Educational API."""

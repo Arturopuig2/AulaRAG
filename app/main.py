@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Prominent video link button + markdown link generation
+# Main FastAPI application for AulaRAG - Supported YouTube, Vimeo, Google Drive, and Direct MP4 Video uploads
 import json
 import os
 import re
