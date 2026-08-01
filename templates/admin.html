@@ -766,9 +766,11 @@
                         <div class="image-preview-container" style="margin-top:0.5rem;">
                             <span style="font-size:1.4rem;">🎥</span>
                             <div style="flex:1;">
-                                <input type="text" id="e-video-url" placeholder="Vídeo Explicativo (URL de YouTube, Vimeo o MP4)...">
-                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Vídeo interactivo para reproducir directamente en la burbuja del chat.</div>
+                                <input type="text" id="e-video-url" placeholder="Vídeo Explicativo (URL o archivo local)...">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">URL web (YouTube, Vimeo, HeyGen) o vídeo subido desde tu ordenador.</div>
                             </div>
+                            <button type="button" class="btn btn-outline" onclick="document.getElementById('video-upload-input').click()" style="padding:0.4rem 0.8rem; font-size:0.8rem;">📁 Subir Vídeo de mi Equipo</button>
+                            <input type="file" id="video-upload-input" accept="video/mp4,video/webm,video/ogg,video/quicktime" style="display:none;" onchange="uploadLocalVideo(this.files[0])">
                         </div>
                     </div>
 
@@ -1319,6 +1321,31 @@
                 }
             } catch (e) {
                 showToast("Error de conexión al subir imagen", true);
+            }
+        }
+
+        async function uploadLocalVideo(file) {
+            if (!file) return;
+            showToast("Subiendo vídeo desde tu ordenador...");
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/admin/api/upload-video', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('e-video-url').value = data.url;
+                    showToast("¡Vídeo subido y asignado correctamente!");
+                } else {
+                    const err = await res.json();
+                    showToast(err.detail || "Error al subir vídeo", true);
+                }
+            } catch (e) {
+                showToast("Error de conexión al subir vídeo", true);
             }
         }
 

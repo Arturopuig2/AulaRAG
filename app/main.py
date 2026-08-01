@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Integrated HeyGen avatar video support & direct video save fixes
+# Main FastAPI application for AulaRAG - Added direct local video file uploader button in content manager
 import json
 import os
 import re
