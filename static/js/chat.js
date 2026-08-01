@@ -624,12 +624,14 @@ function renderVideoMediaHtml(videoUrl) {
     const url = videoUrl.trim();
     let embedHtml = '';
     
-    // YouTube detect & convert to embed
+    // YouTube, Vimeo, HeyGen & direct video formats
     const ytReg = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
     const vimeoReg = /(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)(\d+)/i;
+    const heygenReg = /(?:https?:\/\/)?(?:app|share)\.heygen\.com\/(?:videos\/|embeds\/|share\/)?(?:[^\/\s]+-)?([a-f0-9]{32})/i;
 
     const ytMatch = url.match(ytReg);
     const vimeoMatch = url.match(vimeoReg);
+    const heygenMatch = url.match(heygenReg);
 
     if (ytMatch && ytMatch[1]) {
         const embedUrl = `https://www.youtube-nocookie.com/embed/${ytMatch[1]}`;
@@ -637,8 +639,16 @@ function renderVideoMediaHtml(videoUrl) {
     } else if (vimeoMatch && vimeoMatch[1]) {
         const embedUrl = `https://player.vimeo.com/video/${vimeoMatch[1]}`;
         embedHtml = `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo explicativo Vimeo" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
-    } else if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/static/')) {
+    } else if (heygenMatch && heygenMatch[1]) {
+        const embedUrl = `https://app.heygen.com/embeds/${heygenMatch[1]}`;
+        embedHtml = `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo Avatar HeyGen" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>`;
+    } else if (url.includes('heygen.com')) {
+        const embedUrl = url.includes('/embeds/') ? url : url.replace('/videos/', '/embeds/');
+        embedHtml = `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo Avatar HeyGen" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>`;
+    } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov') || url.startsWith('/static/uploads/')) {
         embedHtml = `<div class="message-media video-container"><video controls width="100%" preload="metadata"><source src="${url}">Tu navegador no soporta reproducción de vídeo.</video></div>`;
+    } else if (url.startsWith('http://') || url.startsWith('https://')) {
+        embedHtml = `<div class="message-media video-container"><iframe src="${url}" title="Vídeo Educativo" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
     }
     
     const linkHtml = `

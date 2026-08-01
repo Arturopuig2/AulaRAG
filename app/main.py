@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Supported YouTube, Vimeo, Google Drive, and Direct MP4 Video uploads
+# Main FastAPI application for AulaRAG - Integrated HeyGen avatar video support & direct video save fixes
 import json
 import os
 import re
