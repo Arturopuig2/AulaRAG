@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added direct local video file uploader button in content manager
+# Main FastAPI application for AulaRAG - Downloaded HeyGen video as local MP4 file (aprendiendo_la_longitud_carlotta.mp4)
 import json
 import os
 import re
