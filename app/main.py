@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Render video directly inside chat bubble with click-to-play and native fullscreen support
+# Main FastAPI application for AulaRAG - Positioned video media container at the top before text explanation
 import json
 import os
 import re

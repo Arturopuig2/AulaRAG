@@ -553,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     mediaHtml += renderVideoMediaHtml(vVidUrl);
                                 }
                                 const safeText = cleanMarkdownText(accumulatedText);
-                                contentEl.innerHTML = marked.parse(safeText) + mediaHtml;
+                                contentEl.innerHTML = mediaHtml + marked.parse(safeText);
                                 chatMessages.scrollTop = chatMessages.scrollHeight;
                             } else if (payload.done) {
                                 const rawFinal = payload.full_text || accumulatedText;
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
                                 </div>`;
 
-                                contentEl.innerHTML = marked.parse(finalMarkdown) + mediaHtml + actionButtonsHtml;
+                                contentEl.innerHTML = mediaHtml + marked.parse(finalMarkdown) + actionButtonsHtml;
                                 window._currentStreamVisualUrl = null;
                                 window._currentStreamVideoUrl = null;
                                 if (audioEnabled && window.speechSynthesis) {
@@ -797,7 +797,7 @@ function renderVideoMediaHtml(videoUrl) {
             </div>`;
         }
 
-        contentEl.innerHTML = formattedText + mediaHtml + interactiveButtonsHtml + theoryActionButtonsHtml;
+        contentEl.innerHTML = mediaHtml + formattedText + interactiveButtonsHtml + theoryActionButtonsHtml;
         msgEl.appendChild(contentEl);
         chatMessages.appendChild(msgEl);
 
