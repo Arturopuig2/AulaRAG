@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Downloaded HeyGen video as local MP4 file (aprendiendo_la_longitud_carlotta.mp4)
+# Main FastAPI application for AulaRAG - Render video directly inside chat bubble with click-to-play and native fullscreen support
 import json
 import os
 import re
@@ -403,13 +403,9 @@ async def get_explanation(
     if not exp:
         return JSONResponse({"error": "not_found"}, status_code=404)
 
-    content_text = exp.text
-    if exp.video_url and exp.video_url.strip():
-        content_text += f"\n\n🎬 **Vídeo explicativo:** [{exp.video_url}]({exp.video_url})"
-
     return {
         "id": exp.id,
-        "content": content_text,
+        "content": exp.text,
         "visual_url": exp.visual_url or "",
         "audio_url": exp.audio_url or "",
         "video_url": exp.video_url or "",

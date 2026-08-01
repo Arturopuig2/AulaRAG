@@ -645,20 +645,17 @@ function renderVideoMediaHtml(videoUrl) {
     } else if (url.includes('heygen.com')) {
         const embedUrl = url.includes('/embeds/') ? url : url.replace('/videos/', '/embeds/');
         embedHtml = `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo Avatar HeyGen" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>`;
-    } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov') || url.startsWith('/static/uploads/')) {
-        embedHtml = `<div class="message-media video-container"><video controls width="100%" preload="metadata"><source src="${url}">Tu navegador no soporta reproducción de vídeo.</video></div>`;
-    } else if (url.startsWith('http://') || url.startsWith('https://')) {
-        embedHtml = `<div class="message-media video-container"><iframe src="${url}" title="Vídeo Educativo" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
+    } else {
+        // Direct Video File inside Chat Bubble with click-to-play and Fullscreen
+        embedHtml = `<div class="message-media video-container">
+            <video controls preload="metadata" playsinline style="width: 100%; cursor: pointer; border-radius: 14px; display: block;" onclick="if(this.paused){this.play();}else{this.pause();}">
+                <source src="${url}">
+                Tu navegador no soporta reproducción de vídeo.
+            </video>
+        </div>`;
     }
     
-    const linkHtml = `
-    <div class="message-media video-link-container" style="margin-top: 10px; margin-bottom: 6px;">
-        <a href="${url}" target="_blank" rel="noopener noreferrer" class="video-direct-link" style="display: inline-flex; align-items: center; gap: 8px; background: #e0efff; color: #0284c7; padding: 10px 16px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; text-decoration: none; border: 1.5px solid #bae6fd; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: all 0.2s ease;">
-            🎬 Abrir enlace directo al vídeo ↗
-        </a>
-    </div>`;
-
-    return linkHtml + embedHtml;
+    return embedHtml;
 }
 
     function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null, preventTheoryButtons = false, videoUrl = null) {
