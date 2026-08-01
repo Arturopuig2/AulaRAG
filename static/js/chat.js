@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const expData = await expResp.json();
                 if (expData.content) {
                     removeMessage(loadingId);
-                    addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null);
+                    addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null, false, expData.video_url || null);
                     staticFound = true;
                 }
             }
@@ -556,7 +556,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let mediaHtml = '';
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
-                                    mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
+                                    mediaHtml += `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
+                                }
+                                if (payload.video_url || window._currentStreamVideoUrl) {
+                                    const vidUrl = payload.video_url || window._currentStreamVideoUrl;
+                                    mediaHtml += renderVideoMediaHtml(vidUrl);
                                 }
 
                                 const easierBtnHtml = !window._isEasierActive 
@@ -609,7 +613,23 @@ document.addEventListener('DOMContentLoaded', () => {
         await sendMessageToBackend(message, false);
     });
 
-    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null, preventTheoryButtons = false) {
+function renderVideoMediaHtml(videoUrl) {
+    if (!videoUrl || !videoUrl.trim()) return '';
+    const url = videoUrl.trim();
+    
+    // YouTube detect & convert to embed
+    const ytReg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const ytMatch = url.match(ytReg);
+    if (ytMatch && ytMatch[1]) {
+        const embedUrl = `https://www.youtube-nocookie.com/embed/${ytMatch[1]}`;
+        return `<div class="message-media video-container"><iframe src="${embedUrl}" title="Vídeo explicativo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+    }
+    
+    // Direct video file (mp4, webm, ogg, or raw URL)
+    return `<div class="message-media video-container"><video controls width="100%" preload="metadata"><source src="${url}">Tu navegador no soporta reproducción de vídeo.</video></div>`;
+}
+
+    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null, preventTheoryButtons = false, videoUrl = null) {
         if (isHidden) return; // Do not render anything if it's a hidden message
 
         const msgEl = document.createElement('div');
@@ -627,6 +647,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (audioUrl) {
             mediaHtml += `<div class="message-audio"><audio controls src="${audioUrl}" class="chat-audio"></audio></div>`;
+        }
+        if (videoUrl) {
+            mediaHtml += renderVideoMediaHtml(videoUrl);
         }
 
         // Parse custom interactive buttons: [BOTON: text]

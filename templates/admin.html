@@ -761,6 +761,15 @@
                             </div>
                             <button type="button" class="btn btn-outline" onclick="openGalleryModal('main')" style="padding:0.4rem 0.8rem; font-size:0.8rem;">🖼️ Seleccionar / Subir Imagen</button>
                         </div>
+
+                        <!-- Vídeo Explicativo Principal -->
+                        <div class="image-preview-container" style="margin-top:0.5rem;">
+                            <span style="font-size:1.4rem;">🎥</span>
+                            <div style="flex:1;">
+                                <input type="text" id="e-video-url" placeholder="Vídeo Explicativo (URL de YouTube, Vimeo o MP4)...">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Vídeo interactivo para reproducir directamente en la burbuja del chat.</div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Apartado 2: Versión Fácil & Imagen Adaptada -->
@@ -1110,6 +1119,7 @@
             document.getElementById('e-bloque').value = "";
             document.getElementById('e-contenido').value = "";
             document.getElementById('e-visual-url').value = "";
+            document.getElementById('e-video-url').value = "";
             document.getElementById('e-easier-visual-url').value = "";
             document.getElementById('e-examples-visual-url').value = "";
             document.getElementById('e-text').value = "";
@@ -1130,6 +1140,7 @@
             document.getElementById('e-bloque').value = e.bloque || "";
             document.getElementById('e-contenido').value = e.contenido || "";
             document.getElementById('e-visual-url').value = e.visual_url || "";
+            document.getElementById('e-video-url').value = e.video_url || "";
             document.getElementById('e-easier-visual-url').value = e.easier_visual_url || "";
             document.getElementById('e-examples-visual-url').value = e.examples_visual_url || "";
             document.getElementById('e-text').value = e.text || "";
@@ -1411,6 +1422,7 @@
             const bloque = document.getElementById('e-bloque').value;
             const contenido = document.getElementById('e-contenido').value;
             const visual_url = document.getElementById('e-visual-url').value;
+            const video_url = document.getElementById('e-video-url').value;
             const easier_visual_url = document.getElementById('e-easier-visual-url').value;
             const examples_visual_url = document.getElementById('e-examples-visual-url').value;
             const text = document.getElementById('e-text').value;
@@ -1423,7 +1435,7 @@
                 return;
             }
 
-            const payload = { subject, grade, bloque, contenido, visual_url, easier_visual_url, examples_visual_url, text, easier_version, examples };
+            const payload = { subject, grade, bloque, contenido, visual_url, video_url, easier_visual_url, examples_visual_url, text, easier_version, examples };
 
             try {
                 let res;

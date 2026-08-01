@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed bottom-left admin access link in sidebar profile area
+# Main FastAPI application for AulaRAG - Integrated responsive Video player (YouTube embeds + MP4 HTML5) in chat and content manager
 import json
 import os
 import re
@@ -408,6 +408,7 @@ async def get_explanation(
         "content": exp.text,
         "visual_url": exp.visual_url or "",
         "audio_url": exp.audio_url or "",
+        "video_url": exp.video_url or "",
     }
 
 

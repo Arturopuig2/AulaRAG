@@ -706,17 +706,20 @@ async def get_gemini_response_stream(
     is_example_req = any(kw in user_message.lower() for kw in ["ejemplo", "exemples", "otro ejemplo"])
 
     visual_url = None
+    video_url = None
     exp_obj = None
 
     if subject != "general":
         try:
             exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
+            if exp_obj:
+                video_url = exp_obj.video_url
             # Prioridad 1: Si pide Versión Fácil y EXISTE en BD -> Responder INMEDIATAMENTE con ella
             if exp_obj and is_easier_req and exp_obj.easier_version and exp_obj.easier_version.strip():
                 saved_easier = exp_obj.easier_version.strip()
                 v_url = exp_obj.easier_visual_url or exp_obj.visual_url
-                yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url})}\n\n"
-                yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url})}\n\n"
+                yield f"data: {json.dumps({'text': saved_easier, 'visual_url': v_url, 'video_url': video_url})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'full_text': saved_easier, 'visual_url': v_url, 'video_url': video_url})}\n\n"
                 return
 
             # Prioridad 2: Si pide Ejemplos y EXISTEN en BD -> Responder INMEDIATAMENTE con ellos
@@ -731,8 +734,8 @@ async def get_gemini_response_stream(
                 except Exception:
                     formatted_ex = f"### 💡 Ejemplos Prácticos:\n\n{ex_raw}"
                 v_url = exp_obj.examples_visual_url or exp_obj.visual_url
-                yield f"data: {json.dumps({'text': formatted_ex, 'visual_url': v_url})}\n\n"
-                yield f"data: {json.dumps({'done': True, 'full_text': formatted_ex, 'visual_url': v_url})}\n\n"
+                yield f"data: {json.dumps({'text': formatted_ex, 'visual_url': v_url, 'video_url': video_url})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'full_text': formatted_ex, 'visual_url': v_url, 'video_url': video_url})}\n\n"
                 return
 
             if exp_obj:
@@ -744,8 +747,8 @@ async def get_gemini_response_stream(
     cached_text = get_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message)
     if cached_text:
         print(f"CACHE HIT [0 ms, 0 tokens]: {subject}/{course_level}/{bloque}/{contenido}")
-        yield f"data: {json.dumps({'text': cached_text, 'visual_url': visual_url})}\n\n"
-        yield f"data: {json.dumps({'done': True, 'full_text': cached_text, 'visual_url': visual_url})}\n\n"
+        yield f"data: {json.dumps({'text': cached_text, 'visual_url': visual_url, 'video_url': video_url})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'full_text': cached_text, 'visual_url': visual_url, 'video_url': video_url})}\n\n"
         return
 
     history_key = f"{user_id}_{subject}"
@@ -830,7 +833,7 @@ async def get_gemini_response_stream(
         async for chunk in stream:
             if chunk.text:
                 full_response_text += chunk.text
-                yield f"data: {json.dumps({'text': chunk.text, 'visual_url': visual_url})}\n\n"
+                yield f"data: {json.dumps({'text': chunk.text, 'visual_url': visual_url, 'video_url': video_url})}\n\n"
         
         from .multi_agent_system import AgenteAuditor
         cleaned_text = AgenteAuditor.audit_and_clean(clean_ai_text(full_response_text), subject)
@@ -841,7 +844,7 @@ async def get_gemini_response_stream(
         if db_session:
             save_cached_explanation(db_session, subject, course_level, bloque, contenido, user_message, cleaned_text)
 
-        yield f"data: {json.dumps({'done': True, 'full_text': cleaned_text, 'visual_url': visual_url})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'full_text': cleaned_text, 'visual_url': visual_url, 'video_url': video_url})}\n\n"
     except Exception as e:
         import traceback
         print(f"Gemini Streaming Error: {e}")
