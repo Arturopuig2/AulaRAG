@@ -545,7 +545,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
                                     window._currentStreamVisualUrl = vUrl;
-                                    mediaHtml = `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
+                                    mediaHtml += `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
+                                }
+                                if (payload.video_url || window._currentStreamVideoUrl) {
+                                    const vVidUrl = payload.video_url || window._currentStreamVideoUrl;
+                                    window._currentStreamVideoUrl = vVidUrl;
+                                    mediaHtml += renderVideoMediaHtml(vVidUrl);
                                 }
                                 const safeText = cleanMarkdownText(accumulatedText);
                                 contentEl.innerHTML = marked.parse(safeText) + mediaHtml;
@@ -579,6 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 contentEl.innerHTML = marked.parse(finalMarkdown) + mediaHtml + actionButtonsHtml;
                                 window._currentStreamVisualUrl = null;
+                                window._currentStreamVideoUrl = null;
                                 if (audioEnabled && window.speechSynthesis) {
                                     speakText(finalMarkdown.replace(/<[^>]*>/g, ''));
                                 }
@@ -647,6 +653,12 @@ function renderVideoMediaHtml(videoUrl) {
         }
         if (audioUrl) {
             mediaHtml += `<div class="message-audio"><audio controls src="${audioUrl}" class="chat-audio"></audio></div>`;
+        }
+        if (!videoUrl && text) {
+            const ytMatch = text.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            if (ytMatch) {
+                videoUrl = ytMatch[0];
+            }
         }
         if (videoUrl) {
             mediaHtml += renderVideoMediaHtml(videoUrl);

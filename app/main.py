@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Integrated responsive Video player (YouTube embeds + MP4 HTML5) in chat and content manager
+# Main FastAPI application for AulaRAG - Fixed video link rendering in chat streaming and added auto-detect for YouTube URLs
 import json
 import os
 import re
