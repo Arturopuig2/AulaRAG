@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed video link rendering in chat streaming and added auto-detect for YouTube URLs
+# Main FastAPI application for AulaRAG - Prominent video link button + markdown link generation
 import json
 import os
 import re
@@ -403,9 +403,13 @@ async def get_explanation(
     if not exp:
         return JSONResponse({"error": "not_found"}, status_code=404)
 
+    content_text = exp.text
+    if exp.video_url and exp.video_url.strip():
+        content_text += f"\n\n🎬 **Vídeo explicativo:** [{exp.video_url}]({exp.video_url})"
+
     return {
         "id": exp.id,
-        "content": exp.text,
+        "content": content_text,
         "visual_url": exp.visual_url or "",
         "audio_url": exp.audio_url or "",
         "video_url": exp.video_url or "",

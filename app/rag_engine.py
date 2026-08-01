@@ -788,6 +788,8 @@ async def get_gemini_response_stream(
 
     if db_explanation:
         turn_instruction += f"\n\n### TEORÍA MAESTRA VERIFICADA (UTILIZA ESTE TEXTO PARA LA EXPLICACIÓN):\n{db_explanation}"
+        if video_url:
+            turn_instruction += f"\n\n[INSTRUCCIÓN: Incluye al final de tu explicación el enlace al vídeo: 🎬 **Vídeo explicativo:** [{video_url}]({video_url})]"
     elif bloque or contenido:
         filter_context = f"[Contexto de Filtrado: Bloque '{bloque}', Contenido '{contenido}']\n"
         turn_instruction = filter_context + turn_instruction
