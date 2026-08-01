@@ -122,14 +122,6 @@
             }).then(r => r.json()).then(data => {
                 if (data.name) {
                     document.getElementById('user-display-name').textContent = data.name;
-                    if (data.is_admin) {
-                        const adminBtn = document.createElement('a');
-                        adminBtn.href = '/admin';
-                        adminBtn.innerHTML = '⚙️';
-                        adminBtn.style = 'background:rgba(255,255,255,0.1);border-radius:8px;padding:4px 8px;text-decoration:none;margin-left:8px;font-size:1.1rem;';
-                        adminBtn.title = 'Administración';
-                        document.querySelector('.user-profile').insertBefore(adminBtn, document.getElementById('logout-btn'));
-                    }
                 } else {
                     document.cookie = 'access_token=; path=/; max-age=0';
                     window.location.href = '/login';

@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Replaced robot mascot logo with clean logoChat branding across UI
+# Main FastAPI application for AulaRAG - Removed bottom-left admin access link in sidebar profile area
 import json
 import os
 import re
