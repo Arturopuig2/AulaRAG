@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Integrated Didactic Rules per Course (1º to 6º Primary) into Multi-Agent System & RAG Engine
+# Main FastAPI application for AulaRAG - Replaced robot mascot logo with clean logoChat branding across UI
 import json
 import os
 import re
