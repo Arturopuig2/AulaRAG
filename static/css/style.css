@@ -525,6 +525,17 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
+.theory-btn.btn-theory {
+    border-color: #0284c7;
+    color: #0369a1;
+    background: #e0f2fe;
+}
+
+.theory-btn.btn-theory:hover {
+    background: #0284c7;
+    color: white;
+}
+
 .theory-btn.btn-easier {
     border-color: #3b82f6;
     color: #1d4ed8;

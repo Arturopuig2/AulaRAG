@@ -327,9 +327,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         addMessage(generatedMessage, 'user');
 
-        // ── THEORY & RAG FLOW ──────────────────────────────────────────
-        const loadingId = addLoadingIndicator();
-        let staticFound = false;
+        window._isTheoryActive = false;
+        window._isEasierActive = false;
+        window._isExampleActive = false;
+
+        // ── TOPIC INITIAL CARD (Media + Action Buttons) ─────────────────
+        let videoUrl = null;
+        let visualUrl = null;
         try {
             const gradeMatch = cursoStr.match(/\d+/);
             const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
@@ -337,32 +341,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const expResp = await fetch(`/explanations/get?${expParams}`);
             if (expResp.ok) {
                 const expData = await expResp.json();
-                if (expData.content) {
-                    removeMessage(loadingId);
-                    addMessage(marked.parse(expData.content), 'assistant', true, false, true, expData.visual_url || null, expData.audio_url || null, false, expData.video_url || null);
-                    staticFound = true;
-                }
+                videoUrl = expData.video_url || null;
+                visualUrl = expData.visual_url || null;
             }
         } catch (e) {
             console.error(e);
         }
 
-        // If no static explanation was found in DB, use Gemini RAG stream to generate the complete theory explanation in real-time!
-        if (!staticFound) {
-            const promptMsg = (currentSubject === 'valenciano')
-                ? `Explica'm detalladament la teoria i exemples de: ${contenidoStr}`
-                : `Explícame detalladamente la teoría y ejemplos de: ${contenidoStr}`;
-            
-            const formData = new URLSearchParams();
-            formData.append('message', promptMsg);
-            formData.append('subject', currentSubject);
-            formData.append('course_level', cursoStr);
-            formData.append('bloque', bloqueStr);
-            formData.append('contenido', contenidoStr);
-            formData.append('reset_history', 'true');
+        const initPrompt = (currentSubject === 'valenciano')
+            ? `Has seleccionat **${contenidoStr}**. Què vols repassar?`
+            : `Has seleccionado **${contenidoStr}**. ¿Qué deseas repassar?`;
 
-            await streamChatResponse(formData, loadingId);
-        }
+        addMessage(initPrompt, 'assistant', true, false, true, visualUrl, null, false, videoUrl);
     });
 
     const DIF_LABELS = { basica: '🟢 Básico', normal: '🟡 Medio', avanzada: '🔴 Avanzado' };
@@ -574,6 +564,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     mediaHtml += `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
                                 }
 
+                                const theoryBtnHtml = !window._isTheoryActive
+                                    ? `<button class="theory-btn btn-theory" onclick="window.handleTheoryAction('theory')">📖 Teoría</button>`
+                                    : '';
                                 const easierBtnHtml = !window._isEasierActive 
                                     ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>`
                                     : '';
@@ -583,6 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const actionButtonsHtml = `
                                 <div class="theory-action-buttons">
+                                    ${theoryBtnHtml}
                                     ${easierBtnHtml}
                                     ${exampleBtnHtml}
                                     <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
@@ -788,6 +782,9 @@ function renderVideoMediaHtml(videoUrl) {
 
         let theoryActionButtonsHtml = '';
         if (sender === 'assistant' && !interactiveButtonsHtml && !preventTheoryButtons && !formattedText.includes('theory-action-buttons')) {
+            const theoryBtnHtml = !window._isTheoryActive
+                ? `<button class="theory-btn btn-theory" onclick="window.handleTheoryAction('theory', this)">📖 Teoría</button>`
+                : '';
             const easierBtnHtml = !window._isEasierActive 
                 ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier', this)">💡 Más fácil</button>`
                 : '';
@@ -797,6 +794,7 @@ function renderVideoMediaHtml(videoUrl) {
 
             theoryActionButtonsHtml = `
             <div class="theory-action-buttons">
+                ${theoryBtnHtml}
                 ${easierBtnHtml}
                 ${exampleBtnHtml}
                 <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done', this)">✅ Listo</button>
@@ -1052,7 +1050,53 @@ function renderVideoMediaHtml(videoUrl) {
             document.querySelectorAll('.theory-action-buttons').forEach(el => el.remove());
         }
 
-        if (action === 'easier') {
+        if (action === 'theory') {
+            window._isTheoryActive = true;
+            const userMsg = (currentSubject === 'valenciano') 
+                ? "Quiero veure la teoria d'aquest tema." 
+                : "Quiero ver la teoría de este tema.";
+            addMessage(userMsg, 'user');
+
+            const loadingId = addLoadingIndicator();
+            let staticFound = false;
+            (async () => {
+                try {
+                    const gradeMatch = (activeSessionCurso || '').match(/\d+/);
+                    const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
+                    const expParams = new URLSearchParams({ 
+                        subject: currentSubject, 
+                        grade: grade, 
+                        bloque: activeSessionBloque || '', 
+                        contenido: activeSessionContenido || '' 
+                    });
+                    const expResp = await fetch(`/explanations/get?${expParams}`);
+                    if (expResp.ok) {
+                        const expData = await expResp.json();
+                        if (expData.content) {
+                            removeMessage(loadingId);
+                            addMessage(marked.parse(expData.content), 'assistant', true, false, false, null, null, false, null);
+                            staticFound = true;
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+
+                if (!staticFound) {
+                    const formData = new URLSearchParams();
+                    formData.append('message', userMsg);
+                    formData.append('subject', currentSubject);
+                    if (activeSessionCurso) {
+                        formData.append('course_level', activeSessionCurso);
+                        formData.append('bloque', activeSessionBloque);
+                        formData.append('contenido', activeSessionContenido);
+                    }
+                    formData.append('reset_history', 'true');
+
+                    await streamChatResponse(formData, loadingId);
+                }
+            })();
+        } else if (action === 'easier') {
             window._isEasierActive = true;
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Pots explicar-ho de forma més fàcil?" 

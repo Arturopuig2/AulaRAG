@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed repetitive lesson title headers (### LECCIÓN TEÓRICA...) from DB and chat outputs
+# Main FastAPI application for AulaRAG - Made explanation text optional via "📖 Teoría" button
 import json
 import os
 import re
