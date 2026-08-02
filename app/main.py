@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed explanation search with get_db_explanation_obj for accent-insensitive matching
+# Main FastAPI application for AulaRAG - Cleared unavailable YouTube placeholder links from DB
 import json
 import os
 import re
