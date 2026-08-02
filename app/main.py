@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Cleared unavailable YouTube placeholder links from DB
+# Main FastAPI application for AulaRAG - Configured AgenteIngles to combine English & Spanish for young primary students
 import json
 import os
 import re

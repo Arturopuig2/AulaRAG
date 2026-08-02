@@ -945,7 +945,7 @@ async def generate_explanation_section_ai(payload: dict):
     if subject == "valenciano":
         lang_instr = "valencià normatiu (AVL)"
     elif subject == "ingles":
-        lang_instr = "inglés escolar (English for Primary Education)"
+        lang_instr = "forma BILINGÜE combinando INGLÉS Y ESPAÑOL (para alumnos muy pequeños de Educación Primaria con nivel inicial). Muestra cada término o frase en inglés acompañado de su traducción y explicación sencilla en español."
 
     if section == "text":
         prompt = (

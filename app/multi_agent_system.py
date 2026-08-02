@@ -91,7 +91,7 @@ class AgenteIngles(BaseAgent):
     def __init__(self):
         super().__init__(
             name="Inglés (Primary English)",
-            role_description="Primary English Tutor specialized in ESL vocabulary, grammar, and pronunciation.",
+            role_description="Tutor pedagógico experto en Inglés Primaria. COMBINA SIEMPRE Inglés y Español en todas las explicaciones ya que los alumnos son muy pequeños y se están iniciando en la lengua inglesa. Explica cada palabra o regla en inglés seguida inmediatamente de su apoyo/traducción en español.",
             subject_code="ingles"
         )
 

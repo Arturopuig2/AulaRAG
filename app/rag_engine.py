@@ -771,6 +771,14 @@ async def get_gemini_response_stream(
         "Usa lenguaje neutro y cercano."
     )
 
+    if subject.lower() == "ingles":
+        turn_instruction += (
+            "\n\n[REGLA DE ORO AGENTE DE INGLÉS: COMBINA SIEMPRE INGLÉS Y ESPAÑOL. "
+            "Dado que los alumnos son muy pequeños (Educación Primaria) y se están iniciando en el idioma, "
+            "explica todo combinando ambos idiomas: presenta el vocabulario o frase en inglés "
+            "acompañado inmediatamente de su traducción clara y explicación sencilla en español.]"
+        )
+
     db_explanation = None
     if exp_obj:
         if is_easier_req:
