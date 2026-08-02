@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed video_url persistence in admin API endpoints (POST & PUT /api/explanations)
+# Main FastAPI application for AulaRAG - Fixed explanation search with get_db_explanation_obj for accent-insensitive matching
 import json
 import os
 import re
@@ -390,16 +390,8 @@ async def get_explanation(
     except HTTPException:
         return JSONResponse({"error": "not_authenticated"}, status_code=401)
 
-    query = db.query(models.Explanation).filter(
-        models.Explanation.subject == subject,
-        models.Explanation.grade == grade,
-    )
-    if bloque:
-        query = query.filter(models.Explanation.bloque == bloque)
-    if contenido:
-        query = query.filter(models.Explanation.contenido == contenido)
-
-    exp = query.first()
+    from app.rag_engine import get_db_explanation_obj
+    exp = get_db_explanation_obj(subject=subject, grade=grade, bloque=bloque, contenido=contenido)
     if not exp:
         return JSONResponse({"error": "not_found"}, status_code=404)
 
