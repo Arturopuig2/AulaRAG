@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Configured AgenteIngles to combine English & Spanish for young primary students
+# Main FastAPI application for AulaRAG - Fixed edit modal opening in admin panel for items with quotes/apostrophes
 import json
 import os
 import re

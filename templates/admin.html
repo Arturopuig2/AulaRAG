@@ -1030,7 +1030,8 @@
             }
         }
 
-        function renderExercises(items) {
+        function renderQuestions(items) {
+            window.allQuestions = items || [];
             const tbody = document.querySelector('#table-exercises tbody');
             const empty = document.getElementById('empty-exercises');
             tbody.innerHTML = '';
@@ -1047,13 +1048,13 @@
                     <td>
                         <span class="badge badge-subject">${q.subject.toUpperCase()}</span>
                         <span class="badge badge-grade">${q.grade ? q.grade + 'º Primaria' : 'General'}</span>
-                        <div style="font-size:0.85rem; margin-top:4px; font-weight:700; color:var(--text-main);">${q.contenido || q.bloque || ''}</div>
+                        <div style="font-size:0.85rem; margin-top:4px; font-weight:700; color:var(--text-main);">${escapeHtml(q.contenido || q.bloque || '')}</div>
                     </td>
                     <td style="font-weight:600;">${escapeHtml(q.question)}</td>
                     <td><strong style="color:var(--success);">${escapeHtml(q.answer)}</strong></td>
                     <td>
                         <div class="actions-cell">
-                            <button class="btn-icon" title="Editar" onclick='editQuestion(${JSON.stringify(q)})'>✏️</button>
+                            <button class="btn-icon" title="Editar" onclick="openQuestionEditById(${q.id})">✏️</button>
                             <button class="btn-icon delete" title="Eliminar" onclick="deleteQuestion(${q.id})">🗑️</button>
                         </div>
                     </td>
@@ -1063,6 +1064,7 @@
         }
 
         function renderExplanations(items) {
+            window.allExplanations = items || [];
             const tbody = document.querySelector('#table-explanations tbody');
             const empty = document.getElementById('empty-explanations');
             tbody.innerHTML = '';
@@ -1090,7 +1092,7 @@
                     <td style="font-size:0.88rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 90))}...</td>
                     <td>
                         <div class="actions-cell">
-                            <button class="btn-icon" title="Editar / Generar IA" onclick='editExplanation(${JSON.stringify(e)})'>✏️</button>
+                            <button class="btn-icon" title="Editar / Generar IA" onclick="openExplanationEditById(${e.id})">✏️</button>
                             <button class="btn-icon delete" title="Eliminar" onclick="deleteExplanation(${e.id})">🗑️</button>
                         </div>
                     </td>
@@ -1098,6 +1100,16 @@
                 tbody.appendChild(tr);
             });
         }
+
+        window.openQuestionEditById = function(id) {
+            const q = (window.allQuestions || []).find(item => item.id === id);
+            if (q) editQuestion(q);
+        };
+
+        window.openExplanationEditById = function(id) {
+            const e = (window.allExplanations || []).find(item => item.id === id);
+            if (e) editExplanation(e);
+        };
 
         function openCreateModal() {
             document.getElementById('exercise-modal-title').textContent = "Nuevo Ejercicio Verificado";
