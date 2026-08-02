@@ -703,6 +703,7 @@ async def api_create_explanation(payload: dict, db: Session = Depends(get_db)):
     easier_version = payload.get("easier_version", "")
     examples = payload.get("examples", [])
     visual_url = payload.get("visual_url", "")
+    video_url = payload.get("video_url", "")
     easier_visual_url = payload.get("easier_visual_url", "")
     examples_visual_url = payload.get("examples_visual_url", "")
     
@@ -718,6 +719,7 @@ async def api_create_explanation(payload: dict, db: Session = Depends(get_db)):
         easier_version=easier_version or None,
         examples=json.dumps(examples, ensure_ascii=False) if isinstance(examples, list) else (examples or None),
         visual_url=visual_url or None,
+        video_url=video_url or None,
         easier_visual_url=easier_visual_url or None,
         examples_visual_url=examples_visual_url or None,
         is_active=True,
@@ -745,6 +747,7 @@ async def api_update_explanation(eid: int, payload: dict, db: Session = Depends(
         ex_val = payload["examples"]
         e.examples = json.dumps(ex_val, ensure_ascii=False) if isinstance(ex_val, list) else (ex_val or None)
     if "visual_url" in payload: e.visual_url = payload["visual_url"] or None
+    if "video_url" in payload: e.video_url = payload["video_url"] or None
     if "easier_visual_url" in payload: e.easier_visual_url = payload["easier_visual_url"] or None
     if "examples_visual_url" in payload: e.examples_visual_url = payload["examples_visual_url"] or None
     

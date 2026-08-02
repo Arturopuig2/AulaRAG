@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed unnecessary introductory selection text from assistant response
+# Main FastAPI application for AulaRAG - Fixed video_url persistence in admin API endpoints (POST & PUT /api/explanations)
 import json
 import os
 import re
