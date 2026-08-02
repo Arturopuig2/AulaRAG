@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed edit modal opening in admin panel for items with quotes/apostrophes
+# Main FastAPI application for AulaRAG - Enabled automatic line break rendering ({ breaks: true }) for theory text
 import json
 import os
 import re

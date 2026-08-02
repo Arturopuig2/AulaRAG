@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if (window.marked && typeof window.marked.setOptions === 'function') {
+        window.marked.setOptions({ breaks: true, gfm: true });
+    }
+
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
     const chatMessages = document.getElementById('chat-messages');
