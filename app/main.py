@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Enabled automatic line break rendering ({ breaks: true }) for theory text
+# Main FastAPI application for AulaRAG - Added real-time Live Preview box in admin modal to see exact chat rendering
 import json
 import os
 import re

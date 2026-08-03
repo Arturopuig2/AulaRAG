@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula - Administrador de Contenidos</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --bg-main: #f4f6f8;
@@ -531,6 +532,53 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        .chat-live-preview-box {
+            margin-top: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #f8fafc;
+            padding: 0.85rem 1rem;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .chat-live-preview-header {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .chat-bubble-preview {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            border-top-left-radius: 4px;
+            padding: 0.85rem 1.1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #1e293b;
+            max-height: 220px;
+            overflow-y: auto;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .chat-bubble-preview p {
+            margin-bottom: 0.6em;
+        }
+        .chat-bubble-preview p:last-child {
+            margin-bottom: 0;
+        }
+        .chat-bubble-preview strong {
+            color: #0f172a;
+            font-weight: 800;
+        }
     </style>
 </head>
 
@@ -750,8 +798,18 @@
                                 <button type="button" class="btn btn-save-sm" onclick="saveSectionOnly('text')">💾 Guardar Texto</button>
                             </div>
                         </div>
-                        <textarea id="e-text" rows="7" placeholder="Escribe o genera con IA el texto teórico completo..." required></textarea>
+                        <textarea id="e-text" rows="7" placeholder="Escribe o genera con IA el texto teórico completo..." oninput="updateTheoryLivePreview()" required></textarea>
                         
+                        <!-- Live Preview Box Teoría -->
+                        <div class="chat-live-preview-box">
+                            <div class="chat-live-preview-header">
+                                👁️ Vista Previa en Vivo (Así se verá en el chat):
+                            </div>
+                            <div id="e-text-live-preview" class="chat-bubble-preview">
+                                <span style="color:var(--text-muted); font-style:italic;">Escribe o genera con IA el texto de la lección para ver cómo quedará en el chat...</span>
+                            </div>
+                        </div>
+
                         <!-- Ilustración Explicación Principal -->
                         <div class="image-preview-container">
                             <img id="e-image-preview-main" src="/static/img/logoChat.png" class="image-preview-thumb" alt="Vista previa">
@@ -783,7 +841,17 @@
                                 <button type="button" class="btn btn-save-sm" onclick="saveSectionOnly('easier_version')">💾 Guardar Versión Fácil</button>
                             </div>
                         </div>
-                        <textarea id="e-easier-version" rows="3" placeholder="Explicación simplificada adaptada..."></textarea>
+                        <textarea id="e-easier-version" rows="3" placeholder="Explicación simplificada adaptada..." oninput="updateEasierLivePreview()"></textarea>
+                        
+                        <!-- Live Preview Box Versión Fácil -->
+                        <div class="chat-live-preview-box">
+                            <div class="chat-live-preview-header">
+                                👁️ Vista Previa Versión Fácil:
+                            </div>
+                            <div id="e-easier-live-preview" class="chat-bubble-preview">
+                                <span style="color:var(--text-muted); font-style:italic;">Vista previa de la versión adaptada...</span>
+                            </div>
+                        </div>
                         
                         <!-- Ilustración Versión Fácil -->
                         <div class="image-preview-container">
@@ -1125,6 +1193,38 @@
             document.getElementById('modal-exercise').classList.add('active');
         }
 
+        function updateTheoryLivePreview() {
+            const text = document.getElementById('e-text').value;
+            const previewEl = document.getElementById('e-text-live-preview');
+            if (!previewEl) return;
+            if (!text || !text.trim()) {
+                previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Escribe o genera con IA el texto de la lección para ver cómo quedará en el chat...</span>';
+                return;
+            }
+            if (window.marked && typeof window.marked.parse === 'function') {
+                window.marked.setOptions({ breaks: true, gfm: true });
+                previewEl.innerHTML = window.marked.parse(text);
+            } else {
+                previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+            }
+        }
+
+        function updateEasierLivePreview() {
+            const text = document.getElementById('e-easier-version').value;
+            const previewEl = document.getElementById('e-easier-live-preview');
+            if (!previewEl) return;
+            if (!text || !text.trim()) {
+                previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Vista previa de la versión adaptada...</span>';
+                return;
+            }
+            if (window.marked && typeof window.marked.parse === 'function') {
+                window.marked.setOptions({ breaks: true, gfm: true });
+                previewEl.innerHTML = window.marked.parse(text);
+            } else {
+                previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+            }
+        }
+
         function openCreateExplanationModal() {
             document.getElementById('explanation-modal-title').textContent = "Nueva Lección Teórica";
             document.getElementById('e-id').value = "";
@@ -1142,6 +1242,9 @@
             updateImagePreview('main', "");
             updateImagePreview('easier', "");
             updateImagePreview('examples', "");
+
+            updateTheoryLivePreview();
+            updateEasierLivePreview();
 
             document.getElementById('modal-explanation').classList.add('active');
         }
@@ -1171,6 +1274,9 @@
             updateImagePreview('main', e.visual_url || "");
             updateImagePreview('easier', e.easier_visual_url || "");
             updateImagePreview('examples', e.examples_visual_url || "");
+
+            updateTheoryLivePreview();
+            updateEasierLivePreview();
 
             document.getElementById('modal-explanation').classList.add('active');
         }
@@ -1206,9 +1312,11 @@
                     const data = await res.json();
                     if (section === 'text') {
                         document.getElementById('e-text').value = data.result || "";
+                        updateTheoryLivePreview();
                         showToast("✨ Texto teórico generado con IA");
                     } else if (section === 'easier_version') {
                         document.getElementById('e-easier-version').value = data.result || "";
+                        updateEasierLivePreview();
                         showToast("✨ Versión fácil generada con IA");
                     } else if (section === 'examples') {
                         let exText = "";
