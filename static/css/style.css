@@ -634,11 +634,9 @@ body {
     }
 }
 
-/* Input Area */
+/* Input Area (Disabled by user directive - selection only from list) */
 .chat-input-area {
-    padding: 20px 30px;
-    background: #ffffff;
-    border-top: 2px solid #eaebed;
+    display: none !important;
 }
 
 .input-form {

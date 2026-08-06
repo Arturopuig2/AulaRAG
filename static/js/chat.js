@@ -603,21 +603,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    if (chatForm) {
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        const message = userInput.value.trim();
-        if (!message) return;
+            const message = userInput ? userInput.value.trim() : '';
+            if (!message) return;
 
-        // Add User Message (visible)
-        addMessage(message, 'user');
+            // Add User Message (visible)
+            addMessage(message, 'user');
 
-        // Clear input
-        userInput.value = '';
+            // Clear input
+            if (userInput) userInput.value = '';
 
-        // Hit the backend
-        await sendMessageToBackend(message, false);
-    });
+            // Hit the backend
+            await sendMessageToBackend(message, false);
+        });
+    }
 
 function renderVideoMediaHtml(videoUrl) {
     if (!videoUrl || !videoUrl.trim()) return '';

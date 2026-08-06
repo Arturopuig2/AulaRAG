@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added real-time Live Preview box in admin modal to see exact chat rendering
+# Main FastAPI application for AulaRAG - Removed message typing input bar (selection from list only)
 import json
 import os
 import re
