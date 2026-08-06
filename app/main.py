@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed message typing input bar (selection from list only)
+# Main FastAPI application for AulaRAG - Updated welcome message to '¡Hola! Soy tu chat de teoría. ¿Qué quieres repasar hoy? 😊'
 import json
 import os
 import re

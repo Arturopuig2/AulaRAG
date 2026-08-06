@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (chatHistoriesHTML[currentSubject]) {
                 chatMessages.innerHTML = chatHistoriesHTML[currentSubject];
             } else {
-                let welcomeText = "¡Hola! Soy tu chat de aprendizaje. ¿Qué quieres repasar hoy? 😊";
+                let welcomeText = "¡Hola! Soy tu chat de teoría. ¿Qué quieres repasar hoy? 😊";
                 if (currentSubject === 'valenciano') {
                     welcomeText = "Hola! Què repassem hui? 😊";
                 }
