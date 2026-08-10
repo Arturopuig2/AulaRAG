@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Cleaned 100% of question code from chat.js
+# Main FastAPI application for AulaRAG - Incremented chat.js cache buster v=225 to force fresh browser load
 import json
 import os
 import re
