@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Integrated clean 'a' logo favicons
+# Main FastAPI application for AulaRAG - Applied Option A minimalist 'a' favicon
 import json
 import os
 import re
