@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Restored /api/ai/generate-section endpoint in admin.py router
+# Main FastAPI application for AulaRAG - Applied strict formal textbook rules across all subjects (no child-talk)
 import json
 import os
 import re

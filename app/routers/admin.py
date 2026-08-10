@@ -654,8 +654,11 @@ async def generate_explanation_section_ai(payload: dict):
             default_tpl = (
                 "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} la EXPLICACIÓN TEÓRICA perfecta para el tema '{contenido}' "
                 "del curso {grade}º de Primaria{bloque_str}.\n"
-                "Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen). "
-                "PROHIBIDO proponer ejercicios, cuestionarios o tests al alumno.\n"
+                "Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen).\n"
+                "REGLAS OBLIGATORIAS DE ESTILO:\n"
+                "- Usa un tono 100% FORMAL, CLARO y RIGUROSO, imitando exactamente el estilo de un LIBRO DE TEXTO escolar oficial. Ten en cuenta que estos textos son leídos por los PADRES de los alumnos.\n"
+                "- PROHIBIDO TOTALMENTE cualquier infantilismo o teatralidad como '¡Hola, pequeños exploradores!', 'partes mágicas', 'corazón de las palabras', '¡Verás qué fácil!', etc.\n"
+                "- PROHIBIDO proponer ejercicios, cuestionarios o tests al alumno.\n"
                 "Responde EXCLUSIVAMENTE con el texto completo en markdown, sin envolver en JSON ni bloques de código."
             )
             template = read_prompt_file("default_teoria.txt", default_tpl)
