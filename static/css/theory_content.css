@@ -1,38 +1,49 @@
-/* ─── Estilos para el markdown de textos de teoría en el chat ─────────────── */
+/* ─── Estilos para el markdown de textos de teoría en el chat y panel admin ─────────────── */
 
-/* Títulos H2 — título principal del tema (ej: "Questions / Preguntas") */
-.message.assistant .bubble h2 {
+/* Títulos H1 y H2 — títulos principales (# y ##) (ej: "Questions / Preguntas", "Resumen", "Ejemplos prácticos") */
+.message.assistant .bubble h1,
+.message.assistant .bubble h2,
+.chat-bubble-preview h1,
+.chat-bubble-preview h2 {
     font-size: 1.15em;
     font-weight: 800;
-    color: var(--color-yellow, #f59e0b);
-    margin: 0 0 10px 0;
+    color: var(--color-yellow, #f59e0b) !important;
+    margin: 10px 0 10px 0;
     padding-bottom: 6px;
-    border-bottom: 2px solid currentColor;
+    border-bottom: 2px solid var(--color-yellow, #f59e0b) !important;
     letter-spacing: 0.01em;
+    display: block;
 }
 
-/* Títulos H3 — subtítulo de cada regla/sección */
-.message.assistant .bubble h3 {
+/* Títulos H3 y H4 — subtítulos de cada regla/sección (### y ####) */
+.message.assistant .bubble h3,
+.message.assistant .bubble h4,
+.chat-bubble-preview h3,
+.chat-bubble-preview h4 {
     font-size: 1em;
     font-weight: 700;
-    color: var(--color-blue, #60a5fa);
+    color: var(--color-blue, #60a5fa) !important;
     margin: 14px 0 6px 0;
+    display: block;
 }
 
 /* Párrafos de introducción */
-.message.assistant .bubble p {
+.message.assistant .bubble p,
+.chat-bubble-preview p {
     margin-bottom: 10px;
     line-height: 1.6;
 }
 
 /* Listas de primer nivel */
-.message.assistant .bubble ul {
+.message.assistant .bubble ul,
+.chat-bubble-preview ul {
     padding-left: 0;
     list-style: none;
     margin: 6px 0 10px 0;
 }
 
-.message.assistant .bubble ul > li {
+.message.assistant .bubble ul > li,
+.chat-bubble-preview ul > li {
     padding: 6px 10px;
     border-left: 3px solid var(--color-yellow, #f59e0b);
     margin-bottom: 8px;
@@ -42,13 +53,15 @@
 }
 
 /* Sub-listas (los guiones con  - **Palabra:** explicación) */
-.message.assistant .bubble ul ul {
+.message.assistant .bubble ul ul,
+.chat-bubble-preview ul ul {
     padding-left: 14px;
     margin: 6px 0 2px 0;
     list-style: none;
 }
 
-.message.assistant .bubble ul ul li {
+.message.assistant .bubble ul ul li,
+.chat-bubble-preview ul ul li {
     border-left: none;
     background: none;
     padding: 2px 0;
@@ -57,14 +70,16 @@
     color: var(--text-main);
 }
 
-.message.assistant .bubble ul ul li::before {
+.message.assistant .bubble ul ul li::before,
+.chat-bubble-preview ul ul li::before {
     content: "→ ";
     color: var(--color-blue, #60a5fa);
     font-weight: 700;
 }
 
 /* Blockquotes — diálogos del "Ejemplo en la vida real" */
-.message.assistant .bubble blockquote {
+.message.assistant .bubble blockquote,
+.chat-bubble-preview blockquote {
     border-left: 4px solid var(--color-blue, #60a5fa);
     background: rgba(96, 165, 250, 0.08);
     margin: 10px 0;
@@ -74,19 +89,22 @@
     line-height: 1.6;
 }
 
-.message.assistant .bubble blockquote p {
+.message.assistant .bubble blockquote p,
+.chat-bubble-preview blockquote p {
     margin: 3px 0;
 }
 
 /* Separadores horizontales --- entre secciones */
-.message.assistant .bubble hr {
+.message.assistant .bubble hr,
+.chat-bubble-preview hr {
     border: none;
     border-top: 1px dashed #cbd5e1;
     margin: 14px 0;
 }
 
 /* Negritas dentro del texto */
-.message.assistant .bubble strong {
+.message.assistant .bubble strong,
+.chat-bubble-preview strong {
     font-weight: 800;
     color: inherit;
 }

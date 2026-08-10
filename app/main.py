@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed exact explanation matching priority (ID 342 'Las vocales')
+# Main FastAPI application for AulaRAG - Styled h1, h2, h3, h4 headers for theory, easier version, examples & admin previews
 import json
 import os
 import re
