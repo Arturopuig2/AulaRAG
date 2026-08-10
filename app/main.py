@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Applied Option C circular emblem 'a' favicon
+# Main FastAPI application for AulaRAG - Applied giant high-contrast 'a' favicon
 import json
 import os
 import re
