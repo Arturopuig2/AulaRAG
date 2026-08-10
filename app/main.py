@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Applied Option B white 'a' on blue gradient favicon
+# Main FastAPI application for AulaRAG - Applied Option C circular emblem 'a' favicon
 import json
 import os
 import re
