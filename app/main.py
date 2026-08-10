@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Refactored into a 100% Theory RAG platform (Removed Questions/Exercises module)
+# Main FastAPI application for AulaRAG - Removed 'Listo' button completely from chat interface
 import json
 import os
 import re

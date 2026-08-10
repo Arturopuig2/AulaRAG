@@ -1430,20 +1430,6 @@ function renderVideoMediaHtml(videoUrl) {
                     await streamChatResponse(formData, loadingId);
                 }
             })();
-        } else if (action === 'done') {
-            const userMsg = (currentSubject === 'valenciano') ? "Llest!" : "¡Listo!";
-            addMessage(userMsg, 'user', false, false, false, null, null, false, null, true);
-            const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
-            if (lastUserMsg) {
-                window._currentTopicUserMsg = lastUserMsg;
-                scrollToCurrentTopic(true);
-            }
-            
-            const doneReply = (currentSubject === 'valenciano')
-                ? "Excel·lent treball! 🌟 Has repassat la teoria d'aquest tema. Quan vulgues, pots triar un altre tema del temari."
-                : "¡Excelente trabajo! 🌟 Has repasado la teoría de este tema. Cuando quieras, puedes seleccionar otro tema del temario.";
-            // Pass preventTheoryButtons = true so NO buttons are added to the final closing message
-            addMessage(marked.parse(doneReply), 'assistant', true, false, false, null, null, true);
         }
     };
 });
