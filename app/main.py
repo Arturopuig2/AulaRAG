@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Applied exact giant official 'a' letter from Aula logo
+# Main FastAPI application for AulaRAG - Enforced strict System Instruction & Auditor scrub for 100% formal theory
 import json
 import os
 import re

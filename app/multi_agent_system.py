@@ -109,10 +109,11 @@ class AgenteAuditor:
         # Remove leftover bracket tags
         text = re.sub(r'\[\s*(?:INCORRECTE|CORRECTE|INCORRECTO|CORRECTO)\s*\]', '', text, flags=re.IGNORECASE)
         
-        # Strip legacy exercise series closing prompts
-        text = re.sub(r'Has completat \d+ exercicis![^\n]*', '', text, flags=re.IGNORECASE)
-        text = re.sub(r'¿Quieres hacer \d+ más\?[^\n]*', '', text, flags=re.IGNORECASE)
-        text = re.sub(r'Vols fer-ne \d+ més\?[^\n]*', '', text, flags=re.IGNORECASE)
+        # Strip any accidental theatrical greetings / child-talk intros
+        text = re.sub(r'^\s*¡?Hola[^\n!.]*[!.]\s*', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'^\s*¡?Bienvenido[^\n!.]*[!.]\s*', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'^\s*¡?Pequeños exploradores[^\n!.]*[!.]\s*', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'^\s*Hoy vamos a descubrir[^\n!.]*[!.]\s*', '', text, flags=re.IGNORECASE)
 
         return text.strip()
 

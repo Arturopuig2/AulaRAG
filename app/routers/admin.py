@@ -684,9 +684,19 @@ async def generate_explanation_section_ai(payload: dict):
         raise HTTPException(400, "Sección no válida")
 
     try:
+        sys_instr = (
+            "Eres un redactor de contenidos para un LIBRO DE TEXTO escolar oficial de Educación Primaria. "
+            "PROHIBIDO ABSOLUTAMENTE incluir saludos, despedidas, mensajes teatrales o infantilismos "
+            "(como '¡Hola, pequeños exploradores!', 'letras cantarinas', '¡Vamos a aprender!', etc.). "
+            "Tu respuesta debe ser ÚNICA Y EXCLUSIVAMENTE la lección teórica formal, clara y rigurosa en formato Markdown."
+        )
         response = await client.aio.models.generate_content(
             model=model_name,
             contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
+            config=types.GenerateContentConfig(
+                system_instruction=sys_instr,
+                temperature=0.0
+            )
         )
 
         raw = response.text.strip()
@@ -698,7 +708,9 @@ async def generate_explanation_section_ai(payload: dict):
                 ex_list = [re.sub(r'^•\s*', '', str(item)).strip() for item in ex_list]
             return {"result": ex_list}
         else:
-            return {"result": raw}
+            from ..multi_agent_system import AgenteAuditor
+            clean_text = AgenteAuditor.audit_and_clean(raw, subject)
+            return {"result": clean_text}
 
     except Exception as e:
         raise HTTPException(500, f"Error generando la sección {section} con IA: {e}")
