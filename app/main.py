@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Applied strict formal textbook rules across all subjects (no child-talk)
+# Main FastAPI application for AulaRAG - Integrated clean 'a' logo favicons
 import json
 import os
 import re
