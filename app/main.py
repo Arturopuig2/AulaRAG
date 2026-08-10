@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Updated welcome message to '¡Hola! Soy tu chat de teoría. ¿Qué quieres repasar hoy? 😊'
+# Main FastAPI application for AulaRAG - Refactored into a 100% Theory RAG platform (Removed Questions/Exercises module)
 import json
 import os
 import re
@@ -52,6 +52,15 @@ async def global_status_update(request: Request, db: Session = Depends(get_db)):
 # Mount static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+@app.middleware("http")
+async def add_no_cache_header(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/static/") or request.url.path == "/":
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
 
 # ── Admin router ──────────────────────────────────────────────────────────────
 from .routers.admin import router as admin_router  # noqa: E402
@@ -317,63 +326,7 @@ async def upload_file(
         return {"error": "Failed to index file in Gemini API"}
 
 
-
-# ── Question Bank ─────────────────────────────────────────────────────────────
-
-from pydantic import BaseModel
-from typing import Optional, List
-import random as _random
-
-class QuestionIn(BaseModel):
-    subject: str
-    grade: Optional[int] = None
-    bloque: Optional[str] = None
-    contenido: Optional[str] = None
-    question: str
-    options: List[str]
-    answer: str
-
-class AnswerCheck(BaseModel):
-    question_id: int
-    selected_option: str
-
-
-@app.get("/questions/random")
-async def get_random_question(
-    request: Request,
-    subject: str,
-    grade: Optional[int] = None,
-    bloque: Optional[str] = None,
-    contenido: Optional[str] = None,
-    db: Session = Depends(get_db),
-):
-    """Return a random question from the bank, filtered by subject/grade/bloque/contenido."""
-    try:
-        current_user = await get_current_user(request, db)
-    except HTTPException:
-        return JSONResponse({"error": "not_authenticated"}, status_code=401)
-
-    q = db.query(models.Question).filter(func.lower(models.Question.subject) == subject.lower())
-    if grade is not None:
-        q = q.filter((models.Question.grade == grade) | (models.Question.grade == None))
-    if bloque:
-        q = q.filter(func.lower(models.Question.bloque) == bloque.lower())
-    if contenido:
-        q = q.filter(func.lower(models.Question.contenido) == contenido.lower())
-
-    # Use func.random() for efficient selection at DB level
-    picked = q.order_by(func.random()).first()
-    
-    if not picked:
-        return JSONResponse({"error": "no_questions", "detail": "No hay preguntas para este filtro."}, status_code=404)
-
-    return {
-        "id": picked.id,
-        "question": picked.question,
-        "options": json.loads(picked.options),
-        # NOTE: answer is intentionally NOT returned to the client
-    }
-
+# ── Theory Explanations ───────────────────────────────────────────────────────
 
 @app.get("/explanations/get")
 async def get_explanation(
@@ -398,91 +351,16 @@ async def get_explanation(
     return {
         "id": exp.id,
         "content": exp.text,
+        "easier_version": exp.easier_version or "",
+        "examples": exp.examples or "",
         "visual_url": exp.visual_url or "",
+        "easier_visual_url": exp.easier_visual_url or "",
+        "examples_visual_url": exp.examples_visual_url or "",
         "audio_url": exp.audio_url or "",
         "video_url": exp.video_url or "",
     }
 
 
-@app.get("/questions/next")
-async def get_next_question(
-    request: Request,
-    subject: str,
-    grade: int,
-    bloque: str = "",
-    contenido: str = "",
-    dificultad: str = "",
-    exclude_id: int = 0,
-    db: Session = Depends(get_db),
-):
-    """Returns a random verified question from DB matching the given filters."""
-    try:
-        current_user = await get_current_user(request, db)
-    except HTTPException:
-        return JSONResponse({"error": "not_authenticated"}, status_code=401)
-
-    from sqlalchemy import func as sqlfunc
-    import random
-
-    query = db.query(models.Question).filter(
-        models.Question.is_active == True,
-        models.Question.is_verified == True,
-        sqlfunc.lower(models.Question.subject) == subject.lower(),
-        models.Question.grade == grade,
-    )
-    if bloque:
-        query = query.filter(sqlfunc.lower(models.Question.bloque) == bloque.lower())
-    if contenido:
-        query = query.filter(sqlfunc.lower(models.Question.contenido) == contenido.lower())
-    if exclude_id:
-        query = query.filter(models.Question.id != exclude_id)
-
-    # First attempt with requested difficulty
-    results_query = query
-    if dificultad:
-        results_query = query.filter(models.Question.dificultad == dificultad)
-
-    questions = results_query.all()
-
-    # Fallback: if no questions found with specific difficulty, take any from the same topic
-    if not questions and dificultad:
-        questions = query.all()
-
-    if not questions:
-        return JSONResponse({"error": "no_questions"}, status_code=404)
-
-    picked = random.choice(questions)
-    opts = json.loads(picked.options) if picked.options else []
-
-    return {
-        "id": picked.id,
-        "question": picked.question,
-        "options": opts,
-        "answer": picked.answer,
-        "dificultad": picked.dificultad or "",
-        "feedback_correct":   picked.feedback_correct   or picked.explanation or "",
-        "feedback_incorrect": picked.feedback_incorrect or picked.explanation or "",
-        "visual_url": picked.visual_url or "",
-        "audio_url": picked.audio_url or "",
-        "identifier": picked.identifier or "",
-    }
-
-
-@app.post("/questions/check")
-async def check_answer(
-    request: Request,
-    body: AnswerCheck,
-    db: Session = Depends(get_db),
-):
-    """Server-side answer evaluation. Returns {correct: bool, answer: str}."""
-    try:
-        current_user = await get_current_user(request, db)
-    except HTTPException:
-        return JSONResponse({"error": "not_authenticated"}, status_code=401)
-
-    q = db.query(models.Question).filter(models.Question.id == body.question_id).first()
-    if not q:
-        raise HTTPException(status_code=404, detail="Question not found")
 
     correct = body.selected_option.strip() == q.answer.strip()
     

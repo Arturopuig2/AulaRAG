@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 import re
@@ -20,10 +21,12 @@ def get_client():
     api_key = os.environ.get("GEMINI_API_KEY", "")
     return genai.Client(api_key=api_key) if api_key else None
 
-client = get_client()
+def get_model_name():
+    load_dotenv(override=True)
+    return os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
-# Model to use - gemini-flash-lite-latest has fast response times and avoids 503 demand spikes
-MODEL_NAME = "gemini-flash-lite-latest"
+client = get_client()
+MODEL_NAME = get_model_name()
 
 def normalize_text(text):
     import unicodedata
@@ -221,7 +224,8 @@ def load_pdf_files_as_parts():
     global existing_files_cache
     source_dir = os.path.join(DATA_DIR, "source_files")
     
-    if not os.path.exists(source_dir) or not client:
+    current_client = get_client()
+    if not os.path.exists(source_dir) or not current_client:
         return
 
     print("[cache] Loading persistent file cache from disk...")
@@ -235,7 +239,7 @@ def load_pdf_files_as_parts():
         try:
             # Extract the file name (e.g. "files/abc123") from the URI
             file_id = "/".join(uri.split("/")[-2:])
-            f = client.files.get(name=file_id)
+            f = current_client.files.get(name=file_id)
             existing_files_cache[display_name] = f
             valid_uri_cache[display_name] = uri
         except Exception:
@@ -247,7 +251,7 @@ def load_pdf_files_as_parts():
     if cache_updated or not valid_uri_cache:
         print("[cache] Fetching current file list from Gemini API...")
         try:
-            for f in client.files.list():
+            for f in current_client.files.list():
                 existing_files_cache[f.display_name] = f
                 valid_uri_cache[f.display_name] = f.uri
         except Exception as e:
@@ -265,7 +269,7 @@ def load_pdf_files_as_parts():
                 else:
                     print(f"Uploading {filename} (Subject: {subject})...")
                     try:
-                        uploaded_file = client.files.upload(
+                        uploaded_file = current_client.files.upload(
                             file=file_path,
                             config=types.UploadFileConfig(display_name=display_name, mime_type="application/pdf")
                         )
@@ -385,73 +389,8 @@ def get_pdf_parts_for_context(subject: str, course_level: str, query_text: str =
     return parts
 
 # Load PDFs at startup to populate cache
-if client:
+if get_client():
     load_pdf_files_as_parts()
-
-def get_db_question(subject: str, grade: int = None, bloque: str = None, contenido: str = None) -> str:
-    """Extrae una pregunta aleatoria optimizada para bases de datos grandes."""
-    import random as _random
-    from sqlalchemy import func
-
-    db = SessionLocal()
-    try:
-        norm_subject = normalize_text(subject)
-        # Handle "mates" -> "matematicas" mapping
-        if "matem" in norm_subject: norm_subject = "matematicas"
-        
-        print(f"[DB_DEBUG] Consulta: sub={norm_subject}, grade={grade}, bloque={bloque}")
-        
-        # 1. SQL-level filtering for performance
-        query = db.query(models.Question).filter(
-            models.Question.is_active == True,
-            models.Question.is_verified == True,
-            func.lower(models.Question.subject).contains(norm_subject)
-        )
-        
-        if grade:
-            query = query.filter(models.Question.grade == int(grade))
-            
-        all_q = query.all()
-        
-        if not all_q:
-            print(f"[DB_DEBUG] CERO resultados SQL para {norm_subject} grado {grade}")
-            return json.dumps({"error": f"No hay ejercicios verificados para {subject} - curso {grade}"})
-
-        # 2. Python-level matching for Bloque/Contenido (Fuzzy)
-        final_pool = all_q
-        if bloque or contenido:
-            norm_bloque = normalize_text(bloque)
-            norm_cont = normalize_text(contenido)
-            
-            strict_pool = []
-            for q in all_q:
-                q_bloque = normalize_text(q.bloque or "")
-                q_cont = normalize_text(q.contenido or "")
-                
-                match_b = (not norm_bloque) or (norm_bloque in q_bloque)
-                match_c = (not norm_cont) or (norm_cont in q_cont)
-                
-                if match_b and match_c:
-                    strict_pool.append(q)
-            
-            if strict_pool:
-                final_pool = strict_pool
-            else:
-                print(f"[DB_DEBUG] Sin coincidencia de bloque. Usando pool de asignatura ({len(all_q)} items).")
-
-        picked = _random.choice(final_pool)
-
-        return json.dumps({
-            "id": picked.id,
-            "identifier": picked.identifier or "",
-            "question": picked.question,
-            "options": json.loads(picked.options),
-            "answer": picked.answer,
-            "visual_url": picked.visual_url,
-            "audio_url": picked.audio_url
-        }, ensure_ascii=False)
-    finally:
-        db.close()
 
 def get_db_explanation(subject: str, grade: int = None, bloque: str = None, contenido: str = None, force_easier: bool = False) -> Optional[str]:
     """Busca una explicación verificada en la base de datos de Aula con normalización."""
@@ -596,7 +535,7 @@ async def get_gemini_response(user_message: str, subject: str = "general", cours
             try:
                 current_client = get_client()
                 response = await current_client.aio.models.generate_content(
-                    model=MODEL_NAME,
+                    model=get_model_name(),
                     contents=messages,
                     config=types.GenerateContentConfig(
                         system_instruction=dynamic_instruction,
@@ -712,7 +651,8 @@ async def get_gemini_response_stream(
     if subject != "general":
         try:
             exp_obj = get_db_explanation_obj(subject=subject, grade=grade_val, bloque=bloque, contenido=contenido)
-            if exp_obj and not is_easier_req and not is_example_req:
+            if exp_obj:
+                visual_url = exp_obj.visual_url
                 video_url = exp_obj.video_url
 
             # Prioridad 1: Si pide Versión Fácil y EXISTE en BD -> Responder INMEDIATAMENTE con ella
@@ -729,11 +669,12 @@ async def get_gemini_response_stream(
                 try:
                     ex_list = json.loads(ex_raw)
                     if isinstance(ex_list, list):
-                        formatted_ex = "### 💡 Ejemplos Prácticos:\n\n" + "\n\n".join([f"• {ex}" for ex in ex_list])
+                        clean_ex = [re.sub(r'^•\s*', '', str(ex)).strip() for ex in ex_list]
+                        formatted_ex = "\n\n".join(clean_ex)
                     else:
-                        formatted_ex = f"### 💡 Ejemplos Prácticos:\n\n{ex_raw}"
+                        formatted_ex = ex_raw
                 except Exception:
-                    formatted_ex = f"### 💡 Ejemplos Prácticos:\n\n{ex_raw}"
+                    formatted_ex = ex_raw
                 v_url = exp_obj.examples_visual_url or exp_obj.visual_url
                 yield f"data: {json.dumps({'text': formatted_ex, 'visual_url': v_url, 'video_url': None})}\n\n"
                 yield f"data: {json.dumps({'done': True, 'full_text': formatted_ex, 'visual_url': v_url, 'video_url': None})}\n\n"
@@ -835,7 +776,7 @@ async def get_gemini_response_stream(
     full_response_text = ""
     try:
         stream = await current_client.aio.models.generate_content_stream(
-            model=MODEL_NAME,
+            model=get_model_name(),
             contents=messages,
             config=types.GenerateContentConfig(
                 system_instruction=dynamic_instruction,

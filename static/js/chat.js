@@ -65,10 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (subject === 'valenciano') currentTemarioData = temarioDataValenciano;
                     else if (subject === 'ingles') currentTemarioData = temarioDataIngles;
 
-                    if (currentTemarioData.length > 0) {
-                        syllabusFilters.style.display = 'block';
-                        populateCursos();
-                    }
+                    const savedCourse = filterCurso ? filterCurso.value : "";
+                    populateCursos(savedCourse);
                 }
             }
         } catch (e) {
@@ -88,27 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const soundIcon = `<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
 
     // Initial load
-    audioToggle.innerHTML = muteIcon;
+    if (audioToggle) {
+        audioToggle.innerHTML = muteIcon;
 
-    // Toggle Audio
-    audioToggle.addEventListener('click', () => {
-        audioEnabled = !audioEnabled;
-        if (audioEnabled) {
-            audioToggle.innerHTML = soundIcon;
-            audioToggle.title = "Desactivar Narración por Voz";
-            audioToggle.classList.remove('muted');
-            // Try playing a silent utterance to unlock audio context on iOS/Safari
-            try {
-                const unlock = new SpeechSynthesisUtterance('');
-                window.speechSynthesis.speak(unlock);
-            } catch (e) { }
-        } else {
-            audioToggle.innerHTML = muteIcon;
-            audioToggle.title = "Activar Narración por Voz";
-            audioToggle.classList.add('muted');
-            if (window.speechSynthesis) window.speechSynthesis.cancel();
-        }
-    });
+        // Toggle Audio
+        audioToggle.addEventListener('click', () => {
+            audioEnabled = !audioEnabled;
+            if (audioEnabled) {
+                audioToggle.innerHTML = soundIcon;
+                audioToggle.title = "Desactivar Narración por Voz";
+                audioToggle.classList.remove('muted');
+                // Try playing a silent utterance to unlock audio context on iOS/Safari
+                try {
+                    const unlock = new SpeechSynthesisUtterance('');
+                    window.speechSynthesis.speak(unlock);
+                } catch (e) { }
+            } else {
+                audioToggle.innerHTML = muteIcon;
+                audioToggle.title = "Activar Narración por Voz";
+                audioToggle.classList.add('muted');
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+            }
+        });
+    }
 
     // Subject theme colors
     const themes = {
@@ -140,11 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextSubject = btnTarget.dataset.subject;
             if (!nextSubject || currentSubject === nextSubject) return;
 
+            // Preserve currently selected course before changing subject (default to "0" / 1º Primaria)
+            const savedCourseIdx = (filterCurso && filterCurso.value !== "") ? filterCurso.value : "0";
+
             subjectButtons.forEach(b => b.classList.remove('active'));
             btnTarget.classList.add('active');
 
-            // Reset active session topic filters
-            activeSessionCurso = "";
+            // Reset active session topic filters except for course
             activeSessionBloque = "";
             activeSessionContenido = "";
 
@@ -156,8 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update UI
             if (themes[currentSubject]) {
-                subjectTitle.textContent = themes[currentSubject].title;
-                subjectTitle.style.color = themes[currentSubject].color;
+                if (subjectTitle) {
+                    subjectTitle.textContent = themes[currentSubject].title;
+                    subjectTitle.style.color = themes[currentSubject].color;
+                }
+                document.documentElement.style.setProperty('--active-subject-color', themes[currentSubject].color);
             }
 
             // Set current temario data
@@ -171,13 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentTemarioData = temarioDataIngles;
             }
 
-            if (currentTemarioData && currentTemarioData.length > 0) {
-                syllabusFilters.style.display = 'block';
-                if (groupBloque) groupBloque.style.display = 'block';
-                populateCursos();
-            } else {
-                syllabusFilters.style.display = 'none';
-            }
+            // Populate courses preserving the selected course index
+            populateCursos(savedCourseIdx);
 
             // Restore or initialize chat history for the new subject
             if (chatHistoriesHTML[currentSubject]) {
@@ -198,78 +198,248 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update Input Placeholder
             if (currentSubject === 'valenciano') {
-                userInput.placeholder = "Pregunta el que vulgues...";
-                btnEstudiar.textContent = "Anem a repassar!";
+                if (userInput) userInput.placeholder = "Pregunta el que vulgues...";
+                if (btnEstudiar) btnEstudiar.textContent = "Anem a repassar!";
             } else if (currentSubject === 'ingles') {
-                userInput.placeholder = "Pregunta lo que quieras...";
-                btnEstudiar.textContent = "Let's go!";
+                if (userInput) userInput.placeholder = "Pregunta lo que quieras...";
+                if (btnEstudiar) btnEstudiar.textContent = "Let's go!";
             } else {
-                userInput.placeholder = "Pregunta lo que quieras...";
-                btnEstudiar.textContent = "¡Vamos a repasar!";
+                if (userInput) userInput.placeholder = "Pregunta lo que quieras...";
+                if (btnEstudiar) btnEstudiar.textContent = "¡Vamos a repasar!";
             }
 
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            smartScrollToBottom();
         });
     });
+
+    window._currentTopicUserMsg = null;
+    let currentScrollAnim = null;
+    let scrollLocked = false;
+
+    function customSmoothScrollTo(element, targetY, duration = 450, force = false, onComplete = null) {
+        const startY = element.scrollTop;
+        const distance = targetY - startY;
+
+        if (Math.abs(distance) < 4) {
+            element.scrollTop = targetY;
+            if (typeof onComplete === 'function') onComplete();
+            return;
+        }
+
+        if (currentScrollAnim) cancelAnimationFrame(currentScrollAnim);
+
+        let startTime = null;
+
+        function easeOutQuint(t) {
+            return 1 - Math.pow(1 - t, 5);
+        }
+
+        function animation(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const progress = Math.min(timeElapsed / duration, 1);
+            const easeProgress = easeOutQuint(progress);
+
+            element.scrollTop = startY + (distance * easeProgress);
+
+            if (timeElapsed < duration) {
+                currentScrollAnim = requestAnimationFrame(animation);
+            } else {
+                element.scrollTop = targetY;
+                currentScrollAnim = null;
+                if (typeof onComplete === 'function') {
+                    onComplete();
+                }
+            }
+        }
+
+        currentScrollAnim = requestAnimationFrame(animation);
+    }
+
+    // Eliminar spacer residual de versiones anteriores si existe
+    const _oldSpacer = document.getElementById('__chat_scroll_spacer__');
+    if (_oldSpacer) _oldSpacer.remove();
+
+    function scrollToCurrentTopic(smooth = true, onComplete = null) {
+        if (window._currentTopicUserMsg && document.body.contains(window._currentTopicUserMsg)) {
+            // Garantizar que hay suficiente padding-bottom para que el elemento pueda
+            // llegar al top del contenedor. El padding-bottom es siempre el último
+            // espacio del contenedor, sin importar cuántos mensajes se añadan después.
+            const neededPadding = chatMessages.clientHeight;
+            const currentPadding = parseInt(chatMessages.style.paddingBottom) || 0;
+            if (currentPadding < neededPadding) {
+                chatMessages.style.paddingBottom = neededPadding + 'px';
+            }
+
+            // Calcular offsetTop acumulando hasta chatMessages
+            let offsetTop = 0;
+            let el = window._currentTopicUserMsg;
+            while (el && el !== chatMessages) {
+                offsetTop += el.offsetTop;
+                el = el.offsetParent;
+            }
+            const targetPos = Math.max(0, offsetTop - 10);
+
+            scrollLocked = true;
+            if (smooth) {
+                customSmoothScrollTo(chatMessages, targetPos, 500, true, () => {
+                    scrollLocked = false;
+                    if (typeof onComplete === 'function') onComplete();
+                });
+            } else {
+                chatMessages.scrollTop = targetPos;
+                scrollLocked = false;
+                if (typeof onComplete === 'function') onComplete();
+            }
+        } else {
+            if (typeof onComplete === 'function') onComplete();
+        }
+    }
+
+    function smartScrollToBottom() {
+        if (scrollLocked) return;
+        if (window._currentTopicUserMsg && document.body.contains(window._currentTopicUserMsg)) {
+            return; // scrollToCurrentTopic tiene el control
+        } else {
+            chatMessages.style.paddingBottom = ''; // Restaurar padding CSS original
+            customSmoothScrollTo(chatMessages, chatMessages.scrollHeight, 450);
+        }
+    }
 
     console.log("Setup inicial completado");
 
     // --- SYLLABUS FILTERS LOGIC ---
-    function populateCursos() {
-        filterCurso.innerHTML = '<option value="">Selecciona Curso...</option>';
-        currentTemarioData.forEach((cursoObj, index) => {
-            const opt = document.createElement('option');
-            opt.value = index;
-            opt.textContent = cursoObj.curso;
-            filterCurso.appendChild(opt);
+    function updateActiveCourseButton(selectedIndex) {
+        const grid = document.getElementById('course-buttons-grid');
+        if (!grid) return;
+        const selectedStr = selectedIndex !== null && selectedIndex !== undefined ? String(selectedIndex) : "";
+        const buttons = grid.querySelectorAll('.course-btn');
+        buttons.forEach(btn => {
+            if (selectedStr !== "" && btn.getAttribute('data-index') === selectedStr) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
         });
-        filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
-        filterBloque.disabled = true;
-        filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
-        filterContenido.disabled = true;
-        btnEstudiar.disabled = true;
     }
 
-    filterCurso.addEventListener('change', (e) => {
-        const cursoIdx = e.target.value;
-        filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
-        filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
-        filterContenido.disabled = true;
-        btnEstudiar.disabled = true;
+    function populateCursos(preserveIndex) {
+        const grid = document.getElementById('course-buttons-grid');
+        if (filterCurso) filterCurso.innerHTML = '<option value="">Selecciona Curso...</option>';
+        if (grid) grid.innerHTML = '';
 
-        if (cursoIdx === "") {
-            filterBloque.disabled = true;
-            return;
-        }
+        const dataToUse = (currentTemarioData && currentTemarioData.length > 0)
+            ? currentTemarioData
+            : [
+                { curso: "1º de Primaria" },
+                { curso: "2º de Primaria" },
+                { curso: "3º de Primaria" },
+                { curso: "4º de Primaria" },
+                { curso: "5º de Primaria" },
+                { curso: "6º de Primaria" }
+            ];
 
-        const cursoObj = currentTemarioData[cursoIdx];
-        if (cursoObj && cursoObj.bloques) {
-            const bloqueNames = Object.keys(cursoObj.bloques);
-            bloqueNames.forEach(bloqueName => {
+        dataToUse.forEach((cursoObj, index) => {
+            if (filterCurso) {
                 const opt = document.createElement('option');
-                opt.value = bloqueName;
-                // Capitalize first letter, handle valencian translation
-                let displayText = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
-                if (currentSubject === 'valenciano' && bloqueName === 'gramatica') {
-                    displayText = 'Gramàtica';
-                }
-                opt.textContent = displayText;
-                filterBloque.appendChild(opt);
-            });
-
-            // If there's only 1 block, select it automatically and hide the selector
-            if (bloqueNames.length === 1) {
-                filterBloque.value = bloqueNames[0];
-                if (groupBloque) groupBloque.style.display = 'none';
-                // Manually trigger change to populate contents dropdown
-                filterBloque.dispatchEvent(new Event('change'));
-            } else {
-                if (groupBloque) groupBloque.style.display = 'block';
-                filterBloque.disabled = false;
+                opt.value = index;
+                opt.textContent = cursoObj.curso || `${index + 1}º de Primaria`;
+                filterCurso.appendChild(opt);
             }
+
+            if (grid) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'course-btn';
+
+                const match = (cursoObj.curso || '').match(/\d+/);
+                const num = match ? match[0] : (index + 1);
+
+                btn.textContent = num;
+                btn.title = cursoObj.curso || `${index + 1}º de Primaria`;
+                btn.setAttribute('data-index', String(index));
+
+                btn.addEventListener('click', () => {
+                    if (!filterCurso) return;
+                    filterCurso.value = String(index);
+                    filterCurso.dispatchEvent(new Event('change'));
+                });
+
+                grid.appendChild(btn);
+            }
+        });
+
+        const targetIdx = (preserveIndex !== undefined && preserveIndex !== null && preserveIndex !== "")
+            ? String(preserveIndex)
+            : "0";
+
+        if (filterCurso) filterCurso.value = targetIdx;
+        updateActiveCourseButton(targetIdx);
+
+        if (targetIdx !== "") {
+            if (filterCurso) filterCurso.dispatchEvent(new Event('change'));
+        } else {
+            if (filterBloque) {
+                filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
+                filterBloque.disabled = true;
+            }
+            if (filterContenido) {
+                filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+                filterContenido.disabled = true;
+            }
+            if (btnEstudiar) btnEstudiar.disabled = true;
         }
+    }
+
+    filterContenido.addEventListener('change', (e) => {
+        btnEstudiar.disabled = (e.target.value === "");
     });
+
+    // Initial course buttons creation and default selection of Course 1 (index 0)
+    populateCursos("0");
+
+    if (filterCurso) {
+        filterCurso.addEventListener('change', (e) => {
+            const cursoIdx = e.target.value;
+            updateActiveCourseButton(cursoIdx);
+            if (filterBloque) filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
+            if (filterContenido) filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+            if (filterContenido) filterContenido.disabled = true;
+            if (btnEstudiar) btnEstudiar.disabled = true;
+
+            if (cursoIdx === "") {
+                if (filterBloque) filterBloque.disabled = true;
+                return;
+            }
+
+            const cursoObj = currentTemarioData[cursoIdx];
+            if (cursoObj && cursoObj.bloques) {
+                const bloqueNames = Object.keys(cursoObj.bloques);
+                bloqueNames.forEach(bloqueName => {
+                    if (filterBloque) {
+                        const opt = document.createElement('option');
+                        opt.value = bloqueName;
+                        let label = bloqueName.charAt(0).toUpperCase() + bloqueName.slice(1);
+                        if (currentSubject === 'valenciano' && bloqueName === 'gramatica') {
+                            label = 'Gramàtica';
+                        }
+                        opt.textContent = label;
+                        filterBloque.appendChild(opt);
+                    }
+                });
+
+                // If there's only 1 block, select it automatically and hide the selector
+                if (bloqueNames.length === 1) {
+                    if (filterBloque) filterBloque.value = bloqueNames[0];
+                    if (groupBloque) groupBloque.style.display = 'none';
+                    if (filterBloque) filterBloque.dispatchEvent(new Event('change'));
+                } else {
+                    if (groupBloque) groupBloque.style.display = 'block';
+                    if (filterBloque) filterBloque.disabled = false;
+                }
+            }
+        });
+    }
 
     filterBloque.addEventListener('change', (e) => {
         const cursoIdx = filterCurso.value;
@@ -313,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const contenidoStr = currentTemarioData[cursoIdx].bloques[bloqueName][contenidoIdx];
 
-        // ✅ Save active session labels so every subsequent turn uses them
+        // Save active session labels so every subsequent turn uses them
         activeSessionCurso = cursoStr;
         activeSessionBloque = bloqueStr;
         activeSessionContenido = contenidoStr;
@@ -326,10 +496,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let generatedMessage = (currentSubject === 'valenciano')
             ? `Vull repassar: ${contenidoStr}`
             : `Quiero repasar: ${contenidoStr}`;
-        if (currentSubject === 'competencia_lectora') {
-            generatedMessage = `Quiero leer: ${contenidoStr}`;
+        const userMsgId = 'topic-msg-' + Date.now();
+        addMessage(generatedMessage, 'user', false, false, false, null, null, false, null, true);
+
+        // Assign unique ID to the last added user message and lock scroll focus to it
+        const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
+        if (lastUserMsg) {
+            lastUserMsg.id = userMsgId;
+            window._currentTopicUserMsg = lastUserMsg;
         }
-        addMessage(generatedMessage, 'user');
 
         window._isTheoryActive = false;
         window._isEasierActive = false;
@@ -352,7 +527,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(e);
         }
 
-        addMessage('', 'assistant', true, false, true, visualUrl, null, false, videoUrl);
+        addMessage('', 'assistant', true, false, true, visualUrl, null, false, videoUrl, true);
+
+        // Enforce smooth scroll alignment to top of new topic card synchronously
+        scrollToCurrentTopic(true);
     });
 
     const DIF_LABELS = { basica: '🟢 Básico', normal: '🟡 Medio', avanzada: '🔴 Avanzado' };
@@ -496,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contentEl.innerHTML = '<span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>';
         msgEl.appendChild(contentEl);
         chatMessages.appendChild(msgEl);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        smartScrollToBottom();
 
         let accumulatedText = "";
         try {
@@ -534,13 +712,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (payload.text) {
                                 accumulatedText += payload.text;
                                 let mediaHtml = '';
-                                // 1. VÍDEO EN PRIMER LUGAR (solo en la explicación inicial)
                                 if ((payload.video_url || window._currentStreamVideoUrl) && !window._isEasierActive && !window._isExampleActive) {
                                     const vVidUrl = payload.video_url || window._currentStreamVideoUrl;
                                     window._currentStreamVideoUrl = vVidUrl;
                                     mediaHtml += renderVideoMediaHtml(vVidUrl);
                                 }
-                                // 2. ILUSTRACIÓN DESPUÉS DEL VÍDEO
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
                                     window._currentStreamVisualUrl = vUrl;
@@ -548,17 +724,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
                                 const safeText = cleanMarkdownText(accumulatedText);
                                 contentEl.innerHTML = mediaHtml + marked.parse(safeText);
-                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                                smartScrollToBottom();
                             } else if (payload.done) {
                                 const rawFinal = payload.full_text || accumulatedText;
                                 const finalMarkdown = cleanMarkdownText(rawFinal);
                                 let mediaHtml = '';
-                                // 1. VÍDEO EN PRIMER LUGAR (solo en la explicación inicial)
                                 if ((payload.video_url || window._currentStreamVideoUrl) && !window._isEasierActive && !window._isExampleActive) {
                                     const vidUrl = payload.video_url || window._currentStreamVideoUrl;
                                     mediaHtml += renderVideoMediaHtml(vidUrl);
                                 }
-                                // 2. ILUSTRACIÓN DESPUÉS DEL VÍDEO
                                 if (payload.visual_url || window._currentStreamVisualUrl) {
                                     const vUrl = payload.visual_url || window._currentStreamVisualUrl;
                                     mediaHtml += `<div class="message-media"><img src="${vUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${vUrl}')"></div>`;
@@ -579,7 +753,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ${theoryBtnHtml}
                                     ${easierBtnHtml}
                                     ${exampleBtnHtml}
-                                    <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done')">✅ Listo</button>
                                 </div>`;
 
                                 contentEl.innerHTML = mediaHtml + marked.parse(finalMarkdown) + actionButtonsHtml;
@@ -656,11 +829,77 @@ function renderVideoMediaHtml(videoUrl) {
             </video>
         </div>`;
     }
-    
     return embedHtml;
 }
 
-    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null, preventTheoryButtons = false, videoUrl = null) {
+    function addMessageWithTypewriter(rawMarkdownText, visualUrl = null, videoUrl = null) {
+        const msgEl = document.createElement('div');
+        const messageId = 'msg-' + Date.now();
+        msgEl.id = messageId;
+        msgEl.className = 'message assistant';
+
+        const contentEl = document.createElement('div');
+        contentEl.className = 'bubble';
+        msgEl.appendChild(contentEl);
+        chatMessages.appendChild(msgEl);
+
+        let mediaHtml = '';
+        if (videoUrl && !window._isTheoryActive && !window._isEasierActive && !window._isExampleActive) {
+            mediaHtml += renderVideoMediaHtml(videoUrl);
+        }
+        if (visualUrl) {
+            mediaHtml += `<div class="message-media"><img src="${visualUrl}" alt="Ilustración del libro" class="chat-img" onclick="window.open('${visualUrl}')"></div>`;
+        }
+
+        const rawText = rawMarkdownText || '';
+        let displayedLength = 0;
+        let animId = null;
+
+        const theoryBtnHtml = !window._isTheoryActive
+            ? `<button class="theory-btn btn-theory" onclick="window.handleTheoryAction('theory')">📖 Teoría</button>`
+            : '';
+        const easierBtnHtml = !window._isEasierActive 
+            ? `<button class="theory-btn btn-easier" onclick="window.handleTheoryAction('easier')">💡 Más fácil</button>`
+            : '';
+        const exampleBtnHtml = !window._isExampleActive 
+            ? `<button class="theory-btn btn-example" onclick="window.handleTheoryAction('example')">📝 Ejemplo</button>`
+            : '';
+
+        const actionButtonsHtml = `
+        <div class="theory-action-buttons">
+            ${theoryBtnHtml}
+            ${easierBtnHtml}
+            ${exampleBtnHtml}
+        </div>`;
+
+        function renderStep() {
+            if (displayedLength < rawText.length) {
+                const diff = rawText.length - displayedLength;
+                const step = diff > 80 ? 4 : (diff > 30 ? 2 : 1);
+                displayedLength = Math.min(displayedLength + step, rawText.length);
+
+                const currentSlice = rawText.slice(0, displayedLength);
+                const safeMarkdown = cleanMarkdownText(currentSlice);
+                contentEl.innerHTML = mediaHtml + marked.parse(safeMarkdown) + '<span class="chat-cursor">▌</span>';
+
+                animId = requestAnimationFrame(renderStep);
+            } else {
+                if (animId) cancelAnimationFrame(animId);
+                const safeFinal = cleanMarkdownText(rawText);
+                contentEl.innerHTML = mediaHtml + marked.parse(safeFinal) + actionButtonsHtml;
+                if (audioEnabled && window.speechSynthesis) {
+                    speakText(safeFinal.replace(/<[^>]*>/g, ''));
+                }
+            }
+        }
+
+        // FIRST smooth scroll to top, THEN start typing only after scroll completes
+        scrollToCurrentTopic(true, () => {
+            animId = requestAnimationFrame(renderStep);
+        });
+    }
+
+    function addMessage(text, sender, isHTML = false, isHidden = false, preventAudio = false, visualUrl = null, audioUrl = null, preventTheoryButtons = false, videoUrl = null, preventScroll = false) {
         if (isHidden) return; // Do not render anything if it's a hidden message
 
         const msgEl = document.createElement('div');
@@ -799,7 +1038,6 @@ function renderVideoMediaHtml(videoUrl) {
                 ${theoryBtnHtml}
                 ${easierBtnHtml}
                 ${exampleBtnHtml}
-                <button class="theory-btn btn-done" onclick="window.handleTheoryAction('done', this)">✅ Listo</button>
             </div>`;
         }
 
@@ -807,8 +1045,10 @@ function renderVideoMediaHtml(videoUrl) {
         msgEl.appendChild(contentEl);
         chatMessages.appendChild(msgEl);
 
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Smart scroll (align to topic top if active, or scroll to bottom)
+        if (!preventScroll) {
+            smartScrollToBottom();
+        }
 
         // Speak the message if audio is enabled and it's from the assistant
         if (sender === 'assistant' && !isHidden && !preventAudio) {
@@ -890,7 +1130,7 @@ function renderVideoMediaHtml(videoUrl) {
         window.speechSynthesis.speak(utterance);
     }
 
-    function addLoadingIndicator() {
+    function addLoadingIndicator(preventScroll = false) {
         const id = 'loading-' + Date.now();
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message assistant';
@@ -905,7 +1145,9 @@ function renderVideoMediaHtml(videoUrl) {
         `;
 
         chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        if (!preventScroll) {
+            smartScrollToBottom();
+        }
 
         return id;
     }
@@ -971,30 +1213,6 @@ function renderVideoMediaHtml(videoUrl) {
         // ── Clear global state ────────────────────────────────────────────
         window.currentCorrectAnswer = null;
 
-        // ── Track answer in DB (progress) ─────────────────────────────────
-        if (window.currentDBQuestion && window.currentDBQuestion.id) {
-            try {
-                const checkResp = await fetch('/questions/check', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question_id: window.currentDBQuestion.id, selected_option: answer })
-                });
-                
-                if (checkResp.ok) {
-                    const checkData = await checkResp.json();
-                    // --- PEDAGOGY: Proactive rescue trigger ---
-                    if (checkData.trigger_rescue) {
-                        console.log("[PEDAGOGY] Error threshold reached. Requesting AUTO_RESCUE...");
-                        // Call chatbot for rescue theory + repeat question
-                        sendMessageToBackend("[AUTO_RESCUE]", false, false, currentExerciseIndex);
-                        return; // Exit: Chatbot will provide the feedback and repeat the question
-                    }
-                }
-            } catch (e) {
-                console.error("Error checking answer:", e);
-            }
-        }
-
         // ── Text feedback (solo si hay texto en la BD) ──────────────────
         if (isCorrect) {
             const fb = q.feedback_correct || '';
@@ -1057,9 +1275,14 @@ function renderVideoMediaHtml(videoUrl) {
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Quiero veure la teoria d'aquest tema." 
                 : "Quiero ver la teoría de este tema.";
-            addMessage(userMsg, 'user');
+            addMessage(userMsg, 'user', false, false, false, null, null, false, null, true);
+            const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
+            if (lastUserMsg) {
+                window._currentTopicUserMsg = lastUserMsg;
+                scrollToCurrentTopic(true);
+            }
 
-            const loadingId = addLoadingIndicator();
+            const loadingId = addLoadingIndicator(true);
             let staticFound = false;
             (async () => {
                 try {
@@ -1076,7 +1299,7 @@ function renderVideoMediaHtml(videoUrl) {
                         const expData = await expResp.json();
                         if (expData.content) {
                             removeMessage(loadingId);
-                            addMessage(marked.parse(expData.content), 'assistant', true, false, false, null, null, false, null);
+                            addMessageWithTypewriter(expData.content, expData.visual_url, null);
                             staticFound = true;
                         }
                     }
@@ -1103,36 +1326,118 @@ function renderVideoMediaHtml(videoUrl) {
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Pots explicar-ho de forma més fàcil?" 
                 : "¿Me lo puedes explicar de forma más fácil y sencilla?";
-            addMessage(userMsg, 'user');
-            
-            const formData = new URLSearchParams();
-            formData.append('message', userMsg);
-            formData.append('subject', currentSubject);
-            if (activeSessionCurso) {
-                formData.append('course_level', activeSessionCurso);
-                formData.append('bloque', activeSessionBloque);
-                formData.append('contenido', activeSessionContenido);
+            addMessage(userMsg, 'user', false, false, false, null, null, false, null, true);
+            const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
+            if (lastUserMsg) {
+                window._currentTopicUserMsg = lastUserMsg;
+                scrollToCurrentTopic(true);
             }
-            streamChatResponse(formData);
+            
+            const loadingId = addLoadingIndicator(true);
+            let staticFound = false;
+            (async () => {
+                try {
+                    const gradeMatch = (activeSessionCurso || '').match(/\d+/);
+                    const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
+                    const expParams = new URLSearchParams({ 
+                        subject: currentSubject, 
+                        grade: grade, 
+                        bloque: activeSessionBloque || '', 
+                        contenido: activeSessionContenido || '' 
+                    });
+                    const expResp = await fetch(`/explanations/get?${expParams}`);
+                    if (expResp.ok) {
+                        const expData = await expResp.json();
+                        if (expData.easier_version && expData.easier_version.trim()) {
+                            removeMessage(loadingId);
+                            addMessageWithTypewriter(expData.easier_version.trim(), expData.easier_visual_url || expData.visual_url, null);
+                            staticFound = true;
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+
+                if (!staticFound) {
+                    const formData = new URLSearchParams();
+                    formData.append('message', userMsg);
+                    formData.append('subject', currentSubject);
+                    if (activeSessionCurso) {
+                        formData.append('course_level', activeSessionCurso);
+                        formData.append('bloque', activeSessionBloque);
+                        formData.append('contenido', activeSessionContenido);
+                    }
+                    formData.append('reset_history', 'true');
+
+                    await streamChatResponse(formData, loadingId);
+                }
+            })();
         } else if (action === 'example') {
             window._isExampleActive = true;
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Dona'm un altre exemple pràctic." 
-                : "Dame otro ejemplo práctico sobre esto.";
-            addMessage(userMsg, 'user');
-
-            const formData = new URLSearchParams();
-            formData.append('message', userMsg);
-            formData.append('subject', currentSubject);
-            if (activeSessionCurso) {
-                formData.append('course_level', activeSessionCurso);
-                formData.append('bloque', activeSessionBloque);
-                formData.append('contenido', activeSessionContenido);
+                : "Dame algún ejemplo.";
+            addMessage(userMsg, 'user', false, false, false, null, null, false, null, true);
+            const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
+            if (lastUserMsg) {
+                window._currentTopicUserMsg = lastUserMsg;
+                scrollToCurrentTopic(true);
             }
-            streamChatResponse(formData);
+
+            const loadingId = addLoadingIndicator(true);
+            let staticFound = false;
+            (async () => {
+                try {
+                    const gradeMatch = (activeSessionCurso || '').match(/\d+/);
+                    const grade = gradeMatch ? parseInt(gradeMatch[0]) : 0;
+                    const expParams = new URLSearchParams({ 
+                        subject: currentSubject, 
+                        grade: grade, 
+                        bloque: activeSessionBloque || '', 
+                        contenido: activeSessionContenido || '' 
+                    });
+                    const expResp = await fetch(`/explanations/get?${expParams}`);
+                    if (expResp.ok) {
+                        const expData = await expResp.json();
+                        if (expData.examples && expData.examples.trim()) {
+                            removeMessage(loadingId);
+                            let formattedEx = expData.examples.trim();
+                            try {
+                                const parsed = JSON.parse(formattedEx);
+                                if (Array.isArray(parsed)) {
+                                    formattedEx = parsed.map(ex => String(ex).replace(/^•\s*/, '').trim()).join('\n\n');
+                                }
+                            } catch(e){}
+                            addMessageWithTypewriter(formattedEx, expData.examples_visual_url || expData.visual_url, null);
+                            staticFound = true;
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+
+                if (!staticFound) {
+                    const formData = new URLSearchParams();
+                    formData.append('message', userMsg);
+                    formData.append('subject', currentSubject);
+                    if (activeSessionCurso) {
+                        formData.append('course_level', activeSessionCurso);
+                        formData.append('bloque', activeSessionBloque);
+                        formData.append('contenido', activeSessionContenido);
+                    }
+                    formData.append('reset_history', 'true');
+
+                    await streamChatResponse(formData, loadingId);
+                }
+            })();
         } else if (action === 'done') {
             const userMsg = (currentSubject === 'valenciano') ? "Llest!" : "¡Listo!";
-            addMessage(userMsg, 'user');
+            addMessage(userMsg, 'user', false, false, false, null, null, false, null, true);
+            const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
+            if (lastUserMsg) {
+                window._currentTopicUserMsg = lastUserMsg;
+                scrollToCurrentTopic(true);
+            }
             
             const doneReply = (currentSubject === 'valenciano')
                 ? "Excel·lent treball! 🌟 Has repassat la teoria d'aquest tema. Quan vulgues, pots triar un altre tema del temari."

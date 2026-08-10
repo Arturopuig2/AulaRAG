@@ -150,8 +150,9 @@ def get_relevant_book_image(subject: str, grade: int = None, query_text: str = "
 
 def audit_catalog_with_vision(limit: int = 100) -> dict:
     """Uses Gemini Vision AI to audit cataloged book images, deleting decorative graphics and enriching educational captions."""
-    from .rag_engine import get_client, MODEL_NAME
+    from .rag_engine import get_client, get_model_name
     client = get_client()
+    model_name = get_model_name()
     db = SessionLocal()
     processed = 0
     kept = 0
@@ -177,7 +178,7 @@ def audit_catalog_with_vision(limit: int = 100) -> dict:
                     "Responde estrictamente en JSON: {\"is_educational\": true|false, \"description\": \"descripción didáctica breve\"}"
                 )
                 response = client.models.generate_content(
-                    model=MODEL_NAME,
+                    model=model_name,
                     contents=[img, prompt]
                 )
                 txt = response.text or ""

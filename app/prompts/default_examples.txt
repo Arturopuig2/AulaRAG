@@ -1,0 +1,5 @@
+Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} 3 EJEMPLOS
+PRÁCTICOS DE LA VIDA REAL para el tema '{contenido}' de {grade}º de Primaria.
+
+Responde EXCLUSIVAMENTE con un JSON válido que contenga un array de strings:
+["Ejemplo 1...", "Ejemplo 2...", "Ejemplo 3..."]. No añadas texto antes ni después.

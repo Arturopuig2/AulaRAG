@@ -6,9 +6,8 @@ Implements specialized pedagogical agents per subject:
 2. AgenteValenciano (Valencian Language & Grammar Expert)
 3. AgenteMatematicas (Math & Logical Reasoning Expert)
 4. AgenteIngles (English Language & Vocabulary Expert)
-5. AgenteCompetenciaLectora (Reading Comprehension & Analysis Expert)
-6. AgenteAuditor (Quality & Orthographic Auditor)
-7. RouterAgent (Directs student queries to the appropriate agent)
+5. AgenteAuditor (Quality & Orthographic Auditor)
+6. RouterAgent (Directs student queries to the appropriate agent)
 """
 
 import json

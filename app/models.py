@@ -16,44 +16,6 @@ class User(Base):
     last_seen_at = Column(DateTime, default=datetime.utcnow)
 
 
-class Question(Base):
-    """A verified question stored in the question bank."""
-    __tablename__ = "questions"
-
-    id = Column(Integer, primary_key=True, index=True)
-
-    # --- Classification ---
-    identifier  = Column(String, unique=True, index=True, nullable=True)   # e.g. PMAT1N0001
-    subject     = Column(String, nullable=False, index=True)               # matematicas | lengua | valenciano | ingles | competencia_lectora
-    grade       = Column(Integer, nullable=True, index=True)               # 1–6
-    bloque      = Column(String, nullable=True, index=True)                # Tema (from temario JSON)
-    contenido   = Column(String, nullable=True, index=True)                # Epígrafe
-    dificultad  = Column(String, nullable=True, default="normal")          # basica | normal | avanzada
-
-    # --- Content ---
-    question_type = Column(String, nullable=False, default="seleccion")    # seleccion | verdadero_falso | pasos
-    question      = Column(Text, nullable=False)                           # Enunciado
-    options       = Column(Text, nullable=True)                            # JSON: ["Opción A", "Opción B", …]
-    answer        = Column(String, nullable=False)                         # Exact correct option string
-    explanation         = Column(Text, nullable=True)                            # Legacy generic explanation
-    feedback_correct    = Column(Text, nullable=True)                            # Shown when student answers correctly
-    feedback_incorrect  = Column(Text, nullable=True)                            # Shown when student answers incorrectly
-
-    # --- Media (paths relative to Render persistent storage) ---
-    visual_url  = Column(String, nullable=True)   # Image URL
-    audio_url   = Column(String, nullable=True)   # Audio URL
-
-    # --- Metadata ---
-    source      = Column(String, nullable=True, default="manual")          # manual | ia_pdf | ia_csv | ia_internet
-    is_active   = Column(Boolean, default=True)                            # Soft delete
-    is_verified = Column(Boolean, default=False)                           # Quality seal for RAG
-    created_by  = Column(Integer, ForeignKey("users.id"), nullable=True)
-    created_at  = Column(DateTime, default=datetime.utcnow)
-    updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    creator = relationship("User", foreign_keys=[created_by])
-
-
 class Explanation(Base):
     """A pedagogical explanation linked to a topic or question."""
     __tablename__ = "explanations"

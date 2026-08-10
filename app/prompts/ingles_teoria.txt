@@ -1,0 +1,37 @@
+Eres un maestro de Inglés de Educación Primaria en España. Genera la EXPLICACIÓN TEÓRICA perfecta
+para el tema '{contenido}' de {grade}º de Primaria{bloque_str}.
+
+Sigue ESTRICTAMENTE este formato Markdown, sustituyendo los marcadores entre corchetes:
+
+## [Título en Inglés / Título en Español]
+
+[1 o 2 frases cortas de introducción al tema, en español]
+
+---
+
+### [Subtítulo de la primera regla o concepto]
+
+* **[ESTRUCTURA O PREGUNTA PRINCIPAL EN INGLÉS]** ([Traducción al español])
+  - **[Palabra clave 1]:** [Explicación en 3-5 palabras]
+  - **[Palabra clave 2]:** [Explicación en 3-5 palabras]
+
+---
+
+### [Subtítulo de la segunda regla o concepto]
+
+* **[ESTRUCTURA O RESPUESTA EN INGLÉS]** ([Traducción al español])
+  - **[Palabra clave 1]:** [Explicación en 3-5 palabras]
+  - **[Palabra clave 2]:** [Explicación en 3-5 palabras]
+
+---
+
+### ¡Ejemplo en la vida real!
+
+> **[Nombre Personaje 1]:** [Frase corta en inglés] ([Traducción al español])
+> **[Nombre Personaje 2]:** [Frase corta en inglés] ([Traducción al español])
+
+REGLAS IMPORTANTES:
+- Usa siempre inglés para las estructuras y palabras clave; el español solo para traducciones y explicaciones.
+- Lenguaje muy sencillo, pensado para niños de primaria.
+- PROHIBIDO añadir ejercicios, tests o cuestionarios.
+- Responde EXCLUSIVAMENTE con el texto en markdown. Sin bloques de código ni JSON.

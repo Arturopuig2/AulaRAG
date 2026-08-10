@@ -598,13 +598,10 @@
             </div>
         </header>
 
-        <!-- Navigation Tabs -->
+        <!-- Navigation Bar (Teoría Maestra RAG) -->
         <div class="tabs">
-            <button class="tab-btn active" id="tab-explanations" onclick="switchTab('explanations')">
-                <span>📚 Teoría Maestra RAG</span>
-            </button>
-            <button class="tab-btn" id="tab-exercises" onclick="switchTab('exercises')">
-                <span>📝 Ejercicios Verificados</span>
+            <button class="tab-btn active" id="tab-explanations">
+                <span>📚 Gestor de Teoría Maestra RAG</span>
             </button>
         </div>
 
@@ -873,7 +870,17 @@
                                 <button type="button" class="btn btn-save-sm" onclick="saveSectionOnly('examples')">💾 Guardar Ejemplos</button>
                             </div>
                         </div>
-                        <textarea id="e-examples" rows="3" placeholder="Ejemplo 1&#10;Ejemplo 2&#10;Ejemplo 3"></textarea>
+                        <textarea id="e-examples" rows="3" placeholder="Ejemplo 1&#10;Ejemplo 2&#10;Ejemplo 3" oninput="updateExamplesLivePreview()"></textarea>
+
+                        <!-- Live Preview Box Ejemplos Prácticos -->
+                        <div class="chat-live-preview-box">
+                            <div class="chat-live-preview-header">
+                                👁️ Vista Previa Ejemplos Prácticos:
+                            </div>
+                            <div id="e-examples-live-preview" class="chat-bubble-preview">
+                                <span style="color:var(--text-muted); font-style:italic;">Vista previa de los ejemplos prácticos...</span>
+                            </div>
+                        </div>
 
                         <!-- Ilustración Ejemplos Prácticos -->
                         <div class="image-preview-container">
@@ -1225,6 +1232,22 @@
             }
         }
 
+        function updateExamplesLivePreview() {
+            const text = document.getElementById('e-examples').value;
+            const previewEl = document.getElementById('e-examples-live-preview');
+            if (!previewEl) return;
+            if (!text || !text.trim()) {
+                previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Vista previa de los ejemplos prácticos...</span>';
+                return;
+            }
+            if (window.marked && typeof window.marked.parse === 'function') {
+                window.marked.setOptions({ breaks: true, gfm: true });
+                previewEl.innerHTML = window.marked.parse(text);
+            } else {
+                previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+            }
+        }
+
         function openCreateExplanationModal() {
             document.getElementById('explanation-modal-title').textContent = "Nueva Lección Teórica";
             document.getElementById('e-id').value = "";
@@ -1245,6 +1268,7 @@
 
             updateTheoryLivePreview();
             updateEasierLivePreview();
+            updateExamplesLivePreview();
 
             document.getElementById('modal-explanation').classList.add('active');
         }
@@ -1265,9 +1289,9 @@
             
             let exStr = "";
             if (Array.isArray(e.examples)) {
-                exStr = e.examples.join('\n');
+                exStr = e.examples.map(ex => typeof ex === 'string' ? ex.replace(/^•\s*/, '').trim() : ex).join('\n');
             } else if (typeof e.examples === 'string') {
-                exStr = e.examples;
+                exStr = e.examples.split('\n').map(ex => ex.replace(/^•\s*/, '').trim()).join('\n');
             }
             document.getElementById('e-examples').value = exStr;
 
@@ -1277,6 +1301,7 @@
 
             updateTheoryLivePreview();
             updateEasierLivePreview();
+            updateExamplesLivePreview();
 
             document.getElementById('modal-explanation').classList.add('active');
         }
@@ -1321,11 +1346,12 @@
                     } else if (section === 'examples') {
                         let exText = "";
                         if (Array.isArray(data.result)) {
-                            exText = data.result.join('\n');
+                            exText = data.result.map(ex => typeof ex === 'string' ? ex.replace(/^•\s*/, '').trim() : ex).join('\n');
                         } else {
-                            exText = data.result;
+                            exText = (data.result || "").split('\n').map(ex => ex.replace(/^•\s*/, '').trim()).join('\n');
                         }
                         document.getElementById('e-examples').value = exText;
+                        updateExamplesLivePreview();
                         showToast("✨ Ejemplos generados con IA");
                     }
                 } else {
@@ -1359,7 +1385,7 @@
             }
             if (sectionName === 'examples') {
                 const raw = document.getElementById('e-examples').value;
-                payload.examples = raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+                payload.examples = raw.split('\n').map(s => s.replace(/^•\s*/, '').trim()).filter(s => s.length > 0);
                 payload.examples_visual_url = document.getElementById('e-examples-visual-url').value;
             }
 
@@ -1576,7 +1602,7 @@
             const text = document.getElementById('e-text').value;
             const easier_version = document.getElementById('e-easier-version').value;
             const examplesRaw = document.getElementById('e-examples').value;
-            const examples = examplesRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+            const examples = examplesRaw.split('\n').map(s => s.replace(/^•\s*/, '').trim()).filter(s => s.length > 0);
 
             if (!contenido || !text) {
                 showToast("Completa los campos obligatorios", true);

@@ -1,0 +1,6 @@
+Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} la EXPLICACIÓN
+TEÓRICA perfecta para el tema '{contenido}' del curso {grade}º de Primaria{bloque_str}.
+
+Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen).
+PROHIBIDO proponer ejercicios, cuestionarios o tests al alumno.
+Responde EXCLUSIVAMENTE con el texto completo en markdown, sin envolver en JSON ni bloques de código.
