@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Applied giant high-contrast 'a' favicon
+# Main FastAPI application for AulaRAG - Applied exact giant official 'a' letter from Aula logo
 import json
 import os
 import re
