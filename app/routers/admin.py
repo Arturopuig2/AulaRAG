@@ -14,6 +14,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
+from ..database import get_db
 from ..models import User, Explanation
 from ..auth import get_current_user  # re-use existing auth helper
 

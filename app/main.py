@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Incremented chat.js cache buster v=225 to force fresh browser load
+# Main FastAPI application for AulaRAG - Fixed get_db import in admin.py router
 import json
 import os
 import re
