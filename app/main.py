@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed 'Listo' button completely from chat interface
+# Main FastAPI application for AulaRAG - Cleaned 100% of question code from chat.js
 import json
 import os
 import re
