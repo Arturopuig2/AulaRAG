@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Enforced strict System Instruction & Auditor scrub for 100% formal theory
+# Main FastAPI application for AulaRAG - Fixed exact explanation matching priority (ID 342 'Las vocales')
 import json
 import os
 import re

@@ -416,9 +416,13 @@ def get_db_explanation_obj(subject: str, grade: int = None, bloque: str = None, 
         if not candidates:
             return None
 
-        # Prioridad 1: Búsqueda por Contenido exacto/parcial (normalizado)
+        # Prioridad 1: Búsqueda por Contenido EXACTO (normalizado)
         if contenido:
             norm_cont = normalize_text(contenido)
+            for exp in candidates:
+                if exp.contenido and normalize_text(exp.contenido) == norm_cont:
+                    return exp
+            # Prioridad 1b: Búsqueda por Contenido Parcial
             for exp in candidates:
                 if exp.contenido and norm_cont in normalize_text(exp.contenido):
                     return exp
