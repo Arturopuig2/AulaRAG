@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed get_db import in admin.py router
+# Main FastAPI application for AulaRAG - Restored /api/ai/generate-section endpoint in admin.py router
 import json
 import os
 import re

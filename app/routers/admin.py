@@ -576,6 +576,131 @@ async def api_delete_explanation(eid: int, db: Session = Depends(get_db)):
     return {"ok": True}
 
 
+# ── AI Generation (Theory Preview) ─────────────────────────────────────────────
+
+@router.post("/api/ai/generate-section")
+async def generate_explanation_section_ai(payload: dict):
+    """Generates a specific section (text, easier_version, or examples) using Gemini AI."""
+    from ..rag_engine import get_client, get_model_name
+    from google.genai import types
+
+    client = get_client()
+    model_name = get_model_name()
+    if not client:
+        raise HTTPException(500, "GEMINI_API_KEY no configurada")
+
+    subject = payload.get("subject", "matematicas")
+    grade = int(payload.get("grade", 1))
+    bloque = payload.get("bloque", "")
+    contenido = payload.get("contenido", "")
+    section = payload.get("section", "text")
+
+    if not contenido:
+        raise HTTPException(400, "Debes indicar el contenido/tema antes de generar.")
+
+    lang_instr = "español"
+    if subject == "valenciano":
+        lang_instr = "valencià normatiu (AVL)"
+    elif subject == "ingles":
+        lang_instr = "forma BILINGÜE combinando INGLÉS Y ESPAÑOL (para alumnos muy pequeños de Educación Primaria con nivel inicial). Muestra cada término o frase en inglés acompañado de su traducción y explicación sencilla en español."
+
+    # Determinar ruta base del directorio de prompts
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    prompts_dir = os.path.join(base_dir, "prompts")
+
+    def read_prompt_file(filename: str, default_text: str) -> str:
+        filepath = os.path.join(prompts_dir, filename)
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    return f.read()
+            except Exception as e:
+                print(f"Error reading prompt file {filename}: {e}")
+        return default_text
+
+    bloque_str = f" (Bloque: {bloque})" if bloque else ""
+
+    if section == "text":
+        if subject == "ingles":
+            default_tpl = (
+                "Eres un maestro de Inglés de Educación Primaria en España. Genera la EXPLICACIÓN TEÓRICA perfecta "
+                "para el tema '{contenido}' de {grade}º de Primaria{bloque_str}.\n\n"
+                "Sigue ESTRICTAMENTE este formato Markdown, sustituyendo los marcadores entre corchetes:\n\n"
+                "## [Título en Inglés / Título en Español]\n\n"
+                "[1 o 2 frases cortas de introducción al tema, en español]\n\n"
+                "---\n\n"
+                "### [Subtítulo de la primera regla o concepto]\n\n"
+                "* **[ESTRUCTURA O PREGUNTA PRINCIPAL EN INGLÉS]** ([Traducción al español])\n"
+                "  - **[Palabra clave 1]:** [Explicación en 3-5 palabras]\n"
+                "  - **[Palabra clave 2]:** [Explicación en 3-5 palabras]\n\n"
+                "---\n\n"
+                "### [Subtítulo de la segunda regla o concepto]\n\n"
+                "* **[ESTRUCTURA O RESPUESTA EN INGLÉS]** ([Traducción al español])\n"
+                "  - **[Palabra clave 1]:** [Explicación en 3-5 palabras]\n"
+                "  - **[Palabra clave 2]:** [Explicación en 3-5 palabras]\n\n"
+                "---\n\n"
+                "### ¡Ejemplo en la vida real!\n\n"
+                "> **[Nombre Personaje 1]:** [Frase corta en inglés] ([Traducción al español])\n"
+                "> **[Nombre Personaje 2]:** [Frase corta en inglés] ([Traducción al español])\n\n"
+                "REGLAS IMPORTANTES:\n"
+                "- Usa siempre inglés para las estructuras y palabras clave; el español solo para traducciones y explicaciones.\n"
+                "- Lenguaje muy sencillo, pensado para niños de primaria.\n"
+                "- PROHIBIDO añadir ejercicios, tests o cuestionarios.\n"
+                "- Responde EXCLUSIVAMENTE con el texto en markdown. Sin bloques de código ni JSON."
+            )
+            template = read_prompt_file("ingles_teoria.txt", default_tpl)
+            prompt = template.format(contenido=contenido, grade=grade, bloque_str=bloque_str)
+        else:
+            default_tpl = (
+                "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} la EXPLICACIÓN TEÓRICA perfecta para el tema '{contenido}' "
+                "del curso {grade}º de Primaria{bloque_str}.\n"
+                "Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen). "
+                "PROHIBIDO proponer ejercicios, cuestionarios o tests al alumno.\n"
+                "Responde EXCLUSIVAMENTE con el texto completo en markdown, sin envolver en JSON ni bloques de código."
+            )
+            template = read_prompt_file("default_teoria.txt", default_tpl)
+            prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, bloque_str=bloque_str)
+    elif section == "easier_version":
+        default_tpl = (
+            "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} una VERSIÓN FÁCIL Y ADAPTADA del tema '{contenido}' "
+            "para {grade}º de Primaria, enfocada a alumnos con necesidades educativas o dificultades de comprensión.\n"
+            "Usa frases muy sencillas, explicaciones intuitivas y lenguaje cercano.\n"
+            "Responde EXCLUSIVAMENTE con el texto adaptado en markdown, sin envolver en JSON ni bloques de código."
+        )
+        template = read_prompt_file("default_easier.txt", default_tpl)
+        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade)
+    elif section == "examples":
+        default_tpl = (
+            "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} 3 EJEMPLOS PRÁCTICOS DE LA VIDA REAL para el tema '{contenido}' "
+            "de {grade}º de Primaria.\n"
+            "Responde EXCLUSIVAMENTE con un JSON válido que contenga un array de strings: [\"Ejemplo 1...\", \"Ejemplo 2...\", \"Ejemplo 3...\"]. No añadas texto antes ni después."
+        )
+        template = read_prompt_file("default_examples.txt", default_tpl)
+        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade)
+    else:
+        raise HTTPException(400, "Sección no válida")
+
+    try:
+        response = await client.aio.models.generate_content(
+            model=model_name,
+            contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
+        )
+
+        raw = response.text.strip()
+        if section == "examples":
+            raw = re.sub(r'^```(?:json)?\s*', '', raw)
+            raw = re.sub(r'\s*```$', '', raw)
+            ex_list = json.loads(raw)
+            if isinstance(ex_list, list):
+                ex_list = [re.sub(r'^•\s*', '', str(item)).strip() for item in ex_list]
+            return {"result": ex_list}
+        else:
+            return {"result": raw}
+
+    except Exception as e:
+        raise HTTPException(500, f"Error generando la sección {section} con IA: {e}")
+
+
 # ── Import JSON / CSV ─────────────────────────────────────────────────────────
 
 @router.post("/import/questions")
