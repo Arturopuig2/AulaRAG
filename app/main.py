@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Removed dynamic AI streaming fallback in student chat to strictly enforce static verified DB content
+# Main FastAPI application for AulaRAG - Moved verification check button to the last actions column alongside edit and delete options
 import json
 import os
 import re
