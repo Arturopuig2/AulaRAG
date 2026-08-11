@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Enabled dynamic inline subject color for .chat-header h2
+# Main FastAPI application for AulaRAG - Unified yellow header styling for h2, h3, h4 across Chat & Admin
 import json
 import os
 import re

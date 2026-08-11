@@ -13,30 +13,27 @@
     display: block;
 }
 
-/* Títulos H2 (##) — amarillo con línea inferior, pero NO BOLD (font-weight: 400) */
+/* Títulos H2, H3 y H4 (##, ###, ####) — amarillo con línea inferior decorativa, sin negrita (font-weight: 400) */
 .message.assistant .bubble h2,
+.message.assistant .bubble h3,
+.message.assistant .bubble h4,
 .chat-bubble-preview h2,
-.bubble h2 {
+.chat-bubble-preview h3,
+.chat-bubble-preview h4,
+.bubble h2,
+.bubble h3,
+.bubble h4,
+#chat-messages .bubble h2,
+#chat-messages .bubble h3,
+#chat-messages .bubble h4 {
     font-size: 1.15em !important;
     font-weight: 400 !important;
     color: var(--color-yellow, #f59e0b) !important;
-    margin: 10px 0 10px 0 !important;
+    margin: 12px 0 8px 0 !important;
     padding-bottom: 6px !important;
     border-bottom: 2px solid var(--color-yellow, #f59e0b) !important;
     letter-spacing: 0.01em !important;
     display: block !important;
-}
-
-/* Títulos H3 y H4 — subtítulos de cada regla/sección (### y ####) — NO BOLD (font-weight: 400) */
-.message.assistant .bubble h3,
-.message.assistant .bubble h4,
-.chat-bubble-preview h3,
-.chat-bubble-preview h4 {
-    font-size: 1em;
-    font-weight: 400 !important;
-    color: var(--color-blue, #60a5fa) !important;
-    margin: 14px 0 6px 0;
-    display: block;
 }
 
 /* Párrafos de introducción */
