@@ -1162,17 +1162,11 @@ function renderVideoMediaHtml(videoUrl) {
                 }
 
                 if (!staticFound) {
-                    const formData = new URLSearchParams();
-                    formData.append('message', userMsg);
-                    formData.append('subject', currentSubject);
-                    if (activeSessionCurso) {
-                        formData.append('course_level', activeSessionCurso);
-                        formData.append('bloque', activeSessionBloque);
-                        formData.append('contenido', activeSessionContenido);
-                    }
-                    formData.append('reset_history', 'true');
-
-                    await streamChatResponse(formData, loadingId);
+                    removeMessage(loadingId);
+                    const notFoundMsg = (currentSubject === 'valenciano')
+                        ? "Aquest tema encara no té una explicació teòrica guardada."
+                        : "Este tema aún no dispone de una explicación teórica guardada.";
+                    addMessage(notFoundMsg, 'assistant');
                 }
             })();
         } else if (action === 'easier') {
@@ -1213,17 +1207,11 @@ function renderVideoMediaHtml(videoUrl) {
                 }
 
                 if (!staticFound) {
-                    const formData = new URLSearchParams();
-                    formData.append('message', userMsg);
-                    formData.append('subject', currentSubject);
-                    if (activeSessionCurso) {
-                        formData.append('course_level', activeSessionCurso);
-                        formData.append('bloque', activeSessionBloque);
-                        formData.append('contenido', activeSessionContenido);
-                    }
-                    formData.append('reset_history', 'true');
-
-                    await streamChatResponse(formData, loadingId);
+                    removeMessage(loadingId);
+                    const notFoundMsg = (currentSubject === 'valenciano')
+                        ? "Aquest tema encara no té una versió adaptada ('Més fàcil') guardada."
+                        : "Este tema aún no dispone de una versión adaptada ('Más fácil') guardada.";
+                    addMessage(notFoundMsg, 'assistant');
                 }
             })();
         } else if (action === 'example') {
@@ -1271,17 +1259,11 @@ function renderVideoMediaHtml(videoUrl) {
                 }
 
                 if (!staticFound) {
-                    const formData = new URLSearchParams();
-                    formData.append('message', userMsg);
-                    formData.append('subject', currentSubject);
-                    if (activeSessionCurso) {
-                        formData.append('course_level', activeSessionCurso);
-                        formData.append('bloque', activeSessionBloque);
-                        formData.append('contenido', activeSessionContenido);
-                    }
-                    formData.append('reset_history', 'true');
-
-                    await streamChatResponse(formData, loadingId);
+                    removeMessage(loadingId);
+                    const notFoundMsg = (currentSubject === 'valenciano')
+                        ? "Aquest tema encara no té exemples pràctics guardats."
+                        : "Este tema aún no dispone de ejemplos prácticos guardados.";
+                    addMessage(notFoundMsg, 'assistant');
                 }
             })();
         }

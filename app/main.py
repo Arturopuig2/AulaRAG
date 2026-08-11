@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added verification check button (Verificado / Sin verificar) next to content blocks in admin panel
+# Main FastAPI application for AulaRAG - Removed dynamic AI streaming fallback in student chat to strictly enforce static verified DB content
 import json
 import os
 import re
