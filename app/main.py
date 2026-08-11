@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Connected context rules and agent skills to admin panel generation (Teoría, Más Fácil, Ejemplos)
+# Main FastAPI application for AulaRAG - Added verification check button (Verificado / Sin verificar) next to content blocks in admin panel
 import json
 import os
 import re

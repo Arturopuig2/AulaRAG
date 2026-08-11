@@ -113,6 +113,38 @@
             align-items: center;
         }
 
+        .btn-verify {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1.5px solid #cbd5e1;
+            background: #f8fafc;
+            color: #64748b;
+            transition: all 0.2s ease;
+            margin-top: 5px;
+            user-select: none;
+        }
+        .btn-verify:hover {
+            border-color: #22c55e;
+            color: #16a34a;
+            background: #f0fdf4;
+        }
+        .btn-verify.active {
+            background: #dcfce7;
+            color: #15803d;
+            border-color: #22c55e;
+            box-shadow: 0 1px 3px rgba(34, 197, 94, 0.18);
+        }
+        .btn-verify .check-icon {
+            font-size: 0.85rem;
+            font-weight: 900;
+        }
+
         .btn {
             padding: 0.7rem 1.3rem;
             border-radius: var(--radius-md);
@@ -1186,6 +1218,16 @@
                     ? `<img src="${e.visual_url || e.easier_visual_url || e.examples_visual_url}" style="width:48px; height:48px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" alt="Ilustración">`
                     : `<span style="font-size:0.75rem; color:var(--text-muted);">Sin imagen</span>`;
 
+                const isVerified = Boolean(e.is_verified);
+                const verifyBtn = `
+                    <button type="button" class="btn-verify ${isVerified ? 'active' : ''}" 
+                            onclick="toggleExplanationVerify(${e.id}, ${isVerified})" 
+                            title="${isVerified ? 'Bloque Verificado - Haz clic para cambiar' : 'Haz clic para marcar este bloque como Verificado'}">
+                        <span class="check-icon">${isVerified ? '✓' : '○'}</span>
+                        <span>${isVerified ? 'Verificado' : 'Sin verificar'}</span>
+                    </button>
+                `;
+
                 tr.innerHTML = `
                     <td>${imgTag}</td>
                     <td>
@@ -1193,7 +1235,10 @@
                         <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
                         <div style="font-size:0.8rem; margin-top:4px; color:var(--text-muted);">${escapeHtml(e.bloque || '')}</div>
                     </td>
-                    <td style="font-weight:700;">${escapeHtml(e.contenido || '')}</td>
+                    <td>
+                        <div style="font-weight:700; font-size:0.95rem;">${escapeHtml(e.contenido || '')}</div>
+                        ${verifyBtn}
+                    </td>
                     <td style="font-size:0.88rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 90))}...</td>
                     <td>
                         <div class="actions-cell">
@@ -1205,6 +1250,28 @@
                 tbody.appendChild(tr);
             });
         }
+
+        window.toggleExplanationVerify = async function(id, currentVerified) {
+            try {
+                const resp = await fetch('/admin/verify-toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, is_verified: !currentVerified, type: 'explanation' })
+                });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const exp = (window.allExplanations || []).find(item => item.id === id);
+                    if (exp) exp.is_verified = data.verified;
+                    renderExplanations(window.allExplanations);
+                    showToast(data.verified ? "Bloque de contenido marcado como Verificado ✓" : "Bloque desmarcado de Verificado");
+                } else {
+                    showToast("Error al cambiar la verificación", true);
+                }
+            } catch(err) {
+                console.error("Error toggle verification:", err);
+                showToast("Error de conexión al verificar", true);
+            }
+        };
 
         window.openQuestionEditById = function(id) {
             const q = (window.allQuestions || []).find(item => item.id === id);
