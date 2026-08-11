@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Enforced direct #f59e0b yellow headers with bottom border in style.css and theory_content.css
+# Main FastAPI application for AulaRAG - Added inline style block in HTML head for guaranteed yellow headers with bottom border line
 import json
 import os
 import re
