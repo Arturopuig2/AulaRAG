@@ -362,6 +362,18 @@
             border: 1px solid #fde68a;
         }
 
+        .badge-video {
+            background: #f3e8ff;
+            color: #7e22ce;
+            border: 1px solid #d8b4fe;
+        }
+
+        .badge-no-video {
+            background: #f8fafc;
+            color: #94a3b8;
+            border: 1px solid #e2e8f0;
+        }
+
         .actions-cell {
             display: flex;
             gap: 0.5rem;
@@ -1228,12 +1240,20 @@
                     </button>
                 `;
 
+                const hasVideo = Boolean(e.video_url && e.video_url.trim());
+                const videoBadge = hasVideo 
+                    ? `<span class="badge badge-video" title="Vídeo adjunto: ${escapeHtml(e.video_url)}">🎬 Vídeo</span>`
+                    : `<span class="badge badge-no-video" title="Sin vídeo adjunto">🎬 Sin vídeo</span>`;
+
                 tr.innerHTML = `
                     <td>${imgTag}</td>
                     <td>
-                        <span class="badge badge-subject">${e.subject.toUpperCase()}</span>
-                        <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
-                        <div style="font-size:0.8rem; margin-top:4px; color:var(--text-muted);">${escapeHtml(e.bloque || '')}</div>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+                            <span class="badge badge-subject">${e.subject.toUpperCase()}</span>
+                            <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
+                            ${videoBadge}
+                        </div>
+                        <div style="font-size:0.8rem; margin-top:6px; color:var(--text-muted);">${escapeHtml(e.bloque || '')}</div>
                     </td>
                     <td style="font-weight:700; font-size:0.95rem;">${escapeHtml(e.contenido || '')}</td>
                     <td style="font-size:0.88rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 90))}...</td>

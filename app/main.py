@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Moved verification check button to the last actions column alongside edit and delete options
+# Main FastAPI application for AulaRAG - Added video availability indicator badge (🎬 Vídeo / 🎬 Sin vídeo) in admin panel
 import json
 import os
 import re
