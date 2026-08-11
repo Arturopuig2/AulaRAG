@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
         str = str.replace(/\[\s*(?:INCORRECTE|CORRECTE|INCORRECTO|CORRECTO)\s*\]/gi, '');
         // Convert ---### or --- ### into double newline headers
         str = str.replace(/---+\s*(#{1,6}\s*)/g, '\n\n$1');
-        // Ensure headings are properly isolated on new lines
-        str = str.replace(/([^\n])\s*(#{1,6}\s*)/g, '$1\n\n$2');
+        // Ensure headings are properly isolated on new lines (skipping preceding # to avoid corrupting ## or ###)
+        str = str.replace(/([^\n#])\s*(#{1,6}\s+)/g, '$1\n\n$2');
         return str.trim();
     }
 

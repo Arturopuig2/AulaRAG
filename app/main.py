@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added inline style block in HTML head for guaranteed yellow headers with bottom border line
+# Main FastAPI application for AulaRAG - Fixed cleanMarkdownText regex bug that converted ## Resumen into # Resumen (H1)
 import json
 import os
 import re
