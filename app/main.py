@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Updated user bubble text to '¿Me lo puedes explicar más fácil?'
+# Main FastAPI application for AulaRAG - Enforced marked.parse & yellow h2 styling for easier version & examples
 import json
 import os
 import re

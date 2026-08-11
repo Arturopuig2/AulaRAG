@@ -940,8 +940,11 @@ function renderVideoMediaHtml(videoUrl) {
         // We use a negative lookbehind/lookahead strategy or simply avoid common SVG keywords
         formattedText = formattedText.replace(/(?<![=a-zA-Z])"([^"<>]+)"(?![=a-zA-Z])/g, '<strong>$1</strong>');
 
-        // Only run these manual replacements if it wasn't already processed by Marked
-        if (!isHTML) {
+        // Process assistant markdown text through Marked if available
+        if (!isHTML && sender === 'assistant' && window.marked && typeof window.marked.parse === 'function') {
+            const clean = cleanMarkdownText(formattedText);
+            formattedText = window.marked.parse(clean);
+        } else if (!isHTML) {
             // Convert newlines to <br>
             formattedText = formattedText.replace(/\n/g, '<br>');
         }

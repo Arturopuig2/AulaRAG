@@ -15,15 +15,17 @@
 
 /* Títulos H2 (##) — amarillo con línea inferior, pero NO BOLD (font-weight: 400) */
 .message.assistant .bubble h2,
-.chat-bubble-preview h2 {
-    font-size: 1.15em;
+.chat-bubble-preview h2,
+.bubble h2,
+h2 {
+    font-size: 1.15em !important;
     font-weight: 400 !important;
     color: var(--color-yellow, #f59e0b) !important;
-    margin: 10px 0 10px 0;
-    padding-bottom: 6px;
+    margin: 10px 0 10px 0 !important;
+    padding-bottom: 6px !important;
     border-bottom: 2px solid var(--color-yellow, #f59e0b) !important;
-    letter-spacing: 0.01em;
-    display: block;
+    letter-spacing: 0.01em !important;
+    display: block !important;
 }
 
 /* Títulos H3 y H4 — subtítulos de cada regla/sección (### y ####) — NO BOLD (font-weight: 400) */
