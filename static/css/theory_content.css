@@ -26,13 +26,13 @@
     display: block;
 }
 
-/* Títulos H3 y H4 — subtítulos de cada regla/sección (### y ####) */
+/* Títulos H3 y H4 — subtítulos de cada regla/sección (### y ####) — NO BOLD (font-weight: 400) */
 .message.assistant .bubble h3,
 .message.assistant .bubble h4,
 .chat-bubble-preview h3,
 .chat-bubble-preview h4 {
     font-size: 1em;
-    font-weight: 700;
+    font-weight: 400 !important;
     color: var(--color-blue, #60a5fa) !important;
     margin: 14px 0 6px 0;
     display: block;

@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - h1 (#) in black without bottom border, h2 (##) in yellow with bottom border (font-weight: 400 / not bold)
+# Main FastAPI application for AulaRAG - h3 (###) and h4 (####) headers set to font-weight 400 (not bold)
 import json
 import os
 import re
