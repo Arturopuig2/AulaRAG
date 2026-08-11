@@ -580,8 +580,9 @@ async def api_delete_explanation(eid: int, db: Session = Depends(get_db)):
 
 @router.post("/api/ai/generate-section")
 async def generate_explanation_section_ai(payload: dict):
-    """Generates a specific section (text, easier_version, or examples) using Gemini AI."""
-    from ..rag_engine import get_client, get_model_name
+    """Generates a specific section (text, easier_version, or examples) using Gemini AI with full context & agent rules."""
+    from ..rag_engine import get_client, get_model_name, load_context_rules
+    from ..multi_agent_system import AgenteAuditor, get_didactic_course_rules
     from google.genai import types
 
     client = get_client()
@@ -604,6 +605,11 @@ async def generate_explanation_section_ai(payload: dict):
     elif subject == "ingles":
         lang_instr = "forma BILINGÜE combinando INGLÉS Y ESPAÑOL (para alumnos muy pequeños de Educación Primaria con nivel inicial). Muestra cada término o frase en inglés acompañado de su traducción y explicación sencilla en español."
 
+    # Cargar reglas del contexto y del curso
+    context_rules = load_context_rules(subject)
+    course_rules = get_didactic_course_rules(grade)
+    rules_block = f"\n\n### REGLAS PEDAGÓGICAS Y DE LENGUAJE:\n{context_rules}\n{course_rules}\n" if (context_rules or course_rules) else ""
+
     # Determinar ruta base del directorio de prompts
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     prompts_dir = os.path.join(base_dir, "prompts")
@@ -624,7 +630,7 @@ async def generate_explanation_section_ai(payload: dict):
         if subject == "ingles":
             default_tpl = (
                 "Eres un maestro de Inglés de Educación Primaria en España. Genera la EXPLICACIÓN TEÓRICA perfecta "
-                "para el tema '{contenido}' de {grade}º de Primaria{bloque_str}.\n\n"
+                "para el tema '{contenido}' de {grade}º de Primaria{bloque_str}.{rules_block}\n\n"
                 "Sigue ESTRICTAMENTE este formato Markdown, sustituyendo los marcadores entre corchetes:\n\n"
                 "## [Título en Inglés / Título en Español]\n\n"
                 "[1 o 2 frases cortas de introducción al tema, en español]\n\n"
@@ -649,11 +655,11 @@ async def generate_explanation_section_ai(payload: dict):
                 "- Responde EXCLUSIVAMENTE con el texto en markdown. Sin bloques de código ni JSON."
             )
             template = read_prompt_file("ingles_teoria.txt", default_tpl)
-            prompt = template.format(contenido=contenido, grade=grade, bloque_str=bloque_str)
+            prompt = template.format(contenido=contenido, grade=grade, bloque_str=bloque_str, rules_block=rules_block)
         else:
             default_tpl = (
                 "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} la EXPLICACIÓN TEÓRICA perfecta para el tema '{contenido}' "
-                "del curso {grade}º de Primaria{bloque_str}.\n"
+                "del curso {grade}º de Primaria{bloque_str}.{rules_block}\n"
                 "Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen).\n"
                 "REGLAS OBLIGATORIAS DE ESTILO:\n"
                 "- Usa un tono 100% FORMAL, CLARO y RIGUROSO, imitando exactamente el estilo de un LIBRO DE TEXTO escolar oficial. Ten en cuenta que estos textos son leídos por los PADRES de los alumnos.\n"
@@ -662,24 +668,24 @@ async def generate_explanation_section_ai(payload: dict):
                 "Responde EXCLUSIVAMENTE con el texto completo en markdown, sin envolver en JSON ni bloques de código."
             )
             template = read_prompt_file("default_teoria.txt", default_tpl)
-            prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, bloque_str=bloque_str)
+            prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, bloque_str=bloque_str, rules_block=rules_block)
     elif section == "easier_version":
         default_tpl = (
             "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} una VERSIÓN FÁCIL Y ADAPTADA del tema '{contenido}' "
-            "para {grade}º de Primaria, enfocada a alumnos con necesidades educativas o dificultades de comprensión.\n"
+            "para {grade}º de Primaria, enfocada a alumnos con necesidades educativas o dificultades de comprensión.{rules_block}\n"
             "Usa frases muy sencillas, explicaciones intuitivas y lenguaje cercano.\n"
             "Responde EXCLUSIVAMENTE con el texto adaptado en markdown, sin envolver en JSON ni bloques de código."
         )
         template = read_prompt_file("default_easier.txt", default_tpl)
-        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade)
+        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, rules_block=rules_block)
     elif section == "examples":
         default_tpl = (
             "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} 3 EJEMPLOS PRÁCTICOS DE LA VIDA REAL para el tema '{contenido}' "
-            "de {grade}º de Primaria.\n"
+            "de {grade}º de Primaria.{rules_block}\n"
             "Responde EXCLUSIVAMENTE con un JSON válido que contenga un array de strings: [\"Ejemplo 1...\", \"Ejemplo 2...\", \"Ejemplo 3...\"]. No añadas texto antes ni después."
         )
         template = read_prompt_file("default_examples.txt", default_tpl)
-        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade)
+        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, rules_block=rules_block)
     else:
         raise HTTPException(400, "Sección no válida")
 

@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Fixed cleanMarkdownText regex bug that converted ## Resumen into # Resumen (H1)
+# Main FastAPI application for AulaRAG - Connected context rules and agent skills to admin panel generation (Teoría, Más Fácil, Ejemplos)
 import json
 import os
 import re
