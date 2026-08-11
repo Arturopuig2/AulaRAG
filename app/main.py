@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Unified yellow header styling for h2, h3, h4 across Chat & Admin
+# Main FastAPI application for AulaRAG - Enforced direct #f59e0b yellow headers with bottom border in style.css and theory_content.css
 import json
 import os
 import re
