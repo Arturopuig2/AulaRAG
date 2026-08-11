@@ -1,12 +1,23 @@
 /* ─── Estilos para el markdown de textos de teoría en el chat y panel admin ─────────────── */
 
-/* Títulos H1 y H2 — títulos principales (# y ##) (ej: "Questions / Preguntas", "Resumen", "Ejemplos prácticos") */
+/* Títulos H1 (#) — sin amarillo, en negro/texto principal y SIN línea inferior decorativa */
 .message.assistant .bubble h1,
+.chat-bubble-preview h1 {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: var(--text-main, #1e293b) !important;
+    margin: 10px 0 10px 0;
+    padding-bottom: 0;
+    border-bottom: none !important;
+    letter-spacing: 0.01em;
+    display: block;
+}
+
+/* Títulos H2 (##) — amarillo con línea inferior, pero NO BOLD (font-weight: 400) */
 .message.assistant .bubble h2,
-.chat-bubble-preview h1,
 .chat-bubble-preview h2 {
     font-size: 1.15em;
-    font-weight: 800;
+    font-weight: 400 !important;
     color: var(--color-yellow, #f59e0b) !important;
     margin: 10px 0 10px 0;
     padding-bottom: 6px;

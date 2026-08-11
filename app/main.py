@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Styled h1, h2, h3, h4 headers for theory, easier version, examples & admin previews
+# Main FastAPI application for AulaRAG - h1 (#) in black without bottom border, h2 (##) in yellow with bottom border (font-weight: 400 / not bold)
 import json
 import os
 import re
