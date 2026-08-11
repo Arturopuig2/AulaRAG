@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Applied 4-colored squares favicon
+# Main FastAPI application for AulaRAG - Updated user bubble text to '¿Me lo puedes explicar más fácil?'
 import json
 import os
 import re

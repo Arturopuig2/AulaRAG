@@ -1176,7 +1176,7 @@ function renderVideoMediaHtml(videoUrl) {
             window._isEasierActive = true;
             const userMsg = (currentSubject === 'valenciano') 
                 ? "Pots explicar-ho de forma més fàcil?" 
-                : "¿Me lo puedes explicar de forma más fácil y sencilla?";
+                : "¿Me lo puedes explicar más fácil?";
             addMessage(userMsg, 'user', false, false, false, null, null, false, null, true);
             const lastUserMsg = chatMessages.querySelector('.message.user:last-child');
             if (lastUserMsg) {
