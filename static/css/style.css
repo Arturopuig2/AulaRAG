@@ -322,7 +322,7 @@ body {
 .chat-header h2 {
     font-size: 24px;
     font-weight: 800;
-    color: var(--color-blue) !important;
+    color: var(--color-blue);
     border-bottom: none !important;
     padding-bottom: 0 !important;
     transition: color 0.3s ease;

@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Restored dynamic subject color and no border for .chat-header h2
+# Main FastAPI application for AulaRAG - Enabled dynamic inline subject color for .chat-header h2
 import json
 import os
 import re
