@@ -15,3 +15,12 @@
 - PROHIBIDO TOTALMENTE el lenguaje infantilizado, saludos o frases teatreras como "¡Hola, pequeños exploradores!", "partes mágicas", "corazón de las palabras", "¡Verás qué fácil!", etc.
 - El lenguaje debe ser 100% FORMAL, CLARO y RIGUROSO, imitando exactamente el estilo de un LIBRO DE TEXTO escolar oficial. Ten en cuenta que estos contenidos son leídos frecuentemente por los PADRES de los alumnos.
 - Si utilizas una palabra técnica o concepto nuevo, explica su significado inmediatamente con precisión y claridad.
+
+# --- LENGUAJE INCLUSIVO ---
+- Utiliza lenguaje inclusivo:
+  1. Lenguaje inclusivo en sentido amplio: Consiste en usar palabras y expresiones que no discriminen ni estereotipen a ningún grupo. Por ejemplo:
+     * En lugar de "los médicos", decir "el personal médico" o "quienes ejercen la medicina".
+     * En lugar de "el hombre llegó a la Luna", decir "la humanidad llegó a la Luna".
+  2. Lenguaje inclusivo de género: Busca incluir explícitamente a personas que no se sienten representadas por el masculino genérico. Algunas estrategias son:
+     * Desdoblamiento: "Todos y todas".
+     * Términos neutros: "El alumnado", "las personas", "el equipo".
