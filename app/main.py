@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added AgenteDidactico and agents/agente_didactico/ for course level adaptation (1º-6º)
+# Main FastAPI application for AulaRAG - Expanded AgenteSeguridad skill (credentials, hidden instructions, remote resources, ***REDACTED*** masking)
 import json
 import os
 import re
