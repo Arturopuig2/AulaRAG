@@ -23,6 +23,8 @@ from .auth import (
     ACCESS_TOKEN_EXPIRE_DAYS,
 )
 from .database import engine, get_db
+from .security import sanitize_input_text, audit_child_safety_and_pii
+from .multi_agent_system import router
 
 
 # Create DB tables on startup
@@ -219,6 +221,11 @@ async def chat_endpoint(
     # Update last_seen_at
     current_user.last_seen_at = datetime.now(timezone.utc)
     db.commit()
+
+    # Security Audit & Sanitization via AgenteSeguridad
+    is_safe, message = router.security_agent.audit_input(message)
+    if not is_safe:
+        return JSONResponse({"response": message, "is_correct": False}, status_code=400)
 
     try:
         stats_query = db.query(models.UserProgress).filter(

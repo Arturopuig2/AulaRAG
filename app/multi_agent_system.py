@@ -117,6 +117,25 @@ class AgenteAuditor:
 
         return text.strip()
 
+class AgenteSeguridad(BaseAgent):
+    """Specialized Security, Anti-Injection, and Child Safety Agent."""
+    def __init__(self):
+        super().__init__(
+            name="AgenteSeguridad",
+            role_description="Guardián de Seguridad Web, Sanitización Anti-XSS/SQLi y Protección Infantil",
+            subject_code="seguridad"
+        )
+
+    def audit_input(self, text: str) -> tuple[bool, str]:
+        from .security import sanitize_input_text, audit_child_safety_and_pii
+        clean_text = sanitize_input_text(text)
+        is_safe, final_text = audit_child_safety_and_pii(clean_text)
+        return is_safe, final_text
+
+    def audit_output(self, text: str) -> str:
+        from .security import sanitize_markdown_output
+        return sanitize_markdown_output(text)
+
 class RouterAgent:
     """Orchestrates agent selection based on the user's selected subject."""
     def __init__(self):
@@ -126,6 +145,7 @@ class RouterAgent:
             "matematicas": AgenteMatematicas(),
             "ingles": AgenteIngles()
         }
+        self.security_agent = AgenteSeguridad()
 
     def get_agent(self, subject: str) -> BaseAgent:
         norm_subj = subject.lower().strip()
