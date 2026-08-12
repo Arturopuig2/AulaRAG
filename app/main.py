@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Migrated to modular agents/ folder architecture (SKILL.md + reglas.txt per agent)
+# Main FastAPI application for AulaRAG - Consolidated 100% of rules into agents/ folder (deleted legacy context/ directory)
 import json
 import os
 import re

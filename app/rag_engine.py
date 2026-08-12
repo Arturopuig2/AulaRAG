@@ -166,7 +166,7 @@ CONTEXT_DIR = os.path.join(BASE_DIR, "context")
 AGENTS_DIR = os.path.join(BASE_DIR, "agents")
 
 def load_context_rules(subject: str = None) -> str:
-    """Lee reglas desde agents/ y context/.
+    """Lee reglas pedagógicas y de seguridad directamente desde las carpetas de agents/.
     Ignora líneas vacías y comentarios (empiezan por #).
     Devuelve el bloque de reglas formateado, o cadena vacía si no hay nada."""
     rules_parts = []
@@ -182,31 +182,22 @@ def load_context_rules(subject: str = None) -> str:
         if lines:
             rules_parts.append(f"[{label}]\n" + "\n".join(lines))
 
-    # General rules
-    _read_rules(os.path.join(CONTEXT_DIR, "reglas_generales.txt"), "REGLAS GENERALES")
+    # General rules from agents/general/reglas.txt
+    _read_rules(os.path.join(AGENTS_DIR, "general", "reglas.txt"), "REGLAS GENERALES")
     
-    # Security agent rules
-    sec_agent_rules = os.path.join(AGENTS_DIR, "agente_seguridad", "reglas.txt")
-    if os.path.exists(sec_agent_rules):
-        _read_rules(sec_agent_rules, "REGLAS DE SEGURIDAD Y PROTECCIÓN INFANTIL")
-    else:
-        _read_rules(os.path.join(CONTEXT_DIR, "reglas_seguridad.txt"), "REGLAS DE SEGURIDAD Y PROTECCIÓN INFANTIL")
+    # Security agent rules from agents/agente_seguridad/reglas.txt
+    _read_rules(os.path.join(AGENTS_DIR, "agente_seguridad", "reglas.txt"), "REGLAS DE SEGURIDAD Y PROTECCIÓN INFANTIL")
 
-    # Subject specific rules
+    # Subject specific rules from agents/agente_{subject}/reglas.txt
     if subject:
         agent_folder = f"agente_{subject.lower()}"
-        agent_rules = os.path.join(AGENTS_DIR, agent_folder, "reglas.txt")
-        if os.path.exists(agent_rules):
-            _read_rules(agent_rules, f"REGLAS DE {subject.upper()}")
-        else:
-            subject_file = f"reglas_{subject.lower()}.txt"
-            _read_rules(os.path.join(CONTEXT_DIR, subject_file), f"REGLAS DE {subject.upper()}")
+        _read_rules(os.path.join(AGENTS_DIR, agent_folder, "reglas.txt"), f"REGLAS DE {subject.upper()}")
 
     if not rules_parts:
         return ""
 
     block = "\n\n".join(rules_parts)
-    print(f"[context] Reglas cargadas desde agents/context para subject='{subject}' ({len(block)} chars)")
+    print(f"[agents] Reglas cargadas desde agents/ para subject='{subject}' ({len(block)} chars)")
     return block
 
 
