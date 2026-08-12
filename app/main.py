@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Consolidated 100% of rules into agents/ folder (deleted legacy context/ directory)
+# Main FastAPI application for AulaRAG - Restored 100% full detailed rules for all subjects in agents/ subdirectories
 import json
 import os
 import re
