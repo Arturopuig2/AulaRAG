@@ -58,14 +58,12 @@ async def _save_upload(file: UploadFile) -> str:
 
 
 def _generate_identifier(prefix: str, subject: str, grade: int, dificultad: str, db: Session) -> str:
-    """Auto-generate a unique identifier like PMAT1N0001."""
+    """Auto-generate a unique identifier like EMAT1N0001."""
     subj_code = SUBJECT_PREFIXES.get(subject, "GEN")
     diff_code  = DIFICULTAD_CODES.get(dificultad, "N")
     base = f"{prefix}{subj_code}{grade or 0}{diff_code}"
     # Find the highest existing sequential number for this prefix
-    existing = db.query(Question.identifier if prefix == "P" else Explanation.identifier)\
-                 .filter((Question.identifier if prefix == "P" else Explanation.identifier).like(f"{base}%"))\
-                 .all()
+    existing = db.query(Explanation.identifier).filter(Explanation.identifier.like(f"{base}%")).all()
     numbers = []
     for (val,) in existing:
         if val:
@@ -77,19 +75,17 @@ def _generate_identifier(prefix: str, subject: str, grade: int, dificultad: str,
 
 @router.post("/verify-toggle")
 async def verify_toggle(request: Request, db: Session = Depends(get_db)):
-    """Toggles the 'is_verified' status for a question or explanation."""
+    """Toggles the 'is_verified' status for an explanation."""
     try:
         user = await require_admin(request, db)
         data = await request.json()
         item_id = data.get("id")
         is_verified = data.get("is_verified")
-        item_type = data.get("type", "question") # "question" or "explanation"
         
-        model_class = Question if item_type == "question" else Explanation
-        item = db.query(model_class).filter(model_class.id == item_id).first()
+        item = db.query(Explanation).filter(Explanation.id == item_id).first()
         
         if not item:
-            return JSONResponse({"error": f"{item_type} {item_id} not found"}, status_code=404)
+            return JSONResponse({"error": f"Explanation {item_id} not found"}, status_code=404)
             
         item.is_verified = bool(is_verified)
         db.commit()
@@ -720,85 +716,6 @@ async def generate_explanation_section_ai(payload: dict):
 
     except Exception as e:
         raise HTTPException(500, f"Error generando la sección {section} con IA: {e}")
-
-
-# ── Import JSON / CSV ─────────────────────────────────────────────────────────
-
-@router.post("/import/questions")
-async def import_questions(
-    request: Request,
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db),
-):
-    """Bulk import questions from a JSON or CSV file."""
-    user = await require_admin(request, db)
-    content = await file.read()
-
-    rows = []
-    if file.filename.endswith(".json"):
-        try:
-            rows = json.loads(content)
-        except Exception as e:
-            raise HTTPException(400, f"JSON inválido: {e}")
-    elif file.filename.endswith(".csv"):
-        try:
-            reader = csv.DictReader(io.StringIO(content.decode("utf-8-sig")))
-            rows = list(reader)
-        except Exception as e:
-            raise HTTPException(400, f"CSV inválido: {e}")
-    else:
-        raise HTTPException(400, "Solo se admiten archivos .json o .csv")
-
-    created, skipped = 0, 0
-    for row in rows:
-        subject    = row.get("subject", "").strip()
-        question   = row.get("question", "").strip()
-        answer     = row.get("answer", "").strip()
-        if not subject or not question or not answer:
-            skipped += 1
-            continue
-
-        grade_raw  = row.get("grade") or row.get("curso") or 0
-        opts_raw   = row.get("options") or row.get("opciones") or "[]"
-        if isinstance(opts_raw, str):
-            try:
-                opts_list = json.loads(opts_raw)
-            except Exception:
-                opts_list = [o.strip() for o in opts_raw.split("|") if o.strip()]
-        else:
-            opts_list = opts_raw
-
-        dificultad = row.get("dificultad", "normal").strip() or "normal"
-        identifier = row.get("identifier") or row.get("id") or ""
-        if not identifier:
-            identifier = _generate_identifier("P", subject, int(grade_raw or 0), dificultad, db)
-
-        # Skip duplicates by identifier
-        if db.query(Question).filter(Question.identifier == identifier).first():
-            skipped += 1
-            continue
-
-        new_q = Question(
-            identifier=identifier,
-            subject=subject,
-            grade=int(grade_raw) if grade_raw else None,
-            bloque=row.get("bloque", "") or None,
-            contenido=row.get("contenido", "") or None,
-            dificultad=dificultad,
-            question_type=row.get("question_type", "seleccion") or "seleccion",
-            question=question,
-            options=json.dumps(opts_list, ensure_ascii=False),
-            answer=answer,
-            explanation=row.get("explanation") or row.get("explicacion") or None,
-            source=row.get("source", "ia_csv") or "ia_csv",
-            is_active=True,
-            created_by=user.id,
-        )
-        db.add(new_q)
-        created += 1
-
-    db.commit()
-    return {"created": created, "skipped": skipped, "total_in_file": len(rows)}
 
 
 # ── AI Generation (Theory Preview) ─────────────────────────────────────────────

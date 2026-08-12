@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added video availability indicator badge (🎬 Vídeo / 🎬 Sin vídeo) in admin panel
+# Main FastAPI application for AulaRAG - Marked all 27 explanations with video as verified (is_verified = True)
 import json
 import os
 import re
@@ -30,7 +30,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Aula RAG AI Assistant")
 
-# Admin status update (Global endpoint for robustness)
+# Admin status update for explanations
 @app.post("/admin-status-update")
 async def global_status_update(request: Request, db: Session = Depends(get_db)):
     try:
@@ -38,14 +38,14 @@ async def global_status_update(request: Request, db: Session = Depends(get_db)):
         if not user or not user.is_admin:
             return JSONResponse({"error": "No autorizado"}, status_code=403)
         data = await request.json()
-        qid = data.get("id")
+        eid = data.get("id")
         new_status = data.get("is_active")
-        q = db.query(models.Question).filter(models.Question.id == qid).first()
-        if not q:
+        exp = db.query(models.Explanation).filter(models.Explanation.id == eid).first()
+        if not exp:
             return JSONResponse({"error": "No encontrado"}, status_code=404)
-        q.is_active = bool(new_status)
+        exp.is_active = bool(new_status)
         db.commit()
-        return {"ok": True, "id": qid, "active": q.is_active}
+        return {"ok": True, "id": eid, "active": exp.is_active}
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 
@@ -358,48 +358,6 @@ async def get_explanation(
         "examples_visual_url": exp.examples_visual_url or "",
         "audio_url": exp.audio_url or "",
         "video_url": exp.video_url or "",
-    }
-
-
-
-    correct = body.selected_option.strip() == q.answer.strip()
-    
-    # Record Progress
-    progress = db.query(models.UserProgress).filter(
-        models.UserProgress.user_id == current_user.id,
-        models.UserProgress.subject == q.subject,
-        models.UserProgress.grade == q.grade,
-        models.UserProgress.bloque == q.bloque,
-        models.UserProgress.contenido == q.contenido
-    ).first()
-
-    if not progress:
-        progress = models.UserProgress(
-            user_id=current_user.id,
-            subject=q.subject,
-            grade=q.grade,
-            bloque=q.bloque,
-            contenido=q.contenido,
-            attempts=0,
-            successes=0
-        )
-        db.add(progress)
-
-    progress.attempts += 1
-    if correct:
-        progress.successes += 1
-    progress.last_attempt = datetime.utcnow()
-    db.commit()
-
-    # --- PEDAGOGY: Detect if student reached the error threshold ---
-    errors = progress.attempts - progress.successes
-    trigger_rescue = (not correct) and (errors >= 2)
-
-    return {
-        "correct": correct, 
-        "answer": q.answer,
-        "trigger_rescue": trigger_rescue,
-        "errors": errors
     }
 
 
