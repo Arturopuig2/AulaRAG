@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Restored 100% full detailed rules for all subjects in agents/ subdirectories
+# Main FastAPI application for AulaRAG - Added AgenteDidactico and agents/agente_didactico/ for course level adaptation (1º-6º)
 import json
 import os
 import re

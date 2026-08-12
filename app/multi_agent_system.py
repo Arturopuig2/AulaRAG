@@ -11,36 +11,33 @@ Implements specialized pedagogical agents per subject:
 """
 
 import json
-import re
 import os
+import re
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+AGENTS_DIR = os.path.join(BASE_DIR, "agents")
 
 def get_didactic_course_rules(grade: int = None) -> str:
-    """Retorna las reglas didácticas de adaptación pedagógica según el curso (1º a 6º de Primaria)."""
+    """Retorna las reglas didácticas de adaptación pedagógica desde agents/agente_didactico/reglas.txt según el curso (1º a 6º de Primaria)."""
     if not grade:
         return ""
-    
+
+    rules_path = os.path.join(AGENTS_DIR, "agente_didactico", "reglas.txt")
+    if not os.path.exists(rules_path):
+        return ""
+
+    with open(rules_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
     if grade in [1, 2]:
-        return (
-            f"\n### REGLAS DIDÁCTICAS OBLIGATORIAS ({grade}º DE PRIMARIA - NIVEL INICIAL):\n"
-            "- Usa frases muy cortas y sencillas (máximo 10-12 palabras por frase).\n"
-            "- Explica siempre con analogías muy visuales usando objetos cercanos (juguetes, frutas, animales o cosas de casa).\n"
-            "- Estrictamente PROHIBIDO utilizar jerga técnica, palabras abstractas o explicaciones complejas.\n"
-            "- Tono súper cercano, claro, directo y motivador."
-        )
+        m = re.search(r'\[NIVEL_INICIAL_1_2\]\s*(.*?)(?=\n\s*\[|\Z)', content, re.DOTALL)
+        return f"\n{m.group(1).strip()}\n" if m else ""
     elif grade in [3, 4]:
-        return (
-            f"\n### REGLAS DIDÁCTICAS OBLIGATORIAS ({grade}º DE PRIMARIA - NIVEL INTERMEDIO):\n"
-            "- Organiza siempre la información mediante esquemas claros, viñetas y estructuras paso a paso.\n"
-            "- Usa explicaciones visuales, metáforas cotidianas y ejemplos del colegio o del día a día.\n"
-            "- Presenta los conceptos clave de forma estructurada sin sobrecargar con teoría innecesaria."
-        )
+        m = re.search(r'\[NIVEL_INTERMEDIO_3_4\]\s*(.*?)(?=\n\s*\[|\Z)', content, re.DOTALL)
+        return f"\n{m.group(1).strip()}\n" if m else ""
     elif grade in [5, 6]:
-        return (
-            f"\n### REGLAS DIDÁCTICAS OBLIGATORIAS ({grade}º DE PRIMARIA - NIVEL AVANZADO / PREPARACIÓN SECUNDARIA):\n"
-            "- Fomenta el pensamiento crítico y la capacidad de deducción planteando preguntas reflexivas.\n"
-            "- Presenta fórmulas, reglas gramaticales y procedimientos totalmente desglosados paso a paso.\n"
-            "- Introduce el vocabulario técnico y formal de la asignatura de forma gradual, explicando siempre su significado."
-        )
+        m = re.search(r'\[NIVEL_AVANZADO_5_6\]\s*(.*?)(?=\n\s*\[|\Z)', content, re.DOTALL)
+        return f"\n{m.group(1).strip()}\n" if m else ""
+
     return ""
 
 
@@ -136,6 +133,18 @@ class AgenteSeguridad(BaseAgent):
         from .security import sanitize_markdown_output
         return sanitize_markdown_output(text)
 
+class AgenteDidactico(BaseAgent):
+    """Specialized Agent for Primary Course Level Adaptation (1º to 6º de Primaria)."""
+    def __init__(self):
+        super().__init__(
+            name="AgenteDidactico",
+            role_description="Especialista en Adaptación Didáctica y Complejidad Psicoevolutiva por Curso",
+            subject_code="didactico"
+        )
+
+    def get_course_rules(self, grade: int) -> str:
+        return get_didactic_course_rules(grade)
+
 class RouterAgent:
     """Orchestrates agent selection based on the user's selected subject."""
     def __init__(self):
@@ -146,6 +155,7 @@ class RouterAgent:
             "ingles": AgenteIngles()
         }
         self.security_agent = AgenteSeguridad()
+        self.didactic_agent = AgenteDidactico()
 
     def get_agent(self, subject: str) -> BaseAgent:
         norm_subj = subject.lower().strip()

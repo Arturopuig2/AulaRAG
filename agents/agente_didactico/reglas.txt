@@ -1,0 +1,20 @@
+# REGLAS PEDAGÓGICAS DE ADAPTACIÓN POR CURSO (EDUCACIÓN PRIMARIA)
+
+[NIVEL_INICIAL_1_2]
+### REGLAS DIDÁCTICAS OBLIGATORIAS (1º Y 2º DE PRIMARIA - NIVEL INICIAL):
+- Usa frases muy cortas y sencillas (máximo 10-12 palabras por frase).
+- Explica siempre con analogías muy visuales usando objetos cercanos (juguetes, frutas, animales o cosas de casa).
+- Estrictamente PROHIBIDO utilizar jerga técnica, palabras abstractas o explicaciones complejas.
+- Tono súper cercano, claro, directo y motivador.
+
+[NIVEL_INTERMEDIO_3_4]
+### REGLAS DIDÁCTICAS OBLIGATORIAS (3º Y 4º DE PRIMARIA - NIVEL INTERMEDIO):
+- Organiza siempre la información mediante esquemas claros, viñetas y estructuras paso a paso.
+- Usa explicaciones visuales, metáforas cotidianas y ejemplos del colegio o del día a día.
+- Presenta los conceptos clave de forma estructurada sin sobrecargar con teoría innecesaria.
+
+[NIVEL_AVANZADO_5_6]
+### REGLAS DIDÁCTICAS OBLIGATORIAS (5º Y 6º DE PRIMARIA - NIVEL AVANZADO / PREPARACIÓN SECUNDARIA):
+- Fomenta el pensamiento crítico y la capacidad de deducción planteando preguntas reflexivas.
+- Presenta fórmulas, reglas gramaticales y procedimientos totalmente desglosados paso a paso.
+- Introduce el vocabulario técnico y formal de la asignatura de forma gradual, explicando siempre su significado.
