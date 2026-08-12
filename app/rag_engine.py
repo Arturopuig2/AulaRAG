@@ -181,6 +181,7 @@ def load_context_rules(subject: str = None) -> str:
             rules_parts.append(f"[{label}]\n" + "\n".join(lines))
 
     _read_rules(os.path.join(CONTEXT_DIR, "reglas_generales.txt"), "REGLAS GENERALES")
+    _read_rules(os.path.join(CONTEXT_DIR, "reglas_seguridad.txt"), "REGLAS DE SEGURIDAD Y PROTECCIÓN INFANTIL")
     if subject:
         subject_file = f"reglas_{subject.lower()}.txt"
         _read_rules(os.path.join(CONTEXT_DIR, subject_file), f"REGLAS DE {subject.upper()}")

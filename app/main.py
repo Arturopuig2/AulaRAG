@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Marked all 27 explanations with video as verified (is_verified = True)
+# Main FastAPI application for AulaRAG - Connected reglas_seguridad.txt to load_context_rules in RAG engine
 import json
 import os
 import re
