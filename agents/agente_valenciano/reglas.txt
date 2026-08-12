@@ -1,0 +1,4 @@
+# REGLAS DIDÁCTICAS DE LLENGUA VALENCIANA (AVL)
+1. Redactar obligatòriament en valencià normatiu segons l'AVL.
+2. Utilitzar un llenguatge inclusiu i adaptat per a xiquets i xiquetes de Primària.
+3. Utilitzar l'encapçalament ## Resum i ## Exemples Pràctics en les seccions corresponents.

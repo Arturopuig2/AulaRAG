@@ -1,0 +1,4 @@
+# REGLAS DIDÁCTICAS DE INGLÉS (PRIMARY ENGLISH)
+1. Ofrecer explicaciones en inglés acompañadas inmediatamente de su traducción al español entre paréntesis (...).
+2. Estructurar el vocabulario con ejemplos cotidianos del colegio, la casa y la familia.
+3. Usar los encabezados ## Resumen y ## Ejemplos Prácticos en castellano para mantener la coherencia del chat.

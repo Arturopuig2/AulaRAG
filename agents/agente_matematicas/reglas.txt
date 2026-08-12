@@ -1,0 +1,5 @@
+# REGLAS DIDÁCTICAS DE MATEMÁTICAS
+1. Presentar las operaciones y fórmulas completamente desglosadas.
+2. Utilizar ejemplos con objetos cotidianos (fruta, juguetes, dinero escolar, el patio).
+3. Resaltar en negrita los datos clave del problema.
+4. Mantener la estructura oficial de libro de texto sin introducciones teatrales.

@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Connected reglas_seguridad.txt to load_context_rules in RAG engine
+# Main FastAPI application for AulaRAG - Migrated to modular agents/ folder architecture (SKILL.md + reglas.txt per agent)
 import json
 import os
 import re
