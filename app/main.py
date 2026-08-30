@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Consolidated admin_exercises.html into single active admin.html template
+# Main FastAPI application for AulaRAG - Added User Profile screen modal (Nombre & Curso options)
 import json
 import os
 import re
@@ -150,7 +150,50 @@ async def logout():
 
 @app.get("/auth/me")
 async def me(current_user: models.User = Depends(get_current_user)):
-    return {"id": current_user.id, "email": current_user.email, "name": current_user.name, "is_admin": current_user.is_admin}
+    user_grade = getattr(current_user, "grade", 1) or 1
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "name": current_user.name,
+        "grade": user_grade,
+        "is_admin": current_user.is_admin
+    }
+
+
+@app.post("/auth/profile")
+async def update_profile(
+    request: Request,
+    name: str = Form(...),
+    grade: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    try:
+        current_user = await get_current_user(request, db)
+    except HTTPException:
+        return JSONResponse({"error": "not_authenticated"}, status_code=401)
+
+    clean_name = name.strip()
+    if not clean_name:
+        return JSONResponse({"error": "El nombre no puede estar vacío"}, status_code=400)
+
+    if grade not in [1, 2, 3, 4, 5, 6]:
+        grade = 1
+
+    current_user.name = clean_name
+    current_user.grade = grade
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "ok": True,
+        "user": {
+            "id": current_user.id,
+            "email": current_user.email,
+            "name": current_user.name,
+            "grade": current_user.grade,
+            "is_admin": current_user.is_admin
+        }
+    }
 
 
 # ── Main app page ─────────────────────────────────────────────────────────────
