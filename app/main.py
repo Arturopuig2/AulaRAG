@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Increased Course buttons size (52px) and Subject text/icon size in Home UI
+# Main FastAPI application for AulaRAG - Consolidated admin_exercises.html into single active admin.html template
 import json
 import os
 import re

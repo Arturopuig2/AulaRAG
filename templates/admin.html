@@ -7,6 +7,36 @@
     <title>Aula - Administrador de Contenidos</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="/static/css/theory_content.css?v=500">
+    <style>
+        .message.assistant .bubble h2,
+        .message.assistant .bubble h3,
+        .message.assistant .bubble h4,
+        .message.assistant h2,
+        .message.assistant h3,
+        .message.assistant h4,
+        .chat-bubble-preview h2,
+        .chat-bubble-preview h3,
+        .chat-bubble-preview h4,
+        .bubble h2,
+        .bubble h3,
+        .bubble h4,
+        #chat-messages h2,
+        #chat-messages h3,
+        #chat-messages h4,
+        #chat-messages .bubble h2,
+        #chat-messages .bubble h3,
+        #chat-messages .bubble h4 {
+            font-size: 1.15em !important;
+            font-weight: 400 !important;
+            color: #f59e0b !important;
+            margin: 12px 0 8px 0 !important;
+            padding-bottom: 6px !important;
+            border-bottom: 2px solid #f59e0b !important;
+            letter-spacing: 0.01em !important;
+            display: block !important;
+        }
+    </style>
     <style>
         :root {
             --bg-main: #f4f6f8;
@@ -81,6 +111,38 @@
             display: flex;
             gap: 0.75rem;
             align-items: center;
+        }
+
+        .btn-verify {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1.5px solid #cbd5e1;
+            background: #f8fafc;
+            color: #64748b;
+            transition: all 0.2s ease;
+            margin-top: 5px;
+            user-select: none;
+        }
+        .btn-verify:hover {
+            border-color: #22c55e;
+            color: #16a34a;
+            background: #f0fdf4;
+        }
+        .btn-verify.active {
+            background: #dcfce7;
+            color: #15803d;
+            border-color: #22c55e;
+            box-shadow: 0 1px 3px rgba(34, 197, 94, 0.18);
+        }
+        .btn-verify .check-icon {
+            font-size: 0.85rem;
+            font-weight: 900;
         }
 
         .btn {
@@ -298,6 +360,18 @@
             background: #fef3c7;
             color: #d97706;
             border: 1px solid #fde68a;
+        }
+
+        .badge-video {
+            background: #f3e8ff;
+            color: #7e22ce;
+            border: 1px solid #d8b4fe;
+        }
+
+        .badge-no-video {
+            background: #f8fafc;
+            color: #94a3b8;
+            border: 1px solid #e2e8f0;
         }
 
         .actions-cell {
@@ -1156,17 +1230,36 @@
                     ? `<img src="${e.visual_url || e.easier_visual_url || e.examples_visual_url}" style="width:48px; height:48px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" alt="Ilustración">`
                     : `<span style="font-size:0.75rem; color:var(--text-muted);">Sin imagen</span>`;
 
+                const isVerified = Boolean(e.is_verified);
+                const verifyBtn = `
+                    <button type="button" class="btn-verify ${isVerified ? 'active' : ''}" 
+                            onclick="toggleExplanationVerify(${e.id}, ${isVerified})" 
+                            title="${isVerified ? 'Bloque Verificado - Haz clic para cambiar' : 'Haz clic para marcar este bloque como Verificado'}">
+                        <span class="check-icon">${isVerified ? '✓' : '○'}</span>
+                        <span>${isVerified ? 'Verificado' : 'Sin verificar'}</span>
+                    </button>
+                `;
+
+                const hasVideo = Boolean(e.video_url && e.video_url.trim());
+                const videoBadge = hasVideo 
+                    ? `<span class="badge badge-video" title="Vídeo adjunto: ${escapeHtml(e.video_url)}">🎬 Vídeo</span>`
+                    : `<span class="badge badge-no-video" title="Sin vídeo adjunto">🎬 Sin vídeo</span>`;
+
                 tr.innerHTML = `
                     <td>${imgTag}</td>
                     <td>
-                        <span class="badge badge-subject">${e.subject.toUpperCase()}</span>
-                        <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
-                        <div style="font-size:0.8rem; margin-top:4px; color:var(--text-muted);">${escapeHtml(e.bloque || '')}</div>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+                            <span class="badge badge-subject">${e.subject.toUpperCase()}</span>
+                            <span class="badge badge-grade">${e.grade ? e.grade + 'º Primaria' : 'General'}</span>
+                            ${videoBadge}
+                        </div>
+                        <div style="font-size:0.8rem; margin-top:6px; color:var(--text-muted);">${escapeHtml(e.bloque || '')}</div>
                     </td>
-                    <td style="font-weight:700;">${escapeHtml(e.contenido || '')}</td>
+                    <td style="font-weight:700; font-size:0.95rem;">${escapeHtml(e.contenido || '')}</td>
                     <td style="font-size:0.88rem; color:var(--text-muted);">${escapeHtml((e.text || '').substring(0, 90))}...</td>
                     <td>
-                        <div class="actions-cell">
+                        <div class="actions-cell" style="display:flex; align-items:center; gap:8px;">
+                            ${verifyBtn}
                             <button class="btn-icon" title="Editar / Generar IA" onclick="openExplanationEditById(${e.id})">✏️</button>
                             <button class="btn-icon delete" title="Eliminar" onclick="deleteExplanation(${e.id})">🗑️</button>
                         </div>
@@ -1175,6 +1268,28 @@
                 tbody.appendChild(tr);
             });
         }
+
+        window.toggleExplanationVerify = async function(id, currentVerified) {
+            try {
+                const resp = await fetch('/admin/verify-toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, is_verified: !currentVerified, type: 'explanation' })
+                });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const exp = (window.allExplanations || []).find(item => item.id === id);
+                    if (exp) exp.is_verified = data.verified;
+                    renderExplanations(window.allExplanations);
+                    showToast(data.verified ? "Bloque de contenido marcado como Verificado ✓" : "Bloque desmarcado de Verificado");
+                } else {
+                    showToast("Error al cambiar la verificación", true);
+                }
+            } catch(err) {
+                console.error("Error toggle verification:", err);
+                showToast("Error de conexión al verificar", true);
+            }
+        };
 
         window.openQuestionEditById = function(id) {
             const q = (window.allQuestions || []).find(item => item.id === id);

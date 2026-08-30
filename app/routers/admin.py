@@ -145,7 +145,7 @@ async def admin_panel(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse(url="/login?next=/admin", status_code=302)
     if not user.is_admin:
         return HTMLResponse("<h1>403 — Sin permiso de administrador</h1>", status_code=403)
-    return templates.TemplateResponse("admin_exercises.html", {"request": request, "user": user})
+    return templates.TemplateResponse("admin.html", {"request": request, "user": user})
 
 
 # ── Explanations API ──────────────────────────────────────────────────────────
