@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Expanded AgenteSeguridad skill (credentials, hidden instructions, remote resources, ***REDACTED*** masking)
+# Main FastAPI application for AulaRAG - Increased Course buttons size (52px) and Subject text/icon size in Home UI
 import json
 import os
 import re
