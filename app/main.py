@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Added User Profile screen modal (Nombre & Curso options)
+# Main FastAPI application for AulaRAG - Updated option placeholders (Selecciona Bloque / Selecciona Contenido) with cache buster v401
 import json
 import os
 import re

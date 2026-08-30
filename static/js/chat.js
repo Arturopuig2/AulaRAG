@@ -380,11 +380,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (filterCurso) filterCurso.dispatchEvent(new Event('change'));
         } else {
             if (filterBloque) {
-                filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
+                filterBloque.innerHTML = '<option value="">Selecciona Bloque</option>';
                 filterBloque.disabled = true;
             }
             if (filterContenido) {
-                filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+                filterContenido.innerHTML = '<option value="">Selecciona Contenido</option>';
                 filterContenido.disabled = true;
             }
             if (btnEstudiar) btnEstudiar.disabled = true;
@@ -402,8 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
         filterCurso.addEventListener('change', (e) => {
             const cursoIdx = e.target.value;
             updateActiveCourseButton(cursoIdx);
-            if (filterBloque) filterBloque.innerHTML = '<option value="">Selecciona Bloque...</option>';
-            if (filterContenido) filterContenido.innerHTML = '<option value="">Selecciona Contenido...</option>';
+            if (filterBloque) filterBloque.innerHTML = '<option value="">Selecciona Bloque</option>';
+            if (filterContenido) filterContenido.innerHTML = '<option value="">Selecciona Contenido</option>';
             if (filterContenido) filterContenido.disabled = true;
             if (btnEstudiar) btnEstudiar.disabled = true;
 

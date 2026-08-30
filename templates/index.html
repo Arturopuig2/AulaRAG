@@ -97,18 +97,19 @@
 
                 <div class="filter-group" id="group-bloque">
                     <select id="filter-bloque" disabled>
-                        <option value="">Selecciona Bloque...</option>
+                        <option value="">Selecciona</option>
                     </select>
                 </div>
 
                 <div class="filter-group" id="group-contenido">
                     <select id="filter-contenido" disabled>
-                        <option value="">Selecciona Contenido...</option>
+                        <option value="">Selecciona</option>
                     </select>
                 </div>
 
                 <button id="btn-estudiar" class="btn-estudiar" disabled>¡Vamos a repasar!</button>
-                <div class="user-profile" onclick="openProfileModal()" style="cursor: pointer; transition: background 0.2s;" title="Ver mi Perfil">
+                <div class="user-profile" onclick="openProfileModal()"
+                    style="cursor: pointer; transition: background 0.2s;" title="Ver mi Perfil">
                     <div class="avatar" id="user-avatar-btn">👨‍🎓</div>
                     <span id="user-display-name"
                         style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight: 700;">Cargando...</span>
@@ -172,27 +173,36 @@
                 </div>
                 <button type="button" class="modal-close-btn" onclick="closeProfileModal()">✖</button>
             </div>
-            
+
             <form id="profile-form" onsubmit="saveProfile(event)">
                 <div class="form-group">
                     <label for="profile-name-input">Nombre del Alumno/a</label>
-                    <input type="text" id="profile-name-input" class="profile-input" required placeholder="Tu nombre...">
+                    <input type="text" id="profile-name-input" class="profile-input" required
+                        placeholder="Tu nombre...">
                 </div>
 
                 <div class="form-group">
                     <label>Curso Actual (Educación Primaria)</label>
                     <div class="profile-course-grid">
-                        <button type="button" class="profile-course-btn" data-grade="1" onclick="selectProfileGrade(1)">1º</button>
-                        <button type="button" class="profile-course-btn" data-grade="2" onclick="selectProfileGrade(2)">2º</button>
-                        <button type="button" class="profile-course-btn" data-grade="3" onclick="selectProfileGrade(3)">3º</button>
-                        <button type="button" class="profile-course-btn" data-grade="4" onclick="selectProfileGrade(4)">4º</button>
-                        <button type="button" class="profile-course-btn" data-grade="5" onclick="selectProfileGrade(5)">5º</button>
-                        <button type="button" class="profile-course-btn" data-grade="6" onclick="selectProfileGrade(6)">6º</button>
+                        <button type="button" class="profile-course-btn" data-grade="1"
+                            onclick="selectProfileGrade(1)">1º</button>
+                        <button type="button" class="profile-course-btn" data-grade="2"
+                            onclick="selectProfileGrade(2)">2º</button>
+                        <button type="button" class="profile-course-btn" data-grade="3"
+                            onclick="selectProfileGrade(3)">3º</button>
+                        <button type="button" class="profile-course-btn" data-grade="4"
+                            onclick="selectProfileGrade(4)">4º</button>
+                        <button type="button" class="profile-course-btn" data-grade="5"
+                            onclick="selectProfileGrade(5)">5º</button>
+                        <button type="button" class="profile-course-btn" data-grade="6"
+                            onclick="selectProfileGrade(6)">6º</button>
                     </div>
                     <input type="hidden" id="profile-grade-input" value="1">
                 </div>
 
-                <div id="profile-status-msg" style="margin-bottom: 15px; font-weight: 600; font-size: 0.9rem; text-align: center; display: none;"></div>
+                <div id="profile-status-msg"
+                    style="margin-bottom: 15px; font-weight: 600; font-size: 0.9rem; text-align: center; display: none;">
+                </div>
 
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeProfileModal()">Cancelar</button>
@@ -204,7 +214,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="/static/js/chat.js?v=400"></script>
+    <script src="/static/js/chat.js?v=401"></script>
     <script>
         let currentUserData = { name: '', grade: 1 };
 
@@ -212,7 +222,7 @@
             let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
             if (match) return match[2];
         }
-        
+
         if (!getCookie('access_token')) {
             window.location.href = '/login';
         } else {
@@ -294,7 +304,7 @@
                     document.getElementById('user-display-name').textContent = res.user.name;
                     statusMsg.style.color = '#16a34a';
                     statusMsg.textContent = '✓ ¡Perfil actualizado correctamente!';
-                    
+
                     const courseBtn = document.querySelector(`.course-btn[data-course="${res.user.grade}"]`);
                     if (courseBtn) courseBtn.click();
 
