@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Updated option placeholders (Selecciona Bloque / Selecciona Contenido) with cache buster v401
+# Main FastAPI application for AulaRAG - Reverted streaming AI implementation to original behavior
 import json
 import os
 import re
