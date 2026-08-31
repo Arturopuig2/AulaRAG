@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, Form
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -716,6 +716,143 @@ async def generate_explanation_section_ai(payload: dict):
 
     except Exception as e:
         raise HTTPException(500, f"Error generando la sección {section} con IA: {e}")
+
+
+@router.post("/api/ai/generate-section-stream")
+async def generate_explanation_section_ai_stream(payload: dict):
+    """Streams the generated section (text, easier_version, or examples) using Gemini AI in real time."""
+    from ..rag_engine import get_client, get_model_name, load_context_rules
+    from ..multi_agent_system import get_didactic_course_rules
+    from google.genai import types
+
+    client = get_client()
+    model_name = get_model_name()
+    if not client:
+        raise HTTPException(500, "GEMINI_API_KEY no configurada")
+
+    subject = payload.get("subject", "matematicas")
+    grade = int(payload.get("grade", 1))
+    bloque = payload.get("bloque", "")
+    contenido = payload.get("contenido", "")
+    section = payload.get("section", "text")
+
+    if not contenido:
+        raise HTTPException(400, "Debes indicar el contenido/tema antes de generar.")
+
+    lang_instr = "español"
+    if subject == "valenciano":
+        lang_instr = "valencià normatiu (AVL)"
+    elif subject == "ingles":
+        lang_instr = "forma BILINGÜE combinando INGLÉS Y ESPAÑOL (para alumnos muy pequeños de Educación Primaria con nivel inicial). Muestra cada término o frase en inglés acompañado de su traducción y explicación sencilla en español."
+
+    context_rules = load_context_rules(subject)
+    course_rules = get_didactic_course_rules(grade)
+    rules_block = f"\n\n### REGLAS PEDAGÓGICAS Y DE LENGUAJE:\n{context_rules}\n{course_rules}\n" if (context_rules or course_rules) else ""
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    prompts_dir = os.path.join(base_dir, "prompts")
+
+    def read_prompt_file(filename: str, default_text: str) -> str:
+        filepath = os.path.join(prompts_dir, filename)
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    return f.read()
+            except Exception as e:
+                print(f"Error reading prompt file {filename}: {e}")
+        return default_text
+
+    bloque_str = f" (Bloque: {bloque})" if bloque else ""
+
+    if section == "text":
+        if subject == "ingles":
+            default_tpl = (
+                "Eres un maestro de Inglés de Educación Primaria en España. Genera la EXPLICACIÓN TEÓRICA perfecta "
+                "para el tema '{contenido}' de {grade}º de Primaria{bloque_str}.{rules_block}\n\n"
+                "Sigue ESTRICTAMENTE este formato Markdown, sustituyendo los marcadores entre corchetes:\n\n"
+                "## [Título en Inglés / Título en Español]\n\n"
+                "[1 o 2 frases cortas de introducción al tema, en español]\n\n"
+                "---\n\n"
+                "### [Subtítulo de la primera regla o concepto]\n\n"
+                "* **[ESTRUCTURA O PREGUNTA PRINCIPAL EN INGLÉS]** ([Traducción al español])\n"
+                "  - **[Palabra clave 1]:** [Explicación en 3-5 palabras]\n"
+                "  - **[Palabra clave 2]:** [Explicación en 3-5 palabras]\n\n"
+                "---\n\n"
+                "### [Subtítulo de la segunda regla o concepto]\n\n"
+                "* **[ESTRUCTURA O RESPUESTA EN INGLÉS]** ([Traducción al español])\n"
+                "  - **[Palabra clave 1]:** [Explicación en 3-5 palabras]\n"
+                "  - **[Palabra clave 2]:** [Explicación en 3-5 palabras]\n\n"
+                "---\n\n"
+                "### ¡Ejemplo en la vida real!\n\n"
+                "> **[Nombre Personaje 1]:** [Frase corta en inglés] ([Traducción al español])\n"
+                "> **[Nombre Personaje 2]:** [Frase corta en inglés] ([Traducción al español])\n\n"
+                "REGLAS IMPORTANTES:\n"
+                "- Usa siempre inglés para las estructuras y palabras clave; el español solo para traducciones y explicaciones.\n"
+                "- Lenguaje muy sencillo, pensado para niños de primaria.\n"
+                "- PROHIBIDO añadir ejercicios, tests o cuestionarios.\n"
+                "- Responde EXCLUSIVAMENTE con el texto en markdown. Sin bloques de código ni JSON."
+            )
+            template = read_prompt_file("ingles_teoria.txt", default_tpl)
+            prompt = template.format(contenido=contenido, grade=grade, bloque_str=bloque_str, rules_block=rules_block)
+        else:
+            default_tpl = (
+                "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} la EXPLICACIÓN TEÓRICA perfecta para el tema '{contenido}' "
+                "del curso {grade}º de Primaria{bloque_str}.{rules_block}\n"
+                "Estructúrala con títulos claros en Markdown (Concepto Didáctico, Reglas y Explicación, Ejemplos Prácticos, Resumen).\n"
+                "REGLAS OBLIGATORIAS DE ESTILO:\n"
+                "- Usa un tono 100% FORMAL, CLARO y RIGUROSO, imitando exactamente el estilo de un LIBRO DE TEXTO escolar oficial. Ten en cuenta que estos textos son leídos por los PADRES de los alumnos.\n"
+                "- PROHIBIDO TOTALMENTE cualquier infantilismo o teatralidad como '¡Hola, pequeños exploradores!', 'partes mágicas', 'corazón de las palabras', '¡Verás qué fácil!', etc.\n"
+                "- PROHIBIDO proponer ejercicios, cuestionarios o tests al alumno.\n"
+                "Responde EXCLUSIVAMENTE con el texto completo en markdown, sin envolver en JSON ni bloques de código."
+            )
+            template = read_prompt_file("default_teoria.txt", default_tpl)
+            prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, bloque_str=bloque_str, rules_block=rules_block)
+    elif section == "easier_version":
+        default_tpl = (
+            "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} una VERSIÓN FÁCIL Y ADAPTADA del tema '{contenido}' "
+            "para {grade}º de Primaria, enfocada a alumnos con necesidades educativas o dificultades de comprensión.{rules_block}\n"
+            "Usa frases muy sencillas, explicaciones intuitivas y lenguaje cercano.\n"
+            "Responde EXCLUSIVAMENTE con el texto adaptado en markdown, sin envolver en JSON ni bloques de código."
+        )
+        template = read_prompt_file("default_easier.txt", default_tpl)
+        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, rules_block=rules_block)
+    elif section == "examples":
+        default_tpl = (
+            "Eres un maestro pedagogo de Educación Primaria experto en España. Genera en {lang_instr} 3 EJEMPLOS PRÁCTICOS DE LA VIDA REAL para el tema '{contenido}' "
+            "de {grade}º de Primaria.{rules_block}\n"
+            "Responde EXCLUSIVAMENTE con un JSON válido que contenga un array de strings: [\"Ejemplo 1...\", \"Ejemplo 2...\", \"Ejemplo 3...\"]. No añadas texto antes ni después."
+        )
+        template = read_prompt_file("default_examples.txt", default_tpl)
+        prompt = template.format(lang_instr=lang_instr, contenido=contenido, grade=grade, rules_block=rules_block)
+    else:
+        raise HTTPException(400, "Sección no válida")
+
+    sys_instr = (
+        "Eres un redactor de contenidos para un LIBRO DE TEXTO escolar oficial de Educación Primaria. "
+        "PROHIBIDO ABSOLUTAMENTE incluir saludos, despedidas, mensajes teatrales o infantilismos. "
+        "Tu respuesta debe ser ÚNICA Y EXCLUSIVAMENTE la lección teórica formal, clara y rigurosa en formato Markdown."
+    )
+
+    async def event_generator():
+        try:
+            stream = await client.aio.models.generate_content_stream(
+                model=model_name,
+                contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
+                config=types.GenerateContentConfig(
+                    system_instruction=sys_instr,
+                    temperature=0.0
+                )
+            )
+            async for chunk in stream:
+                if chunk.text:
+                    payload = json.dumps({"text": chunk.text})
+                    yield f"data: {payload}\n\n"
+            yield "data: [DONE]\n\n"
+        except Exception as e:
+            err_payload = json.dumps({"error": str(e)})
+            yield f"data: {err_payload}\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
 # ── AI Generation (Theory Preview) ─────────────────────────────────────────────

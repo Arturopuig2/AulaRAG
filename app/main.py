@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Updated option placeholders (Selecciona Bloque / Selecciona Contenido) with cache buster v401
+# Main FastAPI application for AulaRAG - Added Real-Time SSE Streaming for AI section generation in Admin panel
 import json
 import os
 import re
