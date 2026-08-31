@@ -1433,79 +1433,48 @@
             }
 
             let btnId = "btn-gen-text";
-            let targetId = "e-text";
-            let updatePreviewFn = updateTheoryLivePreview;
-
-            if (section === "easier_version") {
-                btnId = "btn-gen-easier";
-                targetId = "e-easier-version";
-                updatePreviewFn = updateEasierLivePreview;
-            } else if (section === "examples") {
-                btnId = "btn-gen-examples";
-                targetId = "e-examples";
-                updatePreviewFn = updateExamplesLivePreview;
-            }
+            if (section === "easier_version") btnId = "btn-gen-easier";
+            if (section === "examples") btnId = "btn-gen-examples";
 
             const btn = document.getElementById(btnId);
-            const targetEl = document.getElementById(targetId);
             const origText = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = "⚡ Escribiendo...";
-            targetEl.value = "";
+            btn.innerHTML = "⏳ Generando...";
 
             try {
-                const response = await fetch('/admin/api/ai/generate-section-stream', {
+                const res = await fetch('/admin/api/ai/generate-section', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ subject, grade, bloque, contenido, section })
                 });
 
-                if (!response.ok) {
-                    throw new Error("Error en la petición streaming de la IA");
-                }
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder("utf-8");
-                let accumulated = "";
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    const chunkStr = decoder.decode(value, { stream: true });
-                    const lines = chunkStr.split("\n\n");
-
-                    for (const line of lines) {
-                        if (line.startsWith("data: ")) {
-                            const dataStr = line.replace("data: ", "").trim();
-                            if (dataStr === "[DONE]") break;
-                            try {
-                                const parsed = JSON.parse(dataStr);
-                                if (parsed.text) {
-                                    accumulated += parsed.text;
-                                    if (section === "examples") {
-                                        let cleanEx = accumulated.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
-                                        try {
-                                            const arr = JSON.parse(cleanEx);
-                                            if (Array.isArray(arr)) {
-                                                targetEl.value = arr.map(e => String(e).replace(/^•\s*/, '').trim()).join('\n');
-                                            } else {
-                                                targetEl.value = cleanEx;
-                                            }
-                                        } catch (e) {
-                                            targetEl.value = cleanEx;
-                                        }
-                                    } else {
-                                        targetEl.value = accumulated;
-                                    }
-                                    updatePreviewFn();
-                                }
-                            } catch (e) { }
+                if (res.ok) {
+                    const data = await res.json();
+                    if (section === 'text') {
+                        document.getElementById('e-text').value = data.result || "";
+                        updateTheoryLivePreview();
+                        showToast("✨ Texto teórico generado con IA");
+                    } else if (section === 'easier_version') {
+                        document.getElementById('e-easier-version').value = data.result || "";
+                        updateEasierLivePreview();
+                        showToast("✨ Versión fácil generada con IA");
+                    } else if (section === 'examples') {
+                        let exText = "";
+                        if (Array.isArray(data.result)) {
+                            exText = data.result.map(ex => typeof ex === 'string' ? ex.replace(/^•\s*/, '').trim() : ex).join('\n');
+                        } else {
+                            exText = (data.result || "").split('\n').map(ex => ex.replace(/^•\s*/, '').trim()).join('\n');
                         }
+                        document.getElementById('e-examples').value = exText;
+                        updateExamplesLivePreview();
+                        showToast("✨ Ejemplos generados con IA");
                     }
+                } else {
+                    const err = await res.json();
+                    showToast(err.detail || "Error generando sección", true);
                 }
-                showToast("⚡ Generación en tiempo real completada");
-            } catch (err) {
-                showToast(err.message || "Error al generar la sección", true);
+            } catch (e) {
+                showToast("Error de conexión al servidor", true);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = origText;
