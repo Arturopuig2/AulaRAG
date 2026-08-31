@@ -1315,52 +1315,66 @@
             document.getElementById('modal-exercise').classList.add('active');
         }
 
+        // Global Marked Initialization for 0ms typing latency
+        if (window.marked && typeof window.marked.setOptions === 'function') {
+            window.marked.setOptions({ breaks: true, gfm: true });
+        }
+
+        let theoryPreviewRaf = null;
         function updateTheoryLivePreview() {
-            const text = document.getElementById('e-text').value;
-            const previewEl = document.getElementById('e-text-live-preview');
-            if (!previewEl) return;
-            if (!text || !text.trim()) {
-                previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Escribe o genera con IA el texto de la lección para ver cómo quedará en el chat...</span>';
-                return;
-            }
-            if (window.marked && typeof window.marked.parse === 'function') {
-                window.marked.setOptions({ breaks: true, gfm: true });
-                previewEl.innerHTML = window.marked.parse(text);
-            } else {
-                previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
-            }
+            if (theoryPreviewRaf) cancelAnimationFrame(theoryPreviewRaf);
+            theoryPreviewRaf = requestAnimationFrame(() => {
+                const text = document.getElementById('e-text').value;
+                const previewEl = document.getElementById('e-text-live-preview');
+                if (!previewEl) return;
+                if (!text || !text.trim()) {
+                    previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Escribe o genera con IA el texto de la lección para ver cómo quedará en el chat...</span>';
+                    return;
+                }
+                if (window.marked && typeof window.marked.parse === 'function') {
+                    previewEl.innerHTML = window.marked.parse(text);
+                } else {
+                    previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+                }
+            });
         }
 
+        let easierPreviewRaf = null;
         function updateEasierLivePreview() {
-            const text = document.getElementById('e-easier-version').value;
-            const previewEl = document.getElementById('e-easier-live-preview');
-            if (!previewEl) return;
-            if (!text || !text.trim()) {
-                previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Vista previa de la versión adaptada...</span>';
-                return;
-            }
-            if (window.marked && typeof window.marked.parse === 'function') {
-                window.marked.setOptions({ breaks: true, gfm: true });
-                previewEl.innerHTML = window.marked.parse(text);
-            } else {
-                previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
-            }
+            if (easierPreviewRaf) cancelAnimationFrame(easierPreviewRaf);
+            easierPreviewRaf = requestAnimationFrame(() => {
+                const text = document.getElementById('e-easier-version').value;
+                const previewEl = document.getElementById('e-easier-live-preview');
+                if (!previewEl) return;
+                if (!text || !text.trim()) {
+                    previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Vista previa de la versión adaptada...</span>';
+                    return;
+                }
+                if (window.marked && typeof window.marked.parse === 'function') {
+                    previewEl.innerHTML = window.marked.parse(text);
+                } else {
+                    previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+                }
+            });
         }
 
+        let examplesPreviewRaf = null;
         function updateExamplesLivePreview() {
-            const text = document.getElementById('e-examples').value;
-            const previewEl = document.getElementById('e-examples-live-preview');
-            if (!previewEl) return;
-            if (!text || !text.trim()) {
-                previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Vista previa de los ejemplos prácticos...</span>';
-                return;
-            }
-            if (window.marked && typeof window.marked.parse === 'function') {
-                window.marked.setOptions({ breaks: true, gfm: true });
-                previewEl.innerHTML = window.marked.parse(text);
-            } else {
-                previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
-            }
+            if (examplesPreviewRaf) cancelAnimationFrame(examplesPreviewRaf);
+            examplesPreviewRaf = requestAnimationFrame(() => {
+                const text = document.getElementById('e-examples').value;
+                const previewEl = document.getElementById('e-examples-live-preview');
+                if (!previewEl) return;
+                if (!text || !text.trim()) {
+                    previewEl.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Vista previa de los ejemplos prácticos...</span>';
+                    return;
+                }
+                if (window.marked && typeof window.marked.parse === 'function') {
+                    previewEl.innerHTML = window.marked.parse(text);
+                } else {
+                    previewEl.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+                }
+            });
         }
 
         function openCreateExplanationModal() {

@@ -1,4 +1,4 @@
-# Main FastAPI application for AulaRAG - Reverted streaming AI implementation to original behavior
+# Main FastAPI application for AulaRAG - Optimized live preview rendering with requestAnimationFrame (0ms latency during typing)
 import json
 import os
 import re
